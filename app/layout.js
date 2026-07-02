@@ -1,6 +1,7 @@
 import "./globals.css";
 import Link from "next/link";
 import { SITE, waLink } from "../lib/site";
+import Brand from "./components/Brand";
 
 export const metadata = {
   title: `${SITE.nombre} — Computadores corporativos nuevos y usados en Cali`,
@@ -14,12 +15,8 @@ export default function RootLayout({ children }) {
       <body>
         <header className="site-header">
           <div className="wrap header-in">
-            <Link href="/" className="brand">
-              <span className="brand-mark">VV</span>
-              <span className="brand-text">
-                <b>Ventas Virtual</b> Colombia
-                <small>{SITE.lema}</small>
-              </span>
+            <Link href="/" className="brand" aria-label={SITE.nombre}>
+              <Brand />
             </Link>
             <nav className="main-nav">
               <Link href="/">Inicio</Link>
@@ -42,7 +39,7 @@ export default function RootLayout({ children }) {
         <footer className="site-footer" id="contacto">
           <div className="wrap footer-grid">
             <div>
-              <div className="f-title">{SITE.nombre}</div>
+              <Brand variant="footer" />
               <p>{SITE.lema}. Ventas online y tienda física.</p>
               <p className="f-addr">📍 {SITE.direccion}</p>
             </div>
