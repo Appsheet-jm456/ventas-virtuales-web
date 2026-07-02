@@ -1,4 +1,4 @@
-import { getInventory } from "../lib/inventory";
+import { getPublicInventory } from "../lib/inventory";
 import { SITE, waLink } from "../lib/site";
 import Catalog from "./components/Catalog";
 
@@ -9,7 +9,7 @@ export default async function Home() {
   let rows = [];
   let demo = false;
   try {
-    const inv = await getInventory();
+    const inv = await getPublicInventory();
     rows = inv.rows;
     demo = inv.demo;
   } catch {

@@ -44,6 +44,17 @@ Crea `.env.local` (local) o configúralas en Vercel (Settings → Environment Va
 
 Los enlaces de Google Drive deben estar compartidos como **"Cualquier persona con el enlace"**.
 
+### Columna opcional `Oculto` (para "Quitar de la tienda")
+
+Para poder **quitar un producto del catálogo sin borrarlo de Baserow**, agrega una
+columna llamada exactamente **`Oculto`** (tipo *Texto de una línea*). Cuando su valor
+sea `Sí` (o `1`, `true`, `x`), el producto desaparece de la web para los clientes pero
+se conserva en Baserow; el panel `/admin` lo sigue mostrando para poder republicarlo.
+Si la columna no existe, todos los productos se ven con normalidad.
+
+> **Agotado / Vendido** no necesita esta columna: se controla poniendo `Stock` en `0`,
+> lo que muestra la cinta diagonal **"Equipo agotado"** en el producto.
+
 ## 4. Desplegar en Vercel
 
 1. Sube este proyecto a un repositorio de GitHub.

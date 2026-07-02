@@ -132,6 +132,7 @@ a.card { color: inherit; text-decoration: none !important; }
 .badge { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
 .badge.ok { color: var(--ok); background: var(--ok-bg); }
 .badge.bad { color: var(--bad); background: var(--bad-bg); }
+.badge.off { color: #5c6b80; background: #e7ebf2; }
 
 /* Cinta AGOTADO */
 .ribbon {
@@ -173,6 +174,16 @@ a.card { color: inherit; text-decoration: none !important; }
 
 /* ================= Galería (fotos + video) ================= */
 .pp { display: flex; flex-direction: column; gap: 10px; }
+/* Cinta diagonal "Equipo agotado" sobre la foto del producto */
+.pp-video-only { position: relative; overflow: hidden; border-radius: var(--radius); }
+.pp-ribbon {
+  position: absolute; top: 20px; left: -46px; z-index: 3;
+  transform: rotate(-38deg);
+  background: var(--bad); color: #fff;
+  font-size: 14px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  padding: 7px 56px; box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+.pp.sold .pp-main img, .pp.sold .pv-frame, .pp.sold .pv-native { filter: grayscale(55%) opacity(.8); }
 .pp-main {
   position: relative; width: 100%; padding: 0;
   border: 1px solid var(--border); border-radius: var(--radius);
@@ -184,7 +195,7 @@ a.card { color: inherit; text-decoration: none !important; }
 .pp-thumb { width: 64px; height: 64px; padding: 0; border: 2px solid var(--border); border-radius: 9px; overflow: hidden; cursor: pointer; background: var(--bg-soft); }
 .pp-thumb.active, .pp-thumb:hover { border-color: var(--blue); }
 .pp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.pp-empty { color: var(--muted); font-size: 13.5px; border: 1px dashed var(--border); border-radius: var(--radius); padding: 42px 10px; text-align: center; background: var(--bg-soft); }
+.pp-empty { position: relative; overflow: hidden; color: var(--muted); font-size: 13.5px; border: 1px dashed var(--border); border-radius: var(--radius); padding: 42px 10px; text-align: center; background: var(--bg-soft); }
 
 .pp-thumb-vid { position: relative; }
 .pp-vid-bg { display: block; width: 100%; height: 100%; background: linear-gradient(135deg, #24304a, #0b1c4d); }
@@ -277,6 +288,19 @@ textarea.input { resize: vertical; min-height: 54px; line-height: 1.4; }
 .mini-btn { border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 7px; padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
 .mini-btn:hover { border-color: var(--blue); color: var(--blue); }
 .mini-btn.danger:hover { border-color: var(--bad); color: var(--bad); }
+
+/* Panel "Estado en la tienda web" del modal de edición */
+.estado-panel { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 18px; }
+.ep-label { font-weight: 800; color: var(--blue-ink); font-size: 14px; margin-bottom: 10px; }
+.ep-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; }
+.seg-btn { border: none; background: #fff; color: var(--text); padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.seg-btn + .seg-btn { border-left: 1px solid var(--border); }
+.seg-btn.active-ok { background: var(--ok-bg); color: var(--ok); }
+.seg-btn.active-bad { background: var(--bad-bg); color: var(--bad); }
+.ep-check { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--text); cursor: pointer; }
+.ep-check input { width: 17px; height: 17px; }
+.ep-hint { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
 
 /* Modal admin */
 .modal-overlay { position: fixed; inset: 0; background: rgba(9, 20, 55, .45); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; }

@@ -24,7 +24,7 @@ function VideoPlayer({ video }) {
   return <video className="pv-native" src={video.src} controls preload="metadata" playsInline />;
 }
 
-export default function Gallery({ images = [], videos = [], alt = "" }) {
+export default function Gallery({ images = [], videos = [], alt = "", sold = false }) {
   const [broken, setBroken] = useState(() => new Set());
   const [current, setCurrent] = useState(0);
   // light = null | { type: "image" } | { type: "video", index }
@@ -61,7 +61,12 @@ export default function Gallery({ images = [], videos = [], alt = "" }) {
   }, [light, go]);
 
   if (valid.length === 0 && vids.length === 0) {
-    return <div className="pp-empty">📷 Pronto tendremos fotos de este producto.<br />Pídelas por WhatsApp.</div>;
+    return (
+      <div className="pp-empty">
+        {sold && <span className="pp-ribbon">Equipo agotado</span>}
+        📷 Pronto tendremos fotos de este producto.<br />Pídelas por WhatsApp.
+      </div>
+    );
   }
 
   const idx = Math.min(current, Math.max(0, valid.length - 1));
@@ -69,15 +74,19 @@ export default function Gallery({ images = [], videos = [], alt = "" }) {
   const showThumbs = valid.length + vids.length > 1;
 
   return (
-    <div className="pp">
+    <div className={`pp${sold ? " sold" : ""}`}>
       {mainUrl ? (
         <button className="pp-main" onClick={() => setLight({ type: "image" })} title="Ampliar foto" type="button">
+          {sold && <span className="pp-ribbon">Equipo agotado</span>}
           <img src={mainUrl} alt={alt} loading="lazy" onError={() => markBroken(mainUrl)} />
           <span className="pp-zoom">⤢</span>
         </button>
       ) : (
         // Solo hay video: muéstralo directo.
-        <VideoPlayer video={vids[0]} />
+        <div className="pp-video-only">
+          {sold && <span className="pp-ribbon">Equipo agotado</span>}
+          <VideoPlayer video={vids[0]} />
+        </div>
       )}
 
       {showThumbs && (

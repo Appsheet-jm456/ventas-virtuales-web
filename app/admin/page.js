@@ -7,6 +7,10 @@ import { useEffect, useMemo, useState } from "react";
 // servidor en cada operación; aquí solo se guarda para la sesión).
 
 const f = (r, k) => (r?.[k] ?? "").toString().trim();
+const stockNum = (r) => parseInt(f(r, "Stock") || "0", 10) || 0;
+// ¿Está oculto de la tienda web? (columna "Oculto" de Baserow)
+const HIDDEN_VALUES = ["sí", "si", "true", "1", "x", "oculto", "yes", "y"];
+const isHidden = (r) => HIDDEN_VALUES.includes((f(r, "Oculto") || "").toLowerCase());
 
 // Campos del formulario, en el mismo orden de la tabla de Baserow.
 const FIELDS = [
@@ -26,7 +30,7 @@ const FIELDS = [
   { key: "Video", label: "Video — URL", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
 ];
 
-const EMPTY = Object.fromEntries(FIELDS.map((c) => [c.key, ""]));
+const EMPTY = { ...Object.fromEntries(FIELDS.map((c) => [c.key, ""])), Oculto: "" };
 
 function norm(s) {
   return (s ?? "").toString().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -60,7 +64,10 @@ export default function AdminPage() {
   async function load() {
     setLoading(true);
     try {
-      const res = await fetch("/api/products", { cache: "no-store" });
+      const res = await fetch("/api/products", {
+        cache: "no-store",
+        headers: { "x-admin-password": sessionStorage.getItem("vvc-admin-pw") || pw || "" },
+      });
       const d = await res.json();
       setRows(Array.isArray(d.rows) ? d.rows : []);
       setDemo(!!d.demo);
@@ -113,7 +120,40 @@ export default function AdminPage() {
     setFormError(""); setOkMsg("");
     const fields = {};
     for (const c of FIELDS) fields[c.key] = f(r, c.key);
+    fields["Oculto"] = f(r, "Oculto");
     setEditing({ id: r._id, fields });
+  }
+
+  // Acción rápida desde la tabla: actualiza solo los campos indicados.
+  async function quickUpdate(r, fields, okText) {
+    setOkMsg("");
+    try {
+      const d = await callAdmin({ op: "update", id: r._id, fields });
+      setOkMsg(okText || d.mensaje || "Actualizado.");
+      await load();
+    } catch (e) {
+      window.alert(String(e?.message || e));
+    }
+  }
+
+  // Cambia entre Disponible (Stock 1) y Agotado/Vendido (Stock 0).
+  function toggleAgotado(r) {
+    const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Código");
+    if (stockNum(r) > 0) {
+      quickUpdate(r, { Stock: 0 }, `"${nombre}" marcado como AGOTADO.`);
+    } else {
+      quickUpdate(r, { Stock: 1 }, `"${nombre}" vuelve a estar DISPONIBLE.`);
+    }
+  }
+
+  // Quita de la tienda (oculto) o vuelve a publicar. No borra de Baserow.
+  function toggleOculto(r) {
+    const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Código");
+    if (isHidden(r)) {
+      quickUpdate(r, { Oculto: "" }, `"${nombre}" vuelve a la tienda.`);
+    } else {
+      quickUpdate(r, { Oculto: "Sí" }, `"${nombre}" quitado de la tienda (sigue en Baserow).`);
+    }
   }
 
   async function callAdmin(payload) {
@@ -210,7 +250,7 @@ export default function AdminPage() {
           <thead>
             <tr>
               <th>Código</th><th>Categoría</th><th>Marca</th><th>Modelo</th>
-              <th>Precio</th><th>Stock</th><th>Fotos</th><th>Video</th><th></th>
+              <th>Precio</th><th>Stock</th><th>Estado web</th><th>Fotos</th><th>Video</th><th></th>
             </tr>
           </thead>
           <tbody>
@@ -224,14 +264,27 @@ export default function AdminPage() {
                   <td>{f(r, "Modelo")}</td>
                   <td className="num">{f(r, "Precio") ? `$${Number(f(r, "Precio")).toLocaleString("es-CO")}` : "—"}</td>
                   <td className="num">
-                    {parseInt(f(r, "Stock") || "0", 10) > 0
+                    {stockNum(r) > 0
                       ? f(r, "Stock")
                       : <span className="badge bad">Agotado</span>}
+                  </td>
+                  <td>
+                    {isHidden(r)
+                      ? <span className="badge off">Oculto</span>
+                      : stockNum(r) > 0
+                        ? <span className="badge ok">En línea</span>
+                        : <span className="badge bad">Agotado</span>}
                   </td>
                   <td>{nFotos ? `📷 ${nFotos}` : "—"}</td>
                   <td>{f(r, "Video") ? "🎬" : "—"}</td>
                   <td>
                     <div className="row-actions">
+                      <button className="mini-btn" onClick={() => toggleAgotado(r)} title="Cambia disponible/agotado">
+                        {stockNum(r) > 0 ? "Agotar" : "Disponible"}
+                      </button>
+                      <button className="mini-btn" onClick={() => toggleOculto(r)} title="Quitar/mostrar en la tienda (no borra de Baserow)">
+                        {isHidden(r) ? "Publicar" : "Quitar"}
+                      </button>
                       <button className="mini-btn" onClick={() => openEdit(r)}>Editar</button>
                       <button className="mini-btn danger" onClick={() => remove(r)}>Eliminar</button>
                     </div>
@@ -240,7 +293,7 @@ export default function AdminPage() {
               );
             })}
             {filtered.length === 0 && (
-              <tr><td colSpan={9} style={{ textAlign: "center", color: "var(--muted)", padding: 26 }}>
+              <tr><td colSpan={10} style={{ textAlign: "center", color: "var(--muted)", padding: 26 }}>
                 {loading ? "Cargando…" : "Sin productos."}
               </td></tr>
             )}
@@ -257,6 +310,39 @@ export default function AdminPage() {
               <button className="close-btn" onClick={() => setEditing(null)}>✕</button>
             </div>
             <div className="modal-body">
+              <div className="estado-panel">
+                <div className="ep-label">Estado en la tienda web</div>
+                <div className="ep-row">
+                  <div className="seg">
+                    <button
+                      type="button"
+                      className={`seg-btn${(parseInt(editing.fields["Stock"] || "0", 10) || 0) > 0 ? " active-ok" : ""}`}
+                      onClick={() => setEditing((s) => ({ ...s, fields: { ...s.fields, Stock: (parseInt(s.fields["Stock"] || "0", 10) || 0) > 0 ? s.fields["Stock"] : "1" } }))}
+                    >
+                      ✅ Disponible
+                    </button>
+                    <button
+                      type="button"
+                      className={`seg-btn${(parseInt(editing.fields["Stock"] || "0", 10) || 0) <= 0 ? " active-bad" : ""}`}
+                      onClick={() => setEditing((s) => ({ ...s, fields: { ...s.fields, Stock: "0" } }))}
+                    >
+                      🚫 Agotado / Vendido
+                    </button>
+                  </div>
+                  <label className="ep-check">
+                    <input
+                      type="checkbox"
+                      checked={HIDDEN_VALUES.includes((editing.fields["Oculto"] || "").toLowerCase())}
+                      onChange={(e) => setEditing((s) => ({ ...s, fields: { ...s.fields, Oculto: e.target.checked ? "Sí" : "" } }))}
+                    />
+                    <span>Quitar de la tienda (no se elimina de Baserow)</span>
+                  </label>
+                </div>
+                <p className="ep-hint">
+                  <b>Agotado/Vendido:</b> el equipo sigue visible con la cinta “Equipo agotado”.{" "}
+                  <b>Quitar de la tienda:</b> desaparece del catálogo para los clientes, pero se conserva en Baserow.
+                </p>
+              </div>
               <div className="form-grid">
                 {FIELDS.map((c) => (
                   <div key={c.key} className={`field${c.full ? " full" : ""}`}>

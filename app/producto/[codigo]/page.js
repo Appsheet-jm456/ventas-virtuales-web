@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getInventory } from "../../../lib/inventory";
+import { getPublicInventory } from "../../../lib/inventory";
 import { parseImages, parseVideos } from "../../../lib/images";
 import { SITE, waLink } from "../../../lib/site";
 import Gallery from "../../components/Gallery";
@@ -16,7 +16,7 @@ function fmtPrecio(r) {
 
 async function findProduct(codigo) {
   const target = decodeURIComponent(codigo).trim().toLowerCase();
-  const { rows } = await getInventory();
+  const { rows } = await getPublicInventory();
   return rows.find((r) => f(r, "Código").toLowerCase() === target) || null;
 }
 
@@ -72,7 +72,7 @@ export default async function ProductPage({ params }) {
       </div>
 
       <div className="pd-grid">
-        <Gallery images={parseImages(r)} videos={parseVideos(r)} alt={nombre} />
+        <Gallery images={parseImages(r)} videos={parseVideos(r)} alt={nombre} sold={sold} />
 
         <div className="pd-info">
           <h1>{nombre}</h1>

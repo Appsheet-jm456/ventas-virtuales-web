@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 const COLUMNS = [
   "Código", "Categoría", "Descripción", "Marca", "Modelo", "Procesador",
   "Generación", "RAM", "Almacenamiento", "Estado", "Precio", "Stock",
-  "Foto", "Video",
+  "Foto", "Video", "Oculto",
 ];
 
 function toNumberOrNull(v) {
@@ -38,6 +38,10 @@ function friendlyError(msg) {
   const m = String(msg || "");
   if (m.includes("401") || m.includes("403")) {
     return "El token de Baserow no tiene permisos suficientes (Create/Update/Delete). Revisa los permisos del token.";
+  }
+  // La columna "Oculto" (para 'Quitar de la tienda') aún no existe en Baserow.
+  if (/oculto/i.test(m) || /ERROR_FIELD/i.test(m) || /field.*(does not exist|not found|unknown)/i.test(m)) {
+    return "Para usar 'Quitar de la tienda' primero crea en tu tabla de Baserow una columna llamada exactamente \"Oculto\" (tipo Texto de una línea). No borres las demás columnas.";
   }
   return m;
 }
