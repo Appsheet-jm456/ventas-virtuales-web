@@ -11,7 +11,10 @@
 - [x] Reglas del negocio escritas — [REGLAS_DEL_NEGOCIO.md](../REGLAS_DEL_NEGOCIO.md)
 - [x] Modelo de datos documentado — [notion_modelado_datos.md](../notion_modelado_datos.md)
 - [x] Método de trabajo: git manda, Notion es el espejo (decisión 0001)
-- [ ] Preguntas abiertas del brief respondidas por el dueño
+- [ ] Preguntas abiertas de la Etapa 1 respondidas por el dueño
+- [ ] División en dos etapas confirmada por el dueño (decisión 0005)
+- [ ] Contenido de Quiénes somos reunido
+- [ ] Cuatro políticas redactadas y revisadas: privacidad, envíos, garantía, términos
 - [ ] Reglas del negocio validadas por el dueño
 - [ ] Columnas reales de Baserow revisadas: qué expone hoy la API pública (RN-04)
 - [ ] Hosting destino decidido, con la razón escrita en `docs/decisiones/`

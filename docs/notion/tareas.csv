@@ -12,3 +12,11 @@ Escribir las historias de usuario con criterios de aceptación,2 · Especificaci
 Filtrar la API pública a una lista blanca de columnas,3 · Implementación,Seguridad,Pendiente,Alta,Depende de la revisión de columnas de la Fase 1.,lib/inventory.js
 Configurar las pruebas automáticas (unitarias y de punta a punta),4 · Pruebas,Calidad,Pendiente,Media,,docs/sdlc/4-pruebas.md
 Migrar el alojamiento desde Vercel,5 · Despliegue,Despliegue,Pendiente,Media,"Variables, dominio, SSL y prueba en producción antes de apagar Vercel.",docs/sdlc/5-despliegue.md
+"Actualizar el brief a v1.1 con marca, políticas y ecommerce en dos etapas",1 · Diseño,Producto,Hecha,Alta,"Mapa de la web, flujo de pedido, riesgos y preguntas por etapa. Decisión 0005 propuesta.",docs/00-BRIEF.md
+Confirmar con el dueño la división en dos etapas,1 · Diseño,Producto,Pendiente,Alta,Decisión 0005 en estado Propuesta.,docs/decisiones/0005-dos-etapas-marca-y-ecommerce.md
+"Reunir el contenido de Quiénes somos (historia, años, clientes, logros)",1 · Diseño,Contenido,Pendiente,Alta,Lo aporta el dueño. Fotos del local y del equipo si las hay.,docs/00-BRIEF.md
+Redactar la política de privacidad (Ley 1581),1 · Diseño,Contenido,Pendiente,Alta,Revisión del contador o abogado antes de publicar (RN-12).,docs/REGLAS_DEL_NEGOCIO.md
+Redactar la política de envíos,1 · Diseño,Contenido,Pendiente,Alta,"Cobertura nacional, transportadora, tiempos y costos.",docs/REGLAS_DEL_NEGOCIO.md
+Redactar la política de garantía (nuevo y usado),1 · Diseño,Contenido,Pendiente,Alta,"Qué cubre, cuánto dura y cómo se reclama (RN-14).",docs/REGLAS_DEL_NEGOCIO.md
+Redactar los términos y condiciones,1 · Diseño,Contenido,Pendiente,Media,,docs/REGLAS_DEL_NEGOCIO.md
+Diseñar el flujo de pedido de la Etapa 2 y elegir la pasarela de pago,1 · Diseño,Ecommerce,Pendiente,Baja,Se hace cuando la Etapa 1 esté en producción (decisión 0005).,docs/00-BRIEF.md
