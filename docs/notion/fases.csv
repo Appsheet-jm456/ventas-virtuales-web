@@ -1,0 +1,6 @@
+Fase,Orden,Estado,Criterio de cierre,Documento
+1 · Diseño,1,En curso,"Brief, reglas y modelo validados por el dueño; hosting decidido; columnas de Baserow revisadas",docs/sdlc/1-diseno.md
+2 · Especificaciones,2,Pendiente,"Una historia por funcionalidad del alcance v1, con criterios Dado/Cuando/Entonces, validadas por el dueño",docs/sdlc/2-especificaciones.md
+3 · Implementación,3,Pendiente,"Historias implementadas, npm run build compilando y cada tarea con su commit",docs/sdlc/3-implementacion.md
+4 · Pruebas,4,Pendiente,"npm test con pruebas de lib/, prueba de punta a punta del catálogo y checklist manual en celular",docs/sdlc/4-pruebas.md
+5 · Despliegue,5,Pendiente,"Tienda en el hosting definitivo con dominio, SSL, datos reales y Vercel apagado",docs/sdlc/5-despliegue.md
