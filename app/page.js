@@ -1,9 +1,15 @@
+import Link from "next/link";
 import { getPublicInventory } from "../lib/inventory";
 import { SITE, waLink } from "../lib/site";
-import Catalog from "./components/Catalog";
+import { categoriasDe, enCategoria, stockNum } from "../lib/productos";
+import HeroCarousel from "./components/HeroCarousel";
+import CategoryStrip from "./components/CategoryStrip";
+import ProductCard from "./components/ProductCard";
 
-// El catálogo se refresca cada 60 s (lee Baserow en el servidor).
+// El Inicio se refresca cada 60 s (lee Baserow en el servidor).
 export const revalidate = 60;
+
+const LINEA = { titulo: "Portátiles corporativos", filtro: "portatil", max: 8 }; // HU-04
 
 export default async function Home() {
   let rows = [];
@@ -16,29 +22,44 @@ export default async function Home() {
     rows = [];
   }
 
+  const categorias = categoriasDe(rows);
+  const linea = rows.filter((r) => enCategoria(r, LINEA.filtro) && stockNum(r) > 0).slice(0, LINEA.max);
+
   return (
     <main>
-      <section className="hero">
-        <div className="wrap hero-in">
-          <p className="kicker">Colombia · Equipos corporativos</p>
-          <h1>Computadores corporativos nuevos y usados</h1>
-          <p>
-            Portátiles empresariales, torres tiny, partes y accesorios con garantía.
-            Ventas online y tienda física en {SITE.ciudad}. Te asesoramos por WhatsApp.
-          </p>
-          <div className="hero-actions">
-            <a className="btn-hero" href="#catalogo">Ver catálogo</a>
-            <a
-              className="btn-hero wa"
-              href={waLink("Hola 👋, quiero información sobre sus computadores.")}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Hablar con un asesor
-            </a>
+      <div className="wrap hc-wrap">
+        <HeroCarousel />
+      </div>
+
+      {demo && (
+        <div className="wrap home-demo">
+          <div className="demo-note">
+            Modo demo: productos e imágenes de ejemplo. Configura Baserow para ver el inventario real.
           </div>
         </div>
-      </section>
+      )}
+
+      {categorias.length > 0 && (
+        <section className="wrap home-sec">
+          <div className="sec-head">
+            <h2 className="section-title">Categorías</h2>
+            <Link className="sec-more" href="/categorias">Ver todas →</Link>
+          </div>
+          <CategoryStrip categorias={categorias} />
+        </section>
+      )}
+
+      {linea.length > 0 && (
+        <section className="wrap home-sec">
+          <div className="sec-head">
+            <h2 className="section-title">{LINEA.titulo}</h2>
+            <Link className="sec-more" href={`/productos?categoria=${LINEA.filtro}`}>Ver todos →</Link>
+          </div>
+          <div className="grid">
+            {linea.map((r, i) => <ProductCard key={(r["Código"] ?? "") + "-" + i} r={r} />)}
+          </div>
+        </section>
+      )}
 
       <section className="trust" aria-label="Por qué comprar con nosotros">
         <div className="wrap trust-in">
@@ -48,8 +69,6 @@ export default async function Home() {
           <div className="trust-item"><span className="trust-ico" aria-hidden="true">💬</span><div><b>Asesoría directa</b><small>Por WhatsApp</small></div></div>
         </div>
       </section>
-
-      <Catalog rows={rows} demo={demo} />
 
       <section className="cta-band">
         <div className="wrap cta-in">

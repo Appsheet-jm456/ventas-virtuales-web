@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="1600" height="500">
+<defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e2160"/><stop offset="1" stop-color="#2147c4"/></linearGradient>
+  <radialGradient id="r" cx=".85" cy=".2" r=".7"><stop offset="0" stop-color="#25d366" stop-opacity=".22"/><stop offset="1" stop-color="#25d366" stop-opacity="0"/></radialGradient>
+  <pattern id="p" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity=".06"/></pattern>
+</defs>
+<rect width="1600" height="500" fill="url(#g)"/><rect width="1600" height="500" fill="url(#p)"/><rect width="1600" height="500" fill="url(#r)"/>
+<g transform="translate(980,110)">
+  <rect x="0" y="0" width="482.99999999999994" height="310.5" rx="16.099999999999998" fill="#0b1c4d"/>
+  <rect x="16.099999999999998" y="16.099999999999998" width="450.79999999999995" height="278.3" rx="6.8999999999999995" fill="#2b62e3"/>
+  <rect x="34.5" y="39.099999999999994" width="138.0" height="80.5" rx="4.6" fill="#ffffff" opacity=".25"/>
+  <rect x="189.74999999999997" y="39.099999999999994" width="138.0" height="80.5" rx="4.6" fill="#ffffff" opacity=".18"/>
+  <rect x="34.5" y="135.7" width="293.25" height="103.49999999999999" rx="4.6" fill="#ffffff" opacity=".12"/>
+  <path d="M-57.49999999999999 310.5 H540.4999999999999 L505.99999999999994 340.4 H-23.0 Z" fill="#c9d3e6"/>
+  <rect x="195.49999999999997" y="310.5" width="92.0" height="9.2" rx="4.6" fill="#9aa8c2"/>
+</g><g transform="translate(1180,190)">
+  <rect x="0" y="0" width="336.0" height="216.0" rx="11.200000000000001" fill="#0b1c4d"/>
+  <rect x="11.200000000000001" y="11.200000000000001" width="313.6" height="193.6" rx="4.800000000000001" fill="#3b78ff"/>
+  <rect x="24.0" y="27.200000000000003" width="96.0" height="56.0" rx="3.2" fill="#ffffff" opacity=".25"/>
+  <rect x="132.0" y="27.200000000000003" width="96.0" height="56.0" rx="3.2" fill="#ffffff" opacity=".18"/>
+  <rect x="24.0" y="94.4" width="204.0" height="72.0" rx="3.2" fill="#ffffff" opacity=".12"/>
+  <path d="M-40.0 216.0 H376.0 L352.0 236.8 H-16.0 Z" fill="#c9d3e6"/>
+  <rect x="136.0" y="216.0" width="64.0" height="6.4" rx="3.2" fill="#9aa8c2"/>
+</g>
+<text x="70" y="150" fill="#ffffff" font-size="62" font-weight="800" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" letter-spacing="-1">Portátiles corporativos</text><text x="70" y="220" fill="#ffffff" font-size="62" font-weight="800" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" letter-spacing="-1">con garantía</text><text x="70" y="296" fill="#cdd9f7" font-size="26" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">Lenovo · Dell · HP — nuevos y usados grado A</text><rect x="70" y="322" width="168" height="40" rx="20" fill="#ffffff" opacity=".14"/><text x="154.0" y="348" fill="#ffffff" font-size="17" font-weight="600" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle">Core i5 / i7</text><rect x="248" y="322" width="69" height="40" rx="20" fill="#ffffff" opacity=".14"/><text x="282.5" y="348" fill="#ffffff" font-size="17" font-weight="600" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle">SSD</text><rect x="327" y="322" width="124" height="40" rx="20" fill="#ffffff" opacity=".14"/><text x="389.0" y="348" fill="#ffffff" font-size="17" font-weight="600" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle">Garantía</text><rect x="70" y="386" width="242" height="56" rx="12" fill="#25d366"/><text x="191.0" y="422" fill="#05391f" font-size="22" font-weight="800" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle">Ver portátiles</text>
+<g><rect x="1380" y="24" width="190" height="34" rx="17" fill="#ffffff" opacity=".18"/><text x="1475" y="46" fill="#ffffff" font-size="15" font-weight="700" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle" letter-spacing="1.5">IMAGEN TEMPORAL</text></g>
+</svg>

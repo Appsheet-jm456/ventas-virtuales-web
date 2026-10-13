@@ -20,10 +20,11 @@
 
 ## ⏭️ Siguiente (Camino 1 · landing)
 
-1. El dueño revisa el nuevo diseño y fusiona el [PR #1](https://github.com/Appsheet-jm456/ventas-virtuales-web/pull/1).
-2. El dueño **actualiza los productos en Baserow** (están desactualizados).
-3. Desplegar en Hostinger Web Apps siguiendo [sdlc/5-despliegue.md](./sdlc/5-despliegue.md).
-4. Asociar el dominio y apagar Vercel.
+1. El dueño revisa el demo del nuevo diseño (Inicio, Categorías, Productos — HU-01 a HU-06) y envía las imágenes reales (2 banners y una por categoría, ver `docs/sdlc/2-especificaciones.md`).
+2. Fusionar el [PR #1](https://github.com/Appsheet-jm456/ventas-virtuales-web/pull/1).
+3. El dueño **actualiza los productos en Baserow** (están desactualizados).
+4. Desplegar en Hostinger Web Apps siguiendo [sdlc/5-despliegue.md](./sdlc/5-despliegue.md).
+5. Asociar el dominio y apagar Vercel.
 
 ## 🗺️ Camino 2 · Tienda completa (se planifica en Notion)
 

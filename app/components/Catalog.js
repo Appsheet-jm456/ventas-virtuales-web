@@ -1,66 +1,22 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import { parseImages } from "../../lib/images";
+import { useSearchParams } from "next/navigation";
+import ProductCard from "./ProductCard";
+import { f, stockNum, precioNum, norm, enCategoria } from "../../lib/productos";
 
-const f = (r, k) => (r?.[k] ?? "").toString().trim();
-const stockNum = (r) => parseInt(f(r, "Stock") || "0", 10) || 0;
-
-function precioNum(r) {
-  const n = Number(f(r, "Precio").replace(/[^\d.-]/g, ""));
-  return isNaN(n) ? null : n;
-}
-function fmtPrecio(r) {
-  const n = precioNum(r);
-  return n && n > 0 ? `$${n.toLocaleString("es-CO")}` : "";
-}
-function norm(s) {
-  return (s ?? "").toString().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-}
-
-function ProductCard({ r }) {
-  const sold = stockNum(r) <= 0;
-  const foto = parseImages(r)[0] || "";
-  const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ")
-    || f(r, "Descripción").slice(0, 60) || f(r, "Código") || "Producto";
-  const specs = [
-    f(r, "Procesador"),
-    f(r, "Generación") && `${f(r, "Generación")}ª Gen`,
-    f(r, "RAM"),
-    f(r, "Almacenamiento"),
-  ].filter(Boolean).join(" · ");
-  const precio = fmtPrecio(r);
-
-  return (
-    <Link className={`card${sold ? " sold" : ""}`} href={`/producto/${encodeURIComponent(f(r, "Código"))}`}>
-      {sold && <span className="ribbon">AGOTADO</span>}
-      <div className="card-img">
-        {foto
-          ? <img src={foto} alt={nombre} loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} />
-          : <span className="noimg">💻</span>}
-      </div>
-      <div className="card-body">
-        <span className="card-cat">{f(r, "Categoría") || "Producto"}{f(r, "Estado") ? ` · ${f(r, "Estado")}` : ""}</span>
-        <span className="card-title">{nombre}</span>
-        {specs && <span className="card-specs">{specs}</span>}
-        <div className="card-bottom">
-          {precio
-            ? <span className="card-price">{precio}</span>
-            : <span className="card-price tbd">Precio: consultar</span>}
-          {sold
-            ? <span className="badge bad">Agotado</span>
-            : <span className="badge ok">Disponible</span>}
-        </div>
-        <span className="card-code">Ref: {f(r, "Código")}</span>
-      </div>
-    </Link>
-  );
-}
-
+// Catálogo con buscador y filtros (HU-06). La búsqueda y la categoría pueden venir en la URL:
+// /productos?q=thinkpad o /productos?categoria=portatil (la categoría se compara "contiene").
 export default function Catalog({ rows = [], demo = false }) {
-  const [q, setQ] = useState("");
-  const [cat, setCat] = useState("");
+  const sp = useSearchParams();
+  const [q, setQ] = useState(sp.get("q") || "");
+  const [cat, setCat] = useState(sp.get("categoria") || "");
+
+  // El buscador del encabezado navega a /productos?q=…; si ya estamos aquí, se aplica igual.
+  useEffect(() => {
+    setQ(sp.get("q") || "");
+    setCat(sp.get("categoria") || "");
+  }, [sp]);
   const [marca, setMarca] = useState("");
   const [precioMin, setPrecioMin] = useState("");
   const [precioMax, setPrecioMax] = useState("");
@@ -72,7 +28,7 @@ export default function Catalog({ rows = [], demo = false }) {
   }, [rows]);
 
   const marcas = useMemo(() => {
-    const base = cat ? rows.filter((r) => f(r, "Categoría") === cat) : rows;
+    const base = rows.filter((r) => enCategoria(r, cat));
     const set = new Set(base.map((r) => f(r, "Marca")).filter(Boolean));
     return [...set].sort((a, b) => a.localeCompare(b, "es"));
   }, [rows, cat]);
@@ -87,7 +43,7 @@ export default function Catalog({ rows = [], demo = false }) {
     const max = precioMax ? Number(precioMax) : null;
     return rows.filter((r) => {
       if (soloDisp && stockNum(r) <= 0) return false;
-      if (cat && f(r, "Categoría") !== cat) return false;
+      if (!enCategoria(r, cat)) return false;
       if (marca && f(r, "Marca") !== marca) return false;
       if (min != null || max != null) {
         const p = precioNum(r);
@@ -110,7 +66,7 @@ export default function Catalog({ rows = [], demo = false }) {
 
   return (
     <section className="catalog wrap" id="catalogo">
-      <h2 className="section-title">Nuestro catálogo</h2>
+      <h1 className="section-title">Productos</h1>
       <p className="section-sub">Equipos corporativos con garantía. Precios e inventario sujetos a cambios.</p>
 
       {demo && (

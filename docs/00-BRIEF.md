@@ -79,10 +79,10 @@ Lo que existe y lo que falta, página por página. **Este mapa es la lista de tr
 
 | Página | Qué muestra | Camino | Estado |
 |---|---|---|---|
-| Inicio | Encabezado con buscador y WhatsApp, banner rotativo, categorías, línea Portátiles corporativos | 1 | Por rediseñar (HU-01 a HU-05) |
-| Categorías | Todas las categorías con imagen | 1 | Falta (HU-03) |
+| Inicio | Encabezado con buscador y WhatsApp, banner rotativo, categorías, línea Portátiles corporativos | 1 | Hecho con imágenes temporales (HU-01 a HU-05) |
+| Categorías | Todas las categorías con imagen | 1 | Hecho con imágenes temporales (HU-03) |
 | Quiénes somos | Historia, experiencia y especialidad (Tech) | 2 | Falta |
-| Productos | Catálogo completo con búsqueda y filtros por categoría, marca y precio | 1 | Existe en el Inicio; pasa a `/productos` (HU-06) |
+| Productos | Catálogo completo con búsqueda y filtros por categoría, marca y precio | 1 | Hecho: `/productos` (HU-06) |
 | Producto | Fotos, video, especificaciones, disponibilidad, botón WhatsApp | 1 | Existe |
 | Política de privacidad | Tratamiento de datos personales | 2 | Falta |
 | Política de envíos | Cobertura nacional, tiempos, costos, transportadora | 2 | Falta |
