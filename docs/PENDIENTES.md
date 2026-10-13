@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 12 de octubre de 2026 · Brief `v1.2` · **Camino 1 (landing) · Fase 5 — Despliegue**
+> **Última sesión:** 13 de octubre de 2026 · Brief `v1.2` · **Camino 1 (landing)** · nuevo diseño publicado en Vercel (PR #1 fusionado) · modelo v2 con Cloudinary propuesto
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -17,14 +17,23 @@
 | Rediseño del frontend de la landing | `app/`, `app/globals.css` |
 | Lista blanca de columnas públicas (RN-04) | `lib/inventory.js` |
 | Guía de despliegue en Hostinger | `docs/sdlc/5-despliegue.md` |
+| Nuevo diseño: Inicio, Categorías, Productos (HU-01 a HU-06), publicado en Vercel | PR #1 |
+| Modelo v2 propuesto y plantillas de Baserow | `docs/notion_modelado_datos.md`, `docs/baserow/` |
 
 ## ⏭️ Siguiente (Camino 1 · landing)
 
-1. El dueño revisa el demo del nuevo diseño (Inicio, Categorías, Productos — HU-01 a HU-06) y envía las imágenes reales (2 banners y una por categoría, ver `docs/sdlc/2-especificaciones.md`).
-2. Fusionar el [PR #1](https://github.com/Appsheet-jm456/ventas-virtuales-web/pull/1).
-3. El dueño **actualiza los productos en Baserow** (están desactualizados).
-4. Desplegar en Hostinger Web Apps siguiendo [sdlc/5-despliegue.md](./sdlc/5-despliegue.md).
-5. Asociar el dominio y apagar Vercel.
+1. **Seguridad:** revocar en Baserow el token que se compartió en la conversación del 13 oct y
+   crear uno nuevo (Leer, Crear, Actualizar, Eliminar). Cargarlo en Vercel, Hostinger y `.env.local`.
+2. **Aprobar el modelo v2** (Categorías, Banners, imágenes en Cloudinary — decisión 0007) y crear
+   las dos tablas importando `docs/baserow/*.csv` (guía en `docs/baserow/COMO_IMPORTAR.md`).
+   Pasar los ID de las tablas.
+3. Programar: lectura de Categorías y Banners desde Baserow y subida firmada a Cloudinary desde `/admin`.
+4. Imágenes reales: 2 banners y una por categoría (ver `docs/sdlc/2-especificaciones.md`).
+5. Revisar por qué los productos reales salen sin foto (columna `Foto` vacía o Drive sin compartir).
+6. Renombrar la rama por defecto `claude/github-upload-iteration-cgbvq9` a `main` (o usar ese nombre
+   en Hostinger) y corregir la guía de despliegue.
+7. Desplegar en Hostinger Web Apps y asociar el dominio ([sdlc/5-despliegue.md](./sdlc/5-despliegue.md)); apagar Vercel.
+8. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
 ## 🗺️ Camino 2 · Tienda completa (se planifica en Notion)
 

@@ -14,12 +14,15 @@ Redactar la política de garantía (nuevo y usado),1 · Diseño,Camino 2,Pendien
 Redactar los términos y condiciones,1 · Diseño,Camino 2,Pendiente,Baja,Camino 2: se trabaja después de la landing.,docs/REGLAS_DEL_NEGOCIO.md
 Actualizar el brief a v1.2: dos caminos (landing y tienda completa),1 · Diseño,Producto,Hecha,Alta,Decisión 0005 aceptada. Ecommerce con pago por ahora fuera.,docs/00-BRIEF.md
 Decidir el hosting: Hostinger Web Apps,1 · Diseño,Despliegue,Hecha,Alta,Decisión 0006. Dominio comprado en Hostinger.,docs/decisiones/0006-hosting-hostinger-web-apps.md
-Mejorar el diseño y el frontend de la landing,3 · Implementación,Camino 1,En curso,Alta,Primera mejora hecha; reemplazada por el nuevo diseño HU-01 a HU-06.,app/globals.css
+Mejorar el diseño y el frontend de la landing,3 · Implementación,Camino 1,Hecha,Alta,Primera mejora hecha; reemplazada por el nuevo diseño HU-01 a HU-06.,app/globals.css
 Proteger la API pública con lista blanca de columnas,3 · Implementación,Camino 1,Hecha,Alta,"RN-04: costo, proveedor y notas internas ya no salen al público.",lib/inventory.js
 Actualizar la lista de productos en Baserow,3 · Implementación,Camino 1,Pendiente,Alta,"La tienda lee Baserow y refresca cada 60 s. Lo hace el dueño; revisar Stock, Precio, Foto y Oculto.",docs/notion_modelado_datos.md
 Desplegar la landing en Hostinger Web Apps y asociar el dominio,5 · Despliegue,Camino 1,Pendiente,Alta,Seguir la guía. Probar primero en la URL temporal.,docs/sdlc/5-despliegue.md
 Apagar Vercel tras verificar Hostinger,5 · Despliegue,Camino 1,Pendiente,Media,,docs/sdlc/5-despliegue.md
 "Planificar la tienda completa: administración, inventarios, categorías, configuración y pedidos",1 · Diseño,Camino 2,Pendiente,Baja,Se planifica en Notion. El ecommerce con pago por ahora no.,docs/00-BRIEF.md
 Reunir las imágenes: 2 banners y una por categoría,2 · Especificaciones,Camino 1,Pendiente,Alta,"Banners 1600×500 (y 800×800 para celular, opcional). Categorías 600×600. Reemplazar los SVG temporales de public/banners y public/categorias.",docs/sdlc/2-especificaciones.md
-"Implementar el nuevo Inicio: encabezado, banner, categorías y línea de portátiles",3 · Implementación,Camino 1,En curso,Alta,"Hecho con imágenes temporales: encabezado con buscador, banner rotativo, categorías y línea de portátiles. Falta aprobación del dueño e imágenes reales.",docs/sdlc/2-especificaciones.md
+"Implementar el nuevo Inicio: encabezado, banner, categorías y línea de portátiles",3 · Implementación,Camino 1,Hecha,Alta,Publicado en Vercel (PR #1) con imágenes temporales y línea de portátiles en una sola fila.,docs/sdlc/2-especificaciones.md
 Crear las páginas Categorías y Productos,3 · Implementación,Camino 1,Hecha,Alta,"/categorias y /productos con filtros por URL (?q=, ?categoria=).",docs/sdlc/2-especificaciones.md
+Revocar el token de Baserow compartido y crear uno nuevo,1 · Diseño,Seguridad,Pendiente,Alta,Se pegó en la conversación del 13 oct.,docs/decisiones/0002-secretos-fuera-del-repositorio.md
+Aprobar el modelo v2 y crear las tablas Categorías y Banners,1 · Diseño,Camino 1,Pendiente,Alta,Importar docs/baserow/*.csv. Decisión 0007 propuesta.,docs/baserow/COMO_IMPORTAR.md
+Subir imágenes a Cloudinary desde /admin y leer Categorías y Banners de Baserow,3 · Implementación,Camino 1,Pendiente,Alta,Subida firmada; el secreto solo en el servidor.,docs/notion_modelado_datos.md
