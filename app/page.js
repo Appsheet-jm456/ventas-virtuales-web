@@ -1,15 +1,23 @@
 import Link from "next/link";
 import { getPublicInventory } from "../lib/inventory";
 import { SITE, waLink } from "../lib/site";
-import { categoriasDe, enCategoria, stockNum } from "../lib/productos";
+import { categoriasDe, enCategoria, stockNum, precioNum } from "../lib/productos";
 import HeroCarousel from "./components/HeroCarousel";
 import CategoryStrip from "./components/CategoryStrip";
 import ProductCard from "./components/ProductCard";
+import Rail from "./components/Rail";
 
 // El Inicio se refresca cada 60 s (lee Baserow en el servidor).
 export const revalidate = 60;
 
-const LINEA = { titulo: "Portátiles corporativos", filtro: "portatil", max: 8 }; // HU-04
+// Línea de productos del Inicio (HU-04): una sola fila que se desplaza, con un banner a la izquierda.
+const LINEA = {
+  titulo: "Portátiles corporativos",
+  filtro: "portatil",          // categorías que contienen esta palabra (sin tildes)
+  boton: "Más portátiles",
+  max: 12,
+  promo: { linea1: "Portátiles", linea2: "corporativos", linea3: "nuevos y usados", nota: "Con garantía" },
+};
 
 export default async function Home() {
   let rows = [];
@@ -23,7 +31,10 @@ export default async function Home() {
   }
 
   const categorias = categoriasDe(rows);
-  const linea = rows.filter((r) => enCategoria(r, LINEA.filtro) && stockNum(r) > 0).slice(0, LINEA.max);
+  const disponibles = rows.filter((r) => enCategoria(r, LINEA.filtro) && stockNum(r) > 0);
+  const linea = disponibles.slice(0, LINEA.max);
+  const precios = disponibles.map(precioNum).filter((n) => n && n > 0);
+  const desde = precios.length ? Math.min(...precios) : null;
 
   return (
     <main>
@@ -53,10 +64,19 @@ export default async function Home() {
         <section className="wrap home-sec">
           <div className="sec-head">
             <h2 className="section-title">{LINEA.titulo}</h2>
-            <Link className="sec-more" href={`/productos?categoria=${LINEA.filtro}`}>Ver todos →</Link>
+            <Link className="btn-more" href={`/productos?categoria=${LINEA.filtro}`}>{LINEA.boton} <span aria-hidden="true">›</span></Link>
           </div>
-          <div className="grid">
-            {linea.map((r, i) => <ProductCard key={(r["Código"] ?? "") + "-" + i} r={r} />)}
+          <div className="line">
+            <Link className="line-promo" href={`/productos?categoria=${LINEA.filtro}`}>
+              <span className="lp-1">{LINEA.promo.linea1}</span>
+              <span className="lp-2">{LINEA.promo.linea2}</span>
+              <span className="lp-3">{LINEA.promo.linea3}</span>
+              {desde && <span className="lp-desde">Desde ${desde.toLocaleString("es-CO")}</span>}
+              <span className="lp-nota">{LINEA.promo.nota}</span>
+            </Link>
+            <Rail className="line-rail" label="portátiles">
+              {linea.map((r, i) => <ProductCard key={(r["Código"] ?? "") + "-" + i} r={r} />)}
+            </Rail>
           </div>
         </section>
       )}

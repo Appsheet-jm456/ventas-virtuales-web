@@ -43,8 +43,8 @@ sitecsas.com. Colores, logo, textos e imágenes son de Ventas Virtual.
 │  Categorías                                              ◀ ▶             │  HU-03
 │  [img Portátiles] [img Torres tiny] [img Partes] [img Accesorios] …      │
 ├──────────────────────────────────────────────────────────────────────────┤
-│  Portátiles corporativos                            Ver todos →          │  HU-04
-│  [producto] [producto] [producto] [producto]                             │
+│  Portátiles corporativos                          [ Más portátiles › ]  │  HU-04
+│  [BANNER  ] [producto] [producto] [producto] [producto]  ◀ ▶  (una fila) │
 ├──────────────────────────────────────────────────────────────────────────┤
 │  🛡️ Garantía · 🚚 Envíos nacionales · 📍 Tienda física · 💬 Asesoría       │
 ├──────────────────────────────────────────────────────────────────────────┤
@@ -92,10 +92,15 @@ Como cliente quiero ver las categorías con una imagen para entrar directo a lo 
 ### HU-04 · Línea Portátiles corporativos
 Como cliente quiero ver algunos portátiles disponibles en el Inicio sin tener que buscar.
 
-- Dado el Inicio, entonces veo hasta 8 portátiles **disponibles** (Stock mayor a 0).
-- Dado el enlace **Ver todos**, cuando hago clic, entonces voy a `/productos` filtrado por
+- Dado el Inicio, entonces veo **una sola fila** de portátiles **disponibles** (Stock mayor a 0),
+  hasta 12, que se desplaza con flechas o deslizando. **No** es un catálogo: el catálogo con
+  filtros vive en Productos (HU-06).
+- A la izquierda de la fila hay un banner de la línea ("Portátiles corporativos") con el precio
+  **desde** el más barato disponible.
+- Arriba a la derecha está el botón **Más portátiles ›**, que lleva a `/productos` filtrado por
   portátiles.
 - Si no hay portátiles disponibles, la sección no aparece.
+- En el celular el banner queda arriba, en franja, y la fila se desliza con el dedo.
 
 ### HU-05 · Pie de página de marca
 Como cliente quiero saber quién vende, cómo contactar y dónde seguirlos.
