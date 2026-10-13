@@ -5,18 +5,18 @@ Documentar el modelo de datos y la arquitectura,1 · Diseño,Arquitectura,Hecha,
 Montar el espejo en Notion,1 · Diseño,Método,Hecha,Alta,Mismo esquema de Futur Green (decisión 0001). Solo se escriben los bloques que cambian.,docs/notion/COMO_MONTARLO.md
 Responder las preguntas abiertas del brief,1 · Diseño,Producto,Pendiente,Alta,"Hosting, dominio, diseño visual, productos activos, usuarios del admin y analítica.",docs/00-BRIEF.md
 Validar las reglas del negocio con el dueño,1 · Diseño,Producto,Pendiente,Alta,,docs/REGLAS_DEL_NEGOCIO.md
-Revisar las columnas reales de Baserow que expone la API pública,1 · Diseño,Seguridad,Pendiente,Alta,"/api/products devuelve todas las columnas. Si hay costo o proveedor, se ven desde internet (RN-04).",docs/notion_modelado_datos.md
-Decidir el hosting destino (migración desde Vercel),1 · Diseño,Despliegue,Pendiente,Alta,Debe soportar Node.js 18+. La razón va en la decisión 0005.,docs/sdlc/1-diseno.md
-"Definir la guía visual: logo, colores y tipografía",1 · Diseño,Diseño visual,Pendiente,Media,,docs/sdlc/1-diseno.md
 Escribir las historias de usuario con criterios de aceptación,2 · Especificaciones,Producto,Pendiente,Alta,,docs/sdlc/2-especificaciones.md
-Filtrar la API pública a una lista blanca de columnas,3 · Implementación,Seguridad,Pendiente,Alta,Depende de la revisión de columnas de la Fase 1.,lib/inventory.js
-Configurar las pruebas automáticas (unitarias y de punta a punta),4 · Pruebas,Calidad,Pendiente,Media,,docs/sdlc/4-pruebas.md
-Migrar el alojamiento desde Vercel,5 · Despliegue,Despliegue,Pendiente,Media,"Variables, dominio, SSL y prueba en producción antes de apagar Vercel.",docs/sdlc/5-despliegue.md
-"Actualizar el brief a v1.1 con marca, políticas y ecommerce en dos etapas",1 · Diseño,Producto,Hecha,Alta,"Mapa de la web, flujo de pedido, riesgos y preguntas por etapa. Decisión 0005 propuesta.",docs/00-BRIEF.md
-Confirmar con el dueño la división en dos etapas,1 · Diseño,Producto,Pendiente,Alta,Decisión 0005 en estado Propuesta.,docs/decisiones/0005-dos-etapas-marca-y-ecommerce.md
-"Reunir el contenido de Quiénes somos (historia, años, clientes, logros)",1 · Diseño,Contenido,Pendiente,Alta,Lo aporta el dueño. Fotos del local y del equipo si las hay.,docs/00-BRIEF.md
-Redactar la política de privacidad (Ley 1581),1 · Diseño,Contenido,Pendiente,Alta,Revisión del contador o abogado antes de publicar (RN-12).,docs/REGLAS_DEL_NEGOCIO.md
-Redactar la política de envíos,1 · Diseño,Contenido,Pendiente,Alta,"Cobertura nacional, transportadora, tiempos y costos.",docs/REGLAS_DEL_NEGOCIO.md
-Redactar la política de garantía (nuevo y usado),1 · Diseño,Contenido,Pendiente,Alta,"Qué cubre, cuánto dura y cómo se reclama (RN-14).",docs/REGLAS_DEL_NEGOCIO.md
-Redactar los términos y condiciones,1 · Diseño,Contenido,Pendiente,Media,,docs/REGLAS_DEL_NEGOCIO.md
-Diseñar el flujo de pedido de la Etapa 2 y elegir la pasarela de pago,1 · Diseño,Ecommerce,Pendiente,Baja,Se hace cuando la Etapa 1 esté en producción (decisión 0005).,docs/00-BRIEF.md
+Configurar las pruebas automáticas (unitarias y de punta a punta),4 · Pruebas,Camino 1,Pendiente,Media,,docs/sdlc/4-pruebas.md
+"Reunir el contenido de Quiénes somos (historia, años, clientes, logros)",1 · Diseño,Camino 2,Pendiente,Baja,Lo aporta el dueño. Fotos del local y del equipo si las hay. Camino 2: se trabaja después de la landing.,docs/00-BRIEF.md
+Redactar la política de privacidad (Ley 1581),1 · Diseño,Camino 2,Pendiente,Baja,Revisión del contador o abogado antes de publicar (RN-12). Camino 2: se trabaja después de la landing.,docs/REGLAS_DEL_NEGOCIO.md
+Redactar la política de envíos,1 · Diseño,Camino 2,Pendiente,Baja,"Cobertura nacional, transportadora, tiempos y costos. Camino 2: se trabaja después de la landing.",docs/REGLAS_DEL_NEGOCIO.md
+Redactar la política de garantía (nuevo y usado),1 · Diseño,Camino 2,Pendiente,Baja,"Qué cubre, cuánto dura y cómo se reclama (RN-14). Camino 2: se trabaja después de la landing.",docs/REGLAS_DEL_NEGOCIO.md
+Redactar los términos y condiciones,1 · Diseño,Camino 2,Pendiente,Baja,Camino 2: se trabaja después de la landing.,docs/REGLAS_DEL_NEGOCIO.md
+Actualizar el brief a v1.2: dos caminos (landing y tienda completa),1 · Diseño,Producto,Hecha,Alta,Decisión 0005 aceptada. Ecommerce con pago por ahora fuera.,docs/00-BRIEF.md
+Decidir el hosting: Hostinger Web Apps,1 · Diseño,Despliegue,Hecha,Alta,Decisión 0006. Dominio comprado en Hostinger.,docs/decisiones/0006-hosting-hostinger-web-apps.md
+Mejorar el diseño y el frontend de la landing,3 · Implementación,Camino 1,En curso,Alta,"Hecho en el PR #1: portada, franja de confianza, tarjetas, banda de contacto y móvil. Falta que el dueño lo revise y apruebe.",app/globals.css
+Proteger la API pública con lista blanca de columnas,3 · Implementación,Camino 1,Hecha,Alta,"RN-04: costo, proveedor y notas internas ya no salen al público.",lib/inventory.js
+Actualizar la lista de productos en Baserow,3 · Implementación,Camino 1,Pendiente,Alta,"La tienda lee Baserow y refresca cada 60 s. Lo hace el dueño; revisar Stock, Precio, Foto y Oculto.",docs/notion_modelado_datos.md
+Desplegar la landing en Hostinger Web Apps y asociar el dominio,5 · Despliegue,Camino 1,Pendiente,Alta,Seguir la guía. Probar primero en la URL temporal.,docs/sdlc/5-despliegue.md
+Apagar Vercel tras verificar Hostinger,5 · Despliegue,Camino 1,Pendiente,Media,,docs/sdlc/5-despliegue.md
+"Planificar la tienda completa: administración, inventarios, categorías, configuración y pedidos",1 · Diseño,Camino 2,Pendiente,Baja,Se planifica en Notion. El ecommerce con pago por ahora no.,docs/00-BRIEF.md

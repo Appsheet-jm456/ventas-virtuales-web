@@ -20,6 +20,7 @@ Crear `.env.local` en la raíz (no se versiona, decisión 0002):
 BASEROW_API_TOKEN=...
 BASEROW_TABLE_ID=...
 ADMIN_PASSWORD=...
+NEXT_PUBLIC_SITE_URL=http://localhost:3000   # en producción: el dominio
 # BASEROW_API_URL=https://api.baserow.io   (opcional)
 ```
 
@@ -36,8 +37,11 @@ python3 docs/notion/sincronizar.py --todo      # después: solo lo que cambió
 
 Detalle en [notion/COMO_MONTARLO.md](./notion/COMO_MONTARLO.md).
 
-## Compilar
+## Compilar y producción
 
 ```bash
 npm run build
+npm start        # usa el puerto de la variable PORT (3000 por defecto)
 ```
+
+Despliegue en Hostinger: [sdlc/5-despliegue.md](./sdlc/5-despliegue.md).

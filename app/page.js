@@ -40,7 +40,33 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="trust" aria-label="Por qué comprar con nosotros">
+        <div className="wrap trust-in">
+          <div className="trust-item"><span className="trust-ico" aria-hidden="true">🛡️</span><div><b>Garantía</b><small>En todos nuestros equipos</small></div></div>
+          <div className="trust-item"><span className="trust-ico" aria-hidden="true">🚚</span><div><b>Envíos nacionales</b><small>A todo el país</small></div></div>
+          <div className="trust-item"><span className="trust-ico" aria-hidden="true">📍</span><div><b>Tienda física</b><small>{SITE.ciudad}</small></div></div>
+          <div className="trust-item"><span className="trust-ico" aria-hidden="true">💬</span><div><b>Asesoría directa</b><small>Por WhatsApp</small></div></div>
+        </div>
+      </section>
+
       <Catalog rows={rows} demo={demo} />
+
+      <section className="cta-band">
+        <div className="wrap cta-in">
+          <div>
+            <h2>¿No encuentras el equipo que buscas?</h2>
+            <p>Cuéntanos qué necesitas y un asesor te ayuda a conseguirlo, con envío a todo el país.</p>
+          </div>
+          <a
+            className="btn-hero wa"
+            href={waLink("Hola 👋, estoy buscando un equipo y no lo encontré en el catálogo.")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Escribir a un asesor
+          </a>
+        </div>
+      </section>
     </main>
   );
 }

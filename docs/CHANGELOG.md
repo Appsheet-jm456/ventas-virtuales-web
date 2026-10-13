@@ -5,6 +5,19 @@
 
 ---
 
+## Brief v1.2 — 13 oct 2026 · Dos caminos: la landing ahora, la tienda completa después
+
+**La landing sale primero.** El dueño aclaró el plan: la landing que ya está en Vercel se mejora
+y se pasa a **Hostinger con el dominio propio**, mientras la tienda completa (administración,
+inventarios, categorías, configuración, pedidos y ecommerce) se sigue planificando. El pago en
+línea y el flujo de pedido quedan por ahora fuera (decisión 0005).
+
+En la landing: **nuevo diseño** (portada, franja de confianza con garantía, envíos nacionales,
+tienda física y asesoría, tarjetas de producto, banda de contacto y mejor versión celular) y el
+público **ya no puede ver columnas internas** de Baserow como costo o proveedor.
+
+---
+
 ## Brief v1.1 — 12 oct 2026 · Marca, políticas y ecommerce
 
 **El objetivo creció y ahora está mapeado.** La web deja de ser solo un catálogo: debe posicionar

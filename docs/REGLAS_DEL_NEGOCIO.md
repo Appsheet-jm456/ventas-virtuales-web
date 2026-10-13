@@ -22,7 +22,7 @@ en la tienda pero sigue en Baserow, y el panel admin lo muestra para poder repub
 
 **RN-04 · El cliente solo ve datos de venta.** Código, categoría, marca, modelo,
 especificaciones, estado, precio, stock, descripción, fotos y video. **Nunca** costo, proveedor
-ni notas internas.
+ni notas internas. Se cumple con una lista blanca en `lib/inventory.js` (`publicRow`).
 
 **RN-05 · Fotos y videos compartidos.** Los enlaces de Google Drive deben estar compartidos como
 *Cualquier persona con el enlace*; si no, no cargan en la web.
@@ -45,7 +45,7 @@ exige la clave de administración. El catálogo público nunca escribe en Basero
 **RN-10 · Los datos de la empresa están en un solo lugar.** Nombre, dirección, WhatsApp y redes
 salen de `lib/site.js`.
 
-## Marca y políticas
+## Marca y políticas (Camino 2)
 
 **RN-11 · La web dice quiénes somos.** Una página de marca cuenta la historia, la experiencia y
 la especialidad (comercio de tecnología). Lo que se afirma ahí tiene que ser verdad y demostrable.
@@ -59,7 +59,7 @@ puede pedir nombre, correo ni teléfono al cliente (Ley 1581 de 2012).
 **RN-14 · La política de garantía distingue nuevo de usado.** Cada producto muestra su estado
 (Nuevo, Grado A, Grado B) y la garantía que le corresponde.
 
-## Pedido en línea (Etapa 2 — por validar)
+## Pedido en línea (Camino 2 — por ahora no)
 
 **RN-15 · Un pedido recorre siempre el mismo flujo:** Elección del producto → Pago por pasarela →
 Confirmación → Pedido nuevo → Alistamiento → Video de soporte → Despacho por transportadora.

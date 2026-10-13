@@ -11,14 +11,12 @@
 - [x] Reglas del negocio escritas — [REGLAS_DEL_NEGOCIO.md](../REGLAS_DEL_NEGOCIO.md)
 - [x] Modelo de datos documentado — [notion_modelado_datos.md](../notion_modelado_datos.md)
 - [x] Método de trabajo: git manda, Notion es el espejo (decisión 0001)
-- [ ] Preguntas abiertas de la Etapa 1 respondidas por el dueño
-- [ ] División en dos etapas confirmada por el dueño (decisión 0005)
-- [ ] Contenido de Quiénes somos reunido
-- [ ] Cuatro políticas redactadas y revisadas: privacidad, envíos, garantía, términos
+- [x] División en dos caminos: landing ahora, tienda completa después (decisión 0005)
+- [x] Hosting decidido: Hostinger Web Apps (decisión 0006)
+- [ ] Preguntas abiertas del Camino 1 respondidas por el dueño (dominio, quién actualiza Baserow, admin)
+- [ ] Rediseño del frontend aprobado por el dueño
 - [ ] Reglas del negocio validadas por el dueño
-- [ ] Columnas reales de Baserow revisadas: qué expone hoy la API pública (RN-04)
-- [ ] Hosting destino decidido, con la razón escrita en `docs/decisiones/`
-- [ ] Guía visual definida: logo, colores y tipografía
+- [x] La API pública solo expone columnas de venta (RN-04, lista blanca)
 
 ---
 
@@ -50,3 +48,6 @@
 | `app/api/admin/route.js` | Escrituras protegidas |
 | `app/components/` | Catalog, Gallery, Brand |
 | `lib/inventory.js` · `lib/images.js` · `lib/site.js` | Datos, imágenes, datos de la empresa |
+
+> El contenido de marca (Quiénes somos, políticas) y el diseño de la tienda completa pertenecen al
+> **Camino 2** y se trabajan en su propia planificación.
