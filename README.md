@@ -1,5 +1,7 @@
 # Ventas Virtual Colombia — Tienda web
 
+> **Documentación del proyecto:** [docs/00-BRIEF.md](docs/00-BRIEF.md) · fases en [docs/sdlc/](docs/sdlc/) · método de trabajo en [CLAUDE.md](CLAUDE.md).
+
 Página web tipo ecommerce para la venta de computadores corporativos nuevos y usados
 (portátiles, torres tiny, partes y accesorios). Hecha con Next.js, lista para Vercel.
 

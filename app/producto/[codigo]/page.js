@@ -50,7 +50,7 @@ export default async function ProductPage({ params }) {
         <div className="crumbs"><Link href="/">Inicio</Link> / Producto</div>
         <h1 className="section-title">Producto no encontrado</h1>
         <p className="section-sub">
-          Es posible que ya no esté disponible. <Link href="/#catalogo">Ver el catálogo completo</Link> o{" "}
+          Es posible que ya no esté disponible. <Link href="/productos">Ver el catálogo completo</Link> o{" "}
           <a href={waLink("Hola 👋, busco un producto que vi en su página y ya no aparece.")} target="_blank" rel="noopener noreferrer">
             pregúntanos por WhatsApp
           </a>.
@@ -68,7 +68,7 @@ export default async function ProductPage({ params }) {
   return (
     <main className="pd wrap">
       <div className="crumbs">
-        <Link href="/">Inicio</Link> / <Link href="/#catalogo">Catálogo</Link> / {f(r, "Código")}
+        <Link href="/">Inicio</Link> / <Link href="/productos">Productos</Link> / {f(r, "Categoría") ? <><Link href={`/productos?categoria=${encodeURIComponent(f(r, "Categoría"))}`}>{f(r, "Categoría")}</Link> / </> : null}{f(r, "Código")}
       </div>
 
       <div className="pd-grid">

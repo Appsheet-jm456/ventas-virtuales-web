@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+<defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e2160"/><stop offset="1" stop-color="#2147c4"/></linearGradient>
+  <radialGradient id="r" cx=".85" cy=".2" r=".7"><stop offset="0" stop-color="#25d366" stop-opacity=".22"/><stop offset="1" stop-color="#25d366" stop-opacity="0"/></radialGradient>
+  <pattern id="p" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity=".06"/></pattern>
+</defs>
+<rect width="800" height="800" fill="url(#g)"/><rect width="800" height="800" fill="url(#p)"/><rect width="800" height="800" fill="url(#r)"/>
+<g transform="translate(230,470)">
+  <rect x="0" y="0" width="378.0" height="243.0" rx="12.6" fill="#0b1c4d"/>
+  <rect x="12.6" y="12.6" width="352.8" height="217.8" rx="5.4" fill="#2b62e3"/>
+  <rect x="27.0" y="30.6" width="108.0" height="63.0" rx="3.6" fill="#ffffff" opacity=".25"/>
+  <rect x="148.5" y="30.6" width="108.0" height="63.0" rx="3.6" fill="#ffffff" opacity=".18"/>
+  <rect x="27.0" y="106.2" width="229.5" height="81.0" rx="3.6" fill="#ffffff" opacity=".12"/>
+  <path d="M-45.0 243.0 H423.0 L396.0 266.4 H-18.0 Z" fill="#c9d3e6"/>
+  <rect x="153.0" y="243.0" width="72.0" height="7.2" rx="3.6" fill="#9aa8c2"/>
+</g>
+<text x="50" y="120" fill="#ffffff" font-size="52" font-weight="800" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" letter-spacing="-1">Portátiles</text><text x="50" y="180" fill="#ffffff" font-size="52" font-weight="800" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" letter-spacing="-1">corporativos</text><text x="50" y="246" fill="#cdd9f7" font-size="24" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">Nuevos y usados con garantía</text><rect x="50" y="272" width="168" height="40" rx="20" fill="#ffffff" opacity=".14"/><text x="134.0" y="298" fill="#ffffff" font-size="17" font-weight="600" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle">Core i5 / i7</text><rect x="228" y="272" width="69" height="40" rx="20" fill="#ffffff" opacity=".14"/><text x="262.5" y="298" fill="#ffffff" font-size="17" font-weight="600" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle">SSD</text><rect x="50" y="336" width="242" height="56" rx="12" fill="#25d366"/><text x="171.0" y="372" fill="#05391f" font-size="22" font-weight="800" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle">Ver portátiles</text>
+<g><rect x="580" y="24" width="190" height="34" rx="17" fill="#ffffff" opacity=".18"/><text x="675" y="46" fill="#ffffff" font-size="15" font-weight="700" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" text-anchor="middle" letter-spacing="1.5">IMAGEN TEMPORAL</text></g>
+</svg>
