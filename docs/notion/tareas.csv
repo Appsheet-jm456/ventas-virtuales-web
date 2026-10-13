@@ -5,7 +5,7 @@ Documentar el modelo de datos y la arquitectura,1 · Diseño,Arquitectura,Hecha,
 Montar el espejo en Notion,1 · Diseño,Método,Hecha,Alta,Mismo esquema de Futur Green (decisión 0001). Solo se escriben los bloques que cambian.,docs/notion/COMO_MONTARLO.md
 Responder las preguntas abiertas del brief,1 · Diseño,Producto,Pendiente,Alta,"Hosting, dominio, diseño visual, productos activos, usuarios del admin y analítica.",docs/00-BRIEF.md
 Validar las reglas del negocio con el dueño,1 · Diseño,Producto,Pendiente,Alta,,docs/REGLAS_DEL_NEGOCIO.md
-Escribir las historias de usuario con criterios de aceptación,2 · Especificaciones,Producto,Pendiente,Alta,,docs/sdlc/2-especificaciones.md
+Escribir las historias de usuario con criterios de aceptación,2 · Especificaciones,Producto,En curso,Alta,"HU-01 a HU-06 escritas para la landing (Inicio, Categorías, Productos). Falta validarlas con el dueño.",docs/sdlc/2-especificaciones.md
 Configurar las pruebas automáticas (unitarias y de punta a punta),4 · Pruebas,Camino 1,Pendiente,Media,,docs/sdlc/4-pruebas.md
 "Reunir el contenido de Quiénes somos (historia, años, clientes, logros)",1 · Diseño,Camino 2,Pendiente,Baja,Lo aporta el dueño. Fotos del local y del equipo si las hay. Camino 2: se trabaja después de la landing.,docs/00-BRIEF.md
 Redactar la política de privacidad (Ley 1581),1 · Diseño,Camino 2,Pendiente,Baja,Revisión del contador o abogado antes de publicar (RN-12). Camino 2: se trabaja después de la landing.,docs/REGLAS_DEL_NEGOCIO.md
@@ -20,3 +20,6 @@ Actualizar la lista de productos en Baserow,3 · Implementación,Camino 1,Pendie
 Desplegar la landing en Hostinger Web Apps y asociar el dominio,5 · Despliegue,Camino 1,Pendiente,Alta,Seguir la guía. Probar primero en la URL temporal.,docs/sdlc/5-despliegue.md
 Apagar Vercel tras verificar Hostinger,5 · Despliegue,Camino 1,Pendiente,Media,,docs/sdlc/5-despliegue.md
 "Planificar la tienda completa: administración, inventarios, categorías, configuración y pedidos",1 · Diseño,Camino 2,Pendiente,Baja,Se planifica en Notion. El ecommerce con pago por ahora no.,docs/00-BRIEF.md
+Reunir las imágenes: 2 banners y una por categoría,2 · Especificaciones,Camino 1,Pendiente,Alta,"Banners 1600×500 (y 800×800 para celular, opcional). Categorías 600×600.",docs/sdlc/2-especificaciones.md
+"Implementar el nuevo Inicio: encabezado, banner, categorías y línea de portátiles",3 · Implementación,Camino 1,Pendiente,Alta,HU-01 a HU-05. Referencia de estructura: sitecsas.com.,docs/sdlc/2-especificaciones.md
+Crear las páginas Categorías y Productos,3 · Implementación,Camino 1,Pendiente,Alta,HU-03 y HU-06.,docs/sdlc/2-especificaciones.md

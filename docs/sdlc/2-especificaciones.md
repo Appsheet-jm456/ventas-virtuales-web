@@ -1,29 +1,124 @@
 # Fase 2 · Especificaciones
 
-**Estado:** ⚪ Pendiente
+**Estado:** 🟡 En curso (Camino 1 · landing) · **Abierta:** 13 oct 2026
 
 > Define **qué tiene que pasar** en cada funcionalidad, de forma que se pueda probar. Nada se
 > programa sin su historia y sus criterios de aceptación.
 
 ## Criterio de cierre
 
-- [ ] Una historia de usuario por funcionalidad del alcance v1
-- [ ] Cada historia con criterios de aceptación *Dado / Cuando / Entonces*
+- [x] Estructura de la web para clientes definida: Inicio, Categorías, Productos (13 oct 2026)
 - [ ] Historias validadas por el dueño
+- [ ] Imágenes reunidas: 2 banners y una imagen por categoría
 - [ ] Cada criterio enlazado a la prueba que lo comprueba (Fase 4)
 
 ---
 
-## Formato de una historia
+## Referencia de diseño
+
+Estilo de tienda tecnológica: encabezado con buscador al centro, banner que rota, categorías con
+imagen y filas de productos por línea. Referencia de **estructura** (no de contenido ni marca):
+sitecsas.com. Colores, logo, textos e imágenes son de Ventas Virtual.
+
+## Páginas para clientes
+
+| Página | Ruta | Qué muestra |
+|---|---|---|
+| **Inicio** | `/` | Encabezado · banner rotativo · categorías · línea Portátiles corporativos · franja de confianza · pie |
+| **Categorías** | `/categorias` | Todas las categorías con su imagen; cada una abre Productos filtrado |
+| **Productos** | `/productos` | Catálogo completo con buscador y filtros (categoría, marca, precio, disponibles) |
+| Producto | `/producto/<código>` | Ya existe: fotos, video, especificaciones, botón WhatsApp |
+
+## Estructura del Inicio
 
 ```
-HU-01 · <título>
-Como <usuario> quiero <acción> para <beneficio>.
-
-Criterios de aceptación
-- Dado <contexto>, cuando <acción>, entonces <resultado>.
+┌──────────────────────────────────────────────────────────────────────────┐
+│ [LOGO]   [ 🔍 Buscar productos…            ]   (🟢) WhatsApp   (🚚) Envíos  │  HU-01
+│                                                    317 559 1252   a todo el país│
+│   Inicio · Categorías · Productos · Contacto                              │
+├──────────────────────────────────────────────────────────────────────────┤
+│  ◀            BANNER 1  ⇄  BANNER 2   (rota solo cada 5 s)            ▶  │  HU-02
+│                              ● ○                                         │
+├──────────────────────────────────────────────────────────────────────────┤
+│  Categorías                                              ◀ ▶             │  HU-03
+│  [img Portátiles] [img Torres tiny] [img Partes] [img Accesorios] …      │
+├──────────────────────────────────────────────────────────────────────────┤
+│  Portátiles corporativos                            Ver todos →          │  HU-04
+│  [producto] [producto] [producto] [producto]                             │
+├──────────────────────────────────────────────────────────────────────────┤
+│  🛡️ Garantía · 🚚 Envíos nacionales · 📍 Tienda física · 💬 Asesoría       │
+├──────────────────────────────────────────────────────────────────────────┤
+│  MARCA            CONTACTO             ATENCIÓN            REDES         │  HU-05
+│  Logo + lema      Dirección, WhatsApp  Horario             IG · FB · TikTok│
+└──────────────────────────────────────────────────────────────────────────┘
 ```
+
+---
 
 ## Historias
 
-Se escriben al cerrar la Fase 1.
+### HU-01 · Encabezado con buscador y WhatsApp
+Como cliente quiero buscar un producto y ver el WhatsApp desde cualquier página para encontrar
+rápido lo que necesito o escribir a un asesor.
+
+- Dado cualquier página, cuando la abro, entonces veo de izquierda a derecha: **logo**,
+  **buscador**, **ícono de WhatsApp con el número** y **Envíos a todo el país**.
+- Dado el buscador, cuando escribo "thinkpad" y presiono Enter, entonces voy a `/productos`
+  con los resultados de esa búsqueda.
+- Dado el número de WhatsApp, cuando hago clic, entonces se abre el chat de ventas.
+- Dado un celular, cuando abro la web, entonces el logo y el WhatsApp quedan arriba y el
+  buscador ocupa todo el ancho debajo.
+
+### HU-02 · Banner rotativo
+Como dueño quiero un banner con dos imágenes que se muevan solas para destacar promociones.
+
+- Dado el Inicio, cuando lo abro, entonces el banner muestra la imagen 1 y a los 5 segundos
+  pasa sola a la imagen 2, y vuelve a empezar.
+- Dado el banner, cuando uso las flechas o los puntos, entonces cambio de imagen a mano.
+- Dado un banner con enlace, cuando hago clic, entonces voy a ese producto, categoría o WhatsApp.
+- Dado un celular, cuando lo abro, entonces se ve la versión móvil de la imagen si existe.
+- Las imágenes y sus enlaces se cambian en un solo lugar (`lib/site.js`) sin tocar el diseño.
+
+### HU-03 · Categorías con imagen
+Como cliente quiero ver las categorías con una imagen para entrar directo a lo que busco.
+
+- Dado el Inicio, cuando bajo del banner, entonces veo una fila de categorías con imagen y
+  nombre que se desplaza con flechas o deslizando.
+- Dada una categoría, cuando hago clic, entonces voy a `/productos` filtrado por ella.
+- Las categorías salen de la columna `Categoría` de Baserow; una categoría sin imagen muestra
+  un ícono en su lugar.
+- `/categorias` muestra todas en cuadrícula.
+
+### HU-04 · Línea Portátiles corporativos
+Como cliente quiero ver algunos portátiles disponibles en el Inicio sin tener que buscar.
+
+- Dado el Inicio, entonces veo hasta 8 portátiles **disponibles** (Stock mayor a 0).
+- Dado el enlace **Ver todos**, cuando hago clic, entonces voy a `/productos` filtrado por
+  portátiles.
+- Si no hay portátiles disponibles, la sección no aparece.
+
+### HU-05 · Pie de página de marca
+Como cliente quiero saber quién vende, cómo contactar y dónde seguirlos.
+
+- Dado cualquier página, entonces el pie muestra cuatro bloques: **Marca** (logo y lema),
+  **Contacto** (dirección y WhatsApp), **Atención** (horario) y **Redes** (Instagram, Facebook,
+  TikTok).
+
+### HU-06 · Página Productos
+Como cliente quiero ver todo el catálogo con filtros.
+
+- Dado `/productos`, entonces veo el catálogo con buscador y filtros de categoría, marca,
+  precio y solo disponibles (los que existen hoy en el Inicio).
+- Dado un enlace con `?q=` o `?categoria=`, cuando abro la página, entonces los filtros ya
+  vienen aplicados.
+
+---
+
+## Lo que aporta el dueño
+
+| Qué | Formato | Dónde se pone |
+|---|---|---|
+| Banner 1 y Banner 2 | Escritorio 1600×500 px · celular 800×800 px (opcional), JPG o WebP | `public/banners/` |
+| Enlace de cada banner | Un producto, una categoría o WhatsApp | `lib/site.js` |
+| Imagen por categoría | Cuadrada, 600×600 px, fondo claro | `public/categorias/` |
+| Horario de atención | Texto, p. ej. "Lun a Sáb 9:00 a 6:00" | `lib/site.js` |
