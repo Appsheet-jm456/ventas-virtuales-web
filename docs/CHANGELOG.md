@@ -5,6 +5,14 @@
 
 ---
 
+## Brief v1.3 — 14 oct 2026 · La tienda completa tiene repo propio
+
+El Camino 2 deja de ser una promesa dentro de este repo: se construye en
+`Appsheet-jm456/ventas-virtual-eccomer-web`, que nace con el método completo de Futur Green y el
+CRM (decisión 0008). Este repo se concentra en terminar y publicar la landing.
+
+---
+
 ## Brief v1.2 — 13 oct 2026 · Dos caminos: la landing ahora, la tienda completa después
 
 **La landing sale primero.** El dueño aclaró el plan: la landing que ya está en Vercel se mejora

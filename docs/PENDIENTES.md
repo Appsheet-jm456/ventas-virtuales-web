@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 13 de octubre de 2026 · Brief `v1.2` · **Camino 1 (landing)** · nuevo diseño publicado en Vercel (PR #1 fusionado) · modelo v2 con Cloudinary propuesto
+> **Última sesión:** 13 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · nuevo diseño publicado en Vercel (PR #1 fusionado) · modelo v2 con Cloudinary propuesto
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -12,7 +12,7 @@
 | Brief v1.2 (dos caminos: landing y tienda completa) | `docs/00-BRIEF.md` |
 | Reglas del negocio RN-01 a RN-18 | `docs/REGLAS_DEL_NEGOCIO.md` |
 | Modelo de datos (tabla de Baserow) | `docs/notion_modelado_datos.md` |
-| Decisiones 0001 a 0006 | `docs/decisiones/` |
+| Decisiones 0001 a 0008 | `docs/decisiones/` |
 | Espejo en Notion: script y CSV | `docs/notion/` |
 | Rediseño del frontend de la landing | `app/`, `app/globals.css` |
 | Lista blanca de columnas públicas (RN-04) | `lib/inventory.js` |
@@ -33,9 +33,12 @@
 6. Renombrar la rama por defecto `claude/github-upload-iteration-cgbvq9` a `main` (o usar ese nombre
    en Hostinger) y corregir la guía de despliegue.
 7. Desplegar en Hostinger Web Apps y asociar el dominio ([sdlc/5-despliegue.md](./sdlc/5-despliegue.md)); apagar Vercel.
-8. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
+8. **Decidir la fuente de datos de la landing: seguir con Baserow o migrar a Supabase** (productos,
+   categorías, banners y configuración; `/admin` con panel lateral y carga CSV). Define si la
+   decisión 0003 se reemplaza.
+9. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
-## 🗺️ Camino 2 · Tienda completa (se planifica en Notion)
+## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)
 
 Administración, inventarios, categorías, configuración, pedidos y marca (Quiénes somos,
 políticas). El ecommerce con pago en línea queda **por ahora fuera**. No se programa hasta

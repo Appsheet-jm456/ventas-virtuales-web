@@ -1,6 +1,6 @@
 # Ventas Virtual — Tienda Web · Brief del proyecto
 
-`v1.2` · 13 oct 2026 · **Fase actual: 1 de 5 — Diseño** · Responsable: dueño de Ventas Virtual Colombia
+`v1.3` · 14 oct 2026 · **Fase actual: 1 de 5 — Diseño** · Responsable: dueño de Ventas Virtual Colombia
 
 ---
 
@@ -13,7 +13,7 @@ vez **vitrina de la marca** y **canal de ventas**, y se construye por **dos cami
 | Camino | Qué es | Estado | Cómo se cierra la venta |
 |---|---|---|---|
 | **1 · Landing** | El código de este repositorio: catálogo conectado a Baserow, producto con fotos y video, WhatsApp | **Ahora**: ya existe en Vercel (prototipo); se mejora y se pasa a Hostinger | Por **WhatsApp**, con el producto ya identificado |
-| **2 · Tienda completa (app)** | Administración, inventarios, categorías, configuración, pedidos y ecommerce | **Después**: se planifica en Notion | Por definir. El pago en línea y el flujo de pedido quedan **por ahora fuera** |
+| **2 · Tienda completa (app)** | Administración, inventarios, categorías, configuración, pedidos y ecommerce | **Después**: repo propio `ventas-virtual-eccomer-web` (decisión 0008) | Por definir. El pago en línea y el flujo de pedido quedan **por ahora fuera** |
 
 > No confundir los **caminos** (qué producto se entrega) con las **fases** SDLC (cómo se
 > construye). Cada camino recorre las cinco fases: Diseño, Especificaciones, Implementación,
@@ -108,7 +108,7 @@ Lo que existe y lo que falta, página por página. **Este mapa es la lista de tr
 - Inventario de Baserow al día.
 - Despliegue en Hostinger Web Apps con dominio propio.
 
-**Camino 2 — tienda completa (después):**
+**Camino 2 — tienda completa (después, en el repo `ventas-virtual-eccomer-web`):**
 
 - Páginas de marca: Quiénes somos y las cuatro políticas (privacidad, envíos, garantía, términos).
 - Administración completa: inventarios, categorías, configuración.
