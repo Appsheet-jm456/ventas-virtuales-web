@@ -20,8 +20,13 @@ negocio, así que la base debe estar siempre en línea.
   tablas a mano en el panel. El MCP de Supabase, limitado a este proyecto, aplica las migraciones.
 - `/admin` con panel lateral plegable (Productos, Categorías, Banners, Configuración), login con
   Supabase Auth, carga de productos por **CSV** y subida de imágenes a Cloudinary.
-- La carga inicial sale de un CSV exportado de Baserow. El CSV es también el puente manual con
-  InventarIA.
+- **La web y InventarIA quedan separadas** (confirmado por el dueño el 14 oct 2026): no hay
+  sincronización automática. Todo se hace desde `/admin`: crear, editar, desactivar o eliminar
+  productos uno a uno, y **cargar un CSV** cuando hay inventario nuevo o modificaciones.
+- **Reglas de la carga CSV:** se identifica cada producto por su código; si existe se
+  actualiza y si no, se crea. Los productos que no vienen en el archivo **no se tocan ni se
+  borran**. Antes de aplicar, `/admin` muestra una vista previa (nuevos, modificados, con
+  errores). La carga inicial sale de un CSV exportado de Baserow.
 
 ## Alternativas descartadas
 
@@ -34,5 +39,6 @@ internet estén arriba, y habría que exponerlo.
 
 - El plan gratuito pausa el proyecto tras 7 días sin actividad y no incluye copias automáticas:
   exportar copias periódicas y revisar la pausa antes de publicar.
-- Pendiente: si la web debe seguir conectada a InventarIA automáticamente o solo por CSV.
+- Si más adelante repetir la carga pesa demasiado, se puede agregar una sincronización con
+  Baserow sin cambiar el modelo.
 - El ecommerce decide su propia base (decisión 0003 de su repo).

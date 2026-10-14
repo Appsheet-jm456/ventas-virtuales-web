@@ -35,7 +35,7 @@
 7. Desplegar en Hostinger Web Apps y asociar el dominio ([sdlc/5-despliegue.md](./sdlc/5-despliegue.md)); apagar Vercel.
 8. **Supabase Cloud (decisión 0009):** el dueño crea la cuenta y el proyecto y genera el token del MCP
    (en `.env.local`); luego migración con las 4 tablas + RLS, `/admin` con panel lateral, carga CSV y
-   migración de datos desde Baserow. Falta responder si se mantiene la conexión automática con InventarIA.
+   migración de datos desde Baserow. Web e InventarIA quedan separadas: todo desde `/admin` y carga CSV.
 9. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
 ## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)
