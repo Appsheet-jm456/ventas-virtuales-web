@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "supabase-landing": {
+      "command": "./scripts/supabase-mcp.sh"
+    }
+  }
+}
