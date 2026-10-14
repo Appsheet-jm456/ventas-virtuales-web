@@ -22,6 +22,11 @@
 
 ## ⏭️ Siguiente (Camino 1 · landing)
 
+0. **PRIORITARIA · Notion:** crear la página «Página Web landing Ventas Virtual» con un brief
+   nuevo (desde el v1.3 de git + Supabase, decisión 0009) y la misma estructura SDLC (Brief, Fases,
+   Tareas, Decisiones). Notion hoy tiene brief v1.0 y 13 de 30 tareas. Antes: decidir qué hacer con
+   las 5 tareas que solo existen en Notion. La copia del brief requiere autorización del dueño.
+
 1. **Seguridad:** revocar en Baserow el token que se compartió en la conversación del 13 oct y
    crear uno nuevo (Leer, Crear, Actualizar, Eliminar). Cargarlo en Vercel, Hostinger y `.env.local`.
 2. **Aprobar el modelo v2** (Categorías, Banners, imágenes en Cloudinary — decisión 0007) y crear
