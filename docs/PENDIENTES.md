@@ -33,9 +33,13 @@
 6. Renombrar la rama por defecto `claude/github-upload-iteration-cgbvq9` a `main` (o usar ese nombre
    en Hostinger) y corregir la guía de despliegue.
 7. Desplegar en Hostinger Web Apps y asociar el dominio ([sdlc/5-despliegue.md](./sdlc/5-despliegue.md)); apagar Vercel.
-8. **Supabase Cloud (decisión 0009):** el dueño crea la cuenta y el proyecto y genera el token del MCP
-   (en `.env.local`); luego migración con las 4 tablas + RLS, `/admin` con panel lateral, carga CSV y
-   migración de datos desde Baserow. Web e InventarIA quedan separadas: todo desde `/admin` y carga CSV.
+8. **Supabase Cloud (decisión 0009):** ✅ proyecto creado y migraciones aplicadas por el MCP el
+   14 oct (`supabase/migrations/`): `productos`, `categorias`, `banners`, `configuracion` con RLS
+   (anon lee solo lo activo/visible; escribe solo `authenticated`), 4 categorías, 2 banners y los
+   datos de la empresa. **Falta:** desactivar el registro público en Supabase Auth y crear el
+   usuario del dueño (con RLS actual, cualquier usuario autenticado escribe); exportar el CSV de
+   productos de Baserow para la carga inicial; `/admin` con panel lateral y carga CSV; pasar
+   `lib/inventory.js` a Supabase. Web e InventarIA quedan separadas.
 9. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
 ## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)
