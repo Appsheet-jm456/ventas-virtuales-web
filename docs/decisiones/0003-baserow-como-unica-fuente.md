@@ -1,6 +1,6 @@
 # 0003 · Baserow como única fuente del inventario
 
-**Estado:** Aceptada · 12 oct 2026 (registra cómo se construyó la v1)
+**Estado:** Reemplazada por la [0009](./0009-supabase-cloud-para-la-landing.md) · 14 oct 2026 (registra cómo se construyó la v1)
 
 ## Contexto
 

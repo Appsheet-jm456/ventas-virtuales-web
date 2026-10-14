@@ -122,7 +122,7 @@ Lo que existe y lo que falta, página por página. **Este mapa es la lista de tr
 
 **Frontend** Next.js 14 (App Router) · React 18 · JavaScript
 
-**Datos** Baserow por API — la misma tabla de InventarIA (decisión 0003). *Camino 2: por decidir
+**Datos** Supabase Cloud (decisión 0009; antes Baserow, decisión 0003). *Camino 2: por decidir
 dónde se guardan los pedidos.*
 
 **Contacto** WhatsApp (`wa.me`) con mensaje prellenado

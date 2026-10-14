@@ -33,9 +33,9 @@
 6. Renombrar la rama por defecto `claude/github-upload-iteration-cgbvq9` a `main` (o usar ese nombre
    en Hostinger) y corregir la guía de despliegue.
 7. Desplegar en Hostinger Web Apps y asociar el dominio ([sdlc/5-despliegue.md](./sdlc/5-despliegue.md)); apagar Vercel.
-8. **Decidir la fuente de datos de la landing: seguir con Baserow o migrar a Supabase** (productos,
-   categorías, banners y configuración; `/admin` con panel lateral y carga CSV). Define si la
-   decisión 0003 se reemplaza.
+8. **Supabase Cloud (decisión 0009):** el dueño crea la cuenta y el proyecto y genera el token del MCP
+   (en `.env.local`); luego migración con las 4 tablas + RLS, `/admin` con panel lateral, carga CSV y
+   migración de datos desde Baserow. Falta responder si se mantiene la conexión automática con InventarIA.
 9. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
 ## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)
