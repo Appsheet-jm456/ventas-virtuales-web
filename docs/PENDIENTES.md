@@ -45,6 +45,8 @@
    usuario del dueño (con RLS actual, cualquier usuario autenticado escribe); exportar el CSV de
    productos de Baserow para la carga inicial; `/admin` con panel lateral y carga CSV; pasar
    `lib/inventory.js` a Supabase. Web e InventarIA quedan separadas.
+   **15 oct:** historias HU-07 (acceso), HU-08 (catálogo desde Supabase) y HU-09 (carga CSV)
+   escritas en la Fase 2; en implementación.
 9. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
 ## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)

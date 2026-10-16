@@ -119,6 +119,56 @@ Como cliente quiero ver todo el catálogo con filtros.
 
 ---
 
+## Administración con Supabase (decisión 0009)
+
+Alcance de este bloque: acceso, productos y carga CSV. Categorías, banners y configuración en
+`/admin` (panel lateral) son un bloque aparte.
+
+### HU-07 · Acceso al panel con correo y contraseña
+Como dueño quiero entrar a `/admin` con mi correo y contraseña para que nadie más cambie el catálogo.
+
+- Dado `/admin` sin sesión, entonces veo solo el formulario de correo y contraseña.
+- Dado un correo y contraseña válidos, cuando entro, entonces veo el panel y la sesión sigue
+  abierta al recargar hasta que presione **Salir**.
+- Dado un correo o contraseña incorrectos, entonces veo "Correo o contraseña incorrectos" y no entro.
+- Dado que alguien llama a la API de administración sin sesión válida, entonces recibe 401 y
+  nada cambia.
+- El registro público de Supabase Auth está desactivado: solo existe el usuario que crea el
+  dueño. Las claves secretas nunca llegan al navegador.
+
+### HU-08 · Catálogo leído de Supabase
+Como cliente quiero ver el mismo catálogo de siempre, ahora desde la base de la web.
+
+- Dado el catálogo público, entonces muestra solo productos **activos** con las columnas de
+  venta (RN-04); costo, proveedor y notas no existen en la base.
+- Dado un producto con stock 0, entonces sigue visible como "Agotado" (RN-02).
+- Dado un producto desactivado (**Quitar de la tienda**), entonces no aparece al público pero el
+  panel lo muestra para republicarlo (RN-03).
+- Dado que Supabase no está configurado, entonces la web funciona en modo demo con el inventario
+  de ejemplo.
+- Dado el panel, el dueño puede crear, editar, agotar/disponible, quitar/publicar y eliminar
+  productos uno a uno; los cambios se ven en la tienda al recargar.
+
+### HU-09 · Carga de productos por CSV
+Como dueño quiero subir un CSV cuando hay inventario nuevo para no digitar producto por producto.
+
+- Dado un CSV con las columnas de Baserow (`Código, Categoría, Descripción, Marca, Modelo,
+  Procesador, Generación, RAM, Almacenamiento, Estado, Precio, Stock, Foto, Video, Oculto`),
+  cuando lo selecciono, entonces veo una **vista previa** con cuántos productos son nuevos,
+  cuántos se modifican y cuáles tienen errores (con la fila y el motivo). Nada se guarda aún.
+- Dada la vista previa sin errores bloqueantes, cuando confirmo, entonces los nuevos se crean y
+  los existentes (mismo `Código`) se actualizan.
+- Dados productos que no vienen en el archivo, entonces **no se tocan ni se borran**.
+- Dada una fila sin `Código`, o con `Precio`/`Stock` que no son números, entonces se marca como
+  error y se omite; las demás filas se cargan.
+- Dado un `Código` repetido dentro del mismo archivo, entonces se marca error en la repetida.
+- Columnas que no son de venta (costo, proveedor, notas) se ignoran aunque vengan en el archivo.
+- `Foto` acepta varias URL separadas por coma o salto de línea (la primera es la portada);
+  `Oculto` con "Sí" deja el producto desactivado.
+- Solo una sesión de administrador puede cargar.
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
