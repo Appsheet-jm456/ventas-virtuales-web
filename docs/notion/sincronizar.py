@@ -34,7 +34,7 @@ API = "https://api.notion.com/v1"
 VERSION = "2022-06-28"
 SIMULAR = "--revisar" in sys.argv
 
-PROYECTO = "Ventas Virtual — Tienda Web"   # título de la portada, colgando de NOTION_PARENT_PAGE
+PROYECTO = "Ventas Virtual — Tienda Web Landing"   # título de la portada, colgando de NOTION_PARENT_PAGE
 ICONO = "🛒"
 REPOSITORIO = "github.com/Appsheet-jm456/ventas-virtuales-web (público)"
 

@@ -23,7 +23,7 @@ entra.
 
 ```
 📄 Página padre (NOTION_PARENT_PAGE, compartida con Futur Green y ClaudePyme)
-└── 🛒 Ventas Virtual — Tienda Web    ← one-pager (docs/00-BRIEF.md)
+└── 🛒 Ventas Virtual — Tienda Web Landing ← one-pager (docs/00-BRIEF.md)
     ├── 🚦 Fases                       ← base de datos (fases.csv)
     ├── ✅ Tareas                      ← base de datos (tareas.csv)
     ├── 🗄️ Modelado de Datos           ← docs/notion_modelado_datos.md
