@@ -5,6 +5,14 @@
 
 ---
 
+## 16 oct 2026 · La web lee y se administra desde Supabase
+
+El catálogo ya sale de Supabase en vez de Baserow (decisión 0009). El panel `/admin` pide correo
+y contraseña, y permite cargar un CSV con vista previa antes de guardar. El registro público quedó
+desactivado: solo entra quien el dueño cree. Sin cambio de versión del brief.
+
+---
+
 ## Brief v1.3 — 14 oct 2026 · La tienda completa tiene repo propio
 
 El Camino 2 deja de ser una promesa dentro de este repo: se construye en

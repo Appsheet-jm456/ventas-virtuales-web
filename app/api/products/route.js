@@ -1,23 +1,19 @@
-// Catálogo en JSON. Lee Baserow en el servidor (el token nunca llega al
-// navegador). Para el público excluye los productos ocultos; el panel de
-// administración (que envía la clave en el header x-admin-password) recibe
-// TODOS los productos, incluidos los ocultos, para poder republicarlos.
+// Catálogo en JSON. El público recibe solo lo activo y las columnas de venta (RN-04). El panel
+// envía el token de su sesión (Authorization: Bearer) y recibe TODO, incluidos los ocultos.
 import { getInventory, getPublicInventory } from "../../../lib/inventory";
+import { tokenDe, usuarioDeToken } from "../../../lib/supabase";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request) {
   try {
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    const provided = request.headers.get("x-admin-password") || "";
-    const isAdmin = adminPassword && provided === adminPassword;
+    const token = tokenDe(request);
+    const admin = token ? await usuarioDeToken(token) : null;
+    if (token && !admin) return Response.json({ error: "Sesión no válida.", rows: [] }, { status: 401 });
 
-    const { rows, demo } = isAdmin ? await getInventory() : await getPublicInventory();
+    const { rows, demo } = admin ? await getInventory(token) : await getPublicInventory();
     return Response.json({ rows, demo, total: rows.length });
   } catch (err) {
-    return Response.json(
-      { error: "No pude leer el catálogo: " + String(err?.message || err), rows: [] },
-      { status: 200 }
-    );
+    return Response.json({ error: "No pude leer el catálogo: " + String(err?.message || err), rows: [] }, { status: 200 });
   }
 }

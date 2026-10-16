@@ -31,10 +31,8 @@ Crea `.env.local` (local) o configúralas en Vercel (Settings → Environment Va
 
 | Variable | Obligatoria | Descripción |
 |---|---|---|
-| `BASEROW_API_TOKEN` | Sí | Token de Baserow (la misma tabla de InventarIA). Para que el admin pueda crear/editar/eliminar, el token necesita permisos **Create, Update y Delete** |
-| `BASEROW_TABLE_ID` | Sí | ID de la tabla (el número en la URL de Baserow) |
-| `BASEROW_API_URL` | No | Por defecto `https://api.baserow.io` |
-| `ADMIN_PASSWORD` | Sí | Clave del panel `/admin` |
+| `NEXT_PUBLIC_SUPABASE_URL` | Sí | URL del proyecto de Supabase (decisión 0009) |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Sí | Clave pública; lo que se puede leer o escribir lo decide la RLS |
 
 > No requiere clave de IA (Gemini): esta web no usa IA.
 
@@ -76,7 +74,7 @@ app/
   producto/[codigo]/page.js→ Detalle: galería, specs, botón WhatsApp
   admin/page.js            → Panel admin (CRUD de productos)
   api/products/route.js    → Catálogo público en JSON (lee Baserow)
-  api/admin/route.js       → Escritura protegida con ADMIN_PASSWORD
+  api/admin/route.js       → Escritura protegida con la sesión de Supabase Auth
   components/              → Catalog (grid+filtros), Gallery (fotos+video)
 lib/
   inventory.js             → Lectura/escritura Baserow (+deleteRow)

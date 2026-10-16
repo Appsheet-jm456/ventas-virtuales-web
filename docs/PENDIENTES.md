@@ -45,8 +45,11 @@
    usuario del dueño (con RLS actual, cualquier usuario autenticado escribe); exportar el CSV de
    productos de Baserow para la carga inicial; `/admin` con panel lateral y carga CSV; pasar
    `lib/inventory.js` a Supabase. Web e InventarIA quedan separadas.
-   **15 oct:** historias HU-07 (acceso), HU-08 (catálogo desde Supabase) y HU-09 (carga CSV)
-   escritas en la Fase 2; en implementación.
+   **16 oct:** historias HU-07 (acceso), HU-08 (catálogo desde Supabase) y HU-09 (carga CSV)
+   implementadas y probadas contra Supabase: `lib/inventory.js` ya lee Supabase, `/admin` entra con
+   correo y contraseña y carga CSV con vista previa. **Registro público desactivado.** **Falta:** que el
+   dueño dé el correo para crear su usuario, el CSV exportado de Baserow y `/admin` con panel lateral.
+   Variables nuevas en Vercel/Hostinger: `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 9. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
 ## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)

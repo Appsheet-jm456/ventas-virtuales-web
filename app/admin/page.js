@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-// Panel de administración del catálogo: crear, editar y eliminar productos
-// directamente en Baserow. Protegido con ADMIN_PASSWORD (se valida en el
-// servidor en cada operación; aquí solo se guarda para la sesión).
+import { supabaseNavegador } from "../../lib/supabase-browser";
+
+// Panel de administración del catálogo (Supabase). Acceso con correo y contraseña (Supabase
+// Auth); cada petición lleva el token de la sesión y el servidor lo verifica.
 
 const f = (r, k) => (r?.[k] ?? "").toString().trim();
 const stockNum = (r) => parseInt(f(r, "Stock") || "0", 10) || 0;
@@ -37,8 +38,10 @@ function norm(s) {
 }
 
 export default function AdminPage() {
+  const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [authed, setAuthed] = useState(false);
+  const [checking, setChecking] = useState(true);
   const [gateError, setGateError] = useState("");
 
   const [rows, setRows] = useState([]);
@@ -51,10 +54,22 @@ export default function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState("");
   const [okMsg, setOkMsg] = useState("");
+  // Carga CSV: { texto, nombre, vista } mientras hay una carga en curso.
+  const [csv, setCsv] = useState(null);
+
+  // Token de la sesión actual (el cliente lo renueva solo).
+  async function token() {
+    const sb = supabaseNavegador();
+    const { data } = sb ? await sb.auth.getSession() : { data: {} };
+    return data?.session?.access_token || "";
+  }
 
   useEffect(() => {
-    const saved = sessionStorage.getItem("vvc-admin-pw");
-    if (saved) { setPw(saved); setAuthed(true); }
+    const sb = supabaseNavegador();
+    if (!sb) { setChecking(false); return; }
+    sb.auth.getSession().then(({ data }) => { setAuthed(!!data.session); setChecking(false); });
+    const { data: sub } = sb.auth.onAuthStateChange((_e, session) => setAuthed(!!session));
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -66,7 +81,7 @@ export default function AdminPage() {
     try {
       const res = await fetch("/api/products", {
         cache: "no-store",
-        headers: { "x-admin-password": sessionStorage.getItem("vvc-admin-pw") || pw || "" },
+        headers: { Authorization: `Bearer ${await token()}` },
       });
       const d = await res.json();
       setRows(Array.isArray(d.rows) ? d.rows : []);
@@ -78,29 +93,19 @@ export default function AdminPage() {
     }
   }
 
-  // Valida la clave haciendo una operación inocua (update sin campos a id 0
-  // devolvería error de id; usamos una op inexistente que solo pasa el auth).
   async function enter(e) {
     e?.preventDefault();
     setGateError("");
-    if (!pw.trim()) { setGateError("Escribe la clave."); return; }
-    const res = await fetch("/api/admin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-password": pw },
-      body: JSON.stringify({ op: "ping" }),
-    });
-    if (res.status === 401) { setGateError("Clave incorrecta."); return; }
-    if (res.status === 500) {
-      const d = await res.json().catch(() => ({}));
-      setGateError(d.error || "El panel no está configurado en el servidor.");
-      return;
-    }
-    sessionStorage.setItem("vvc-admin-pw", pw);
-    setAuthed(true);
+    const sb = supabaseNavegador();
+    if (!sb) { setGateError("El panel no está configurado en el servidor (faltan las claves de Supabase)."); return; }
+    if (!email.trim() || !pw) { setGateError("Escribe el correo y la contraseña."); return; }
+    const { error } = await sb.auth.signInWithPassword({ email: email.trim(), password: pw });
+    if (error) { setGateError("Correo o contraseña incorrectos."); return; }
+    setPw("");
   }
 
-  function logout() {
-    sessionStorage.removeItem("vvc-admin-pw");
+  async function logout() {
+    await supabaseNavegador()?.auth.signOut();
     setAuthed(false); setPw("");
   }
 
@@ -152,20 +157,47 @@ export default function AdminPage() {
     if (isHidden(r)) {
       quickUpdate(r, { Oculto: "" }, `"${nombre}" vuelve a la tienda.`);
     } else {
-      quickUpdate(r, { Oculto: "Sí" }, `"${nombre}" quitado de la tienda (sigue en Baserow).`);
+      quickUpdate(r, { Oculto: "Sí" }, `"${nombre}" quitado de la tienda (sigue en la base).`);
     }
   }
 
-  async function callAdmin(payload) {
-    const res = await fetch("/api/admin", {
+  async function callAdmin(payload, url = "/api/admin") {
+    const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-password": pw },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${await token()}` },
       body: JSON.stringify(payload),
     });
     if (res.status === 401) { logout(); throw new Error("Sesión expirada: vuelve a entrar."); }
     const d = await res.json();
     if (d.error) throw new Error(d.error);
     return d;
+  }
+
+  async function leerCsv(e) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setOkMsg("");
+    const texto = await file.text();
+    setCsv({ texto, nombre: file.name, vista: null, busy: true });
+    try {
+      const vista = await callAdmin({ op: "vista", csv: texto }, "/api/admin/csv");
+      setCsv({ texto, nombre: file.name, vista, busy: false });
+    } catch (err) {
+      setCsv({ texto, nombre: file.name, vista: null, busy: false, error: String(err?.message || err) });
+    }
+  }
+
+  async function aplicarCsv() {
+    setCsv((c) => ({ ...c, busy: true }));
+    try {
+      const d = await callAdmin({ op: "aplicar", csv: csv.texto }, "/api/admin/csv");
+      setOkMsg(d.mensaje || "Carga lista.");
+      setCsv(null);
+      await load();
+    } catch (err) {
+      setCsv((c) => ({ ...c, busy: false, error: String(err?.message || err) }));
+    }
   }
 
   async function save() {
@@ -202,19 +234,29 @@ export default function AdminPage() {
   }
 
   // ---------- Pantalla de acceso ----------
+  if (checking) return <main className="admin wrap"><p>Cargando…</p></main>;
   if (!authed) {
     return (
       <main className="admin wrap">
         <form className="admin-gate" onSubmit={enter}>
           <h1>Panel de administración</h1>
-          <p>Catálogo de Ventas Virtual Colombia. Ingresa la clave de administración.</p>
+          <p>Catálogo de Ventas Virtual Colombia. Entra con tu correo y contraseña.</p>
+          <input
+            className="input"
+            type="email"
+            autoComplete="username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Correo"
+            autoFocus
+          />
           <input
             className="input"
             type="password"
+            autoComplete="current-password"
             value={pw}
             onChange={(e) => setPw(e.target.value)}
-            placeholder="Clave de administración"
-            autoFocus
+            placeholder="Contraseña"
           />
           <button className="btn full" type="submit">Entrar</button>
           {gateError && <div className="form-error">{gateError}</div>}
@@ -237,12 +279,16 @@ export default function AdminPage() {
             placeholder="Buscar código, marca, modelo…"
           />
           <button className="btn" onClick={openNew}>➕ Nuevo producto</button>
+          <label className="btn-ghost" style={{ cursor: "pointer" }}>
+            📄 Cargar CSV
+            <input type="file" accept=".csv,text/csv" onChange={leerCsv} style={{ display: "none" }} />
+          </label>
           <button className="btn-ghost" onClick={load} disabled={loading}>{loading ? "Cargando…" : "Recargar"}</button>
           <button className="btn-ghost" onClick={logout}>Salir</button>
         </div>
       </div>
 
-      {demo && <div className="demo-note">Modo demo: Baserow no está configurado; los cambios no se guardarán.</div>}
+      {demo && <div className="demo-note">Modo demo: Supabase no está configurado; los cambios no se guardarán.</div>}
       {okMsg && <p className="form-ok">✅ {okMsg}</p>}
 
       <div className="admin-table-wrap">
@@ -282,7 +328,7 @@ export default function AdminPage() {
                       <button className="mini-btn" onClick={() => toggleAgotado(r)} title="Cambia disponible/agotado">
                         {stockNum(r) > 0 ? "Agotar" : "Disponible"}
                       </button>
-                      <button className="mini-btn" onClick={() => toggleOculto(r)} title="Quitar/mostrar en la tienda (no borra de Baserow)">
+                      <button className="mini-btn" onClick={() => toggleOculto(r)} title="Quitar/mostrar en la tienda (no borra de la base)">
                         {isHidden(r) ? "Publicar" : "Quitar"}
                       </button>
                       <button className="mini-btn" onClick={() => openEdit(r)}>Editar</button>
@@ -300,6 +346,39 @@ export default function AdminPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Modal carga CSV: vista previa y confirmación */}
+      {csv && (
+        <div className="modal-overlay" onClick={() => !csv.busy && setCsv(null)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-head">
+              <h2>Cargar {csv.nombre}</h2>
+              <button className="close-btn" onClick={() => setCsv(null)}>✕</button>
+            </div>
+            <div className="modal-body">
+              {csv.busy && !csv.vista && <p>Revisando el archivo…</p>}
+              {csv.error && <div className="form-error">{csv.error}</div>}
+              {csv.vista && (
+                <>
+                  <p><b>{csv.vista.nuevos}</b> nuevos · <b>{csv.vista.modificados}</b> se modifican · <b>{csv.vista.errores.length}</b> con error (de {csv.vista.total} filas).</p>
+                  <p className="ep-hint">Los productos que no vienen en el archivo no se tocan ni se borran.</p>
+                  {csv.vista.errores.length > 0 && (
+                    <ul className="ep-hint" style={{ maxHeight: 160, overflow: "auto" }}>
+                      {csv.vista.errores.map((x, i) => <li key={i}>Fila {x.fila}{x.codigo ? ` (${x.codigo})` : ""}: {x.motivo}</li>)}
+                    </ul>
+                  )}
+                </>
+              )}
+              <div className="modal-actions">
+                <button className="btn-ghost" onClick={() => setCsv(null)} disabled={csv.busy}>Cancelar</button>
+                <button className="btn" onClick={aplicarCsv} disabled={csv.busy || !csv.vista || csv.vista.nuevos + csv.vista.modificados === 0}>
+                  {csv.busy ? "Trabajando…" : "Aplicar carga"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal crear/editar */}
       {editing && (
@@ -335,12 +414,12 @@ export default function AdminPage() {
                       checked={HIDDEN_VALUES.includes((editing.fields["Oculto"] || "").toLowerCase())}
                       onChange={(e) => setEditing((s) => ({ ...s, fields: { ...s.fields, Oculto: e.target.checked ? "Sí" : "" } }))}
                     />
-                    <span>Quitar de la tienda (no se elimina de Baserow)</span>
+                    <span>Quitar de la tienda (no se elimina de la base)</span>
                   </label>
                 </div>
                 <p className="ep-hint">
                   <b>Agotado/Vendido:</b> el equipo sigue visible con la cinta “Equipo agotado”.{" "}
-                  <b>Quitar de la tienda:</b> desaparece del catálogo para los clientes, pero se conserva en Baserow.
+                  <b>Quitar de la tienda:</b> desaparece del catálogo para los clientes, pero se conserva en la base.
                 </p>
               </div>
               <div className="form-grid">
