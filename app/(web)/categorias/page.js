@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getPublicInventory } from "../../../lib/inventory";
 import { SITE } from "../../../lib/site";
-import { categoriasDe } from "../../../lib/productos";
+import { getCategoriasPublicas } from "../../../lib/categorias";
 import { CategoryTile } from "../../components/CategoryStrip";
 
 export const revalidate = 60;
@@ -18,7 +18,7 @@ export default async function CategoriasPage() {
   } catch {
     rows = [];
   }
-  const categorias = categoriasDe(rows);
+  const categorias = await getCategoriasPublicas(rows);
 
   return (
     <main className="wrap home-sec">

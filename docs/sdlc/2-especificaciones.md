@@ -174,7 +174,7 @@ Como dueño quiero subir un CSV cuando hay inventario nuevo para no digitar prod
 Maqueta aprobada para revisión: [docs/diseno/admin-maqueta.html](../diseno/admin-maqueta.html)
 (abrir en el navegador). Alcance: reemplazar la página única de `/admin` por un shell con panel
 lateral izquierdo y cinco módulos. Se reutiliza el acceso (HU-07) y la carga CSV (HU-09).
-Orden de construcción: HU-10 y HU-12 (hechas el 19 oct), HU-14, HU-15, HU-13 y al final HU-11.
+Orden de construcción: HU-10, HU-12 y HU-14 (hechas el 19 oct), HU-15, HU-13 y al final HU-11.
 
 ### HU-10 · Panel lateral plegable
 Como dueño quiero un menú a la izquierda que se abra y se pliegue a iconos para moverme entre módulos sin perder espacio.
@@ -237,13 +237,26 @@ Como dueño quiero cambiar los banners de la portada y las imágenes de categor�
 ### HU-14 · Categorías: crear, actualizar y quitar
 Como dueño quiero administrar las categorías del catálogo.
 
-- Dado **Agregar categoría**, con un nombre, entonces se crea con un enlace generado del nombre
-  (sin tildes ni espacios) y queda visible.
-- Dada una categoría, puedo editar nombre y enlace, mostrarla u ocultarla y quitarla.
-- Dado un nombre o enlace repetido, entonces veo el motivo y no se guarda.
-- Dada una categoría con productos, al quitarla los productos **no se borran**: pasan a «Sin
-  categoría» y la pantalla avisa cuántos.
-- La tabla muestra imagen, nombre, enlace, número de productos y estado.
+> Ajuste del 19 oct al modelo real (tabla `categorias`, 0009): los productos no se enlazan a una
+> categoría por id. Cada categoría tiene una **palabra que agrupa** (`coincide_con`) y entran los
+> productos cuya columna Categoría la contiene, sin tildes ni mayúsculas («portatil» agrupa
+> «Portátil usado» y «Portátil nuevo»). Esa palabra es también el enlace `/productos?categoria=`.
+
+- Dado **Agregar categoría** con un nombre, entonces se sugiere la palabra que agrupa (el nombre
+  sin tildes, editable) y se ve en vivo cuántos productos agrupa y con qué textos; si no agrupa
+  ninguno, se avisa. Al guardar queda visible y al final del orden.
+- Dada una categoría, puedo editar nombre y palabra en la misma fila, mostrarla u ocultarla,
+  subirla o bajarla en el orden y quitarla.
+- Dado un nombre o una palabra que ya usa otra categoría (sin tildes ni mayúsculas), entonces veo
+  el motivo y no se guarda.
+- Dada una categoría con productos, al quitarla los productos **no se tocan**: conservan su texto
+  y siguen en el catálogo y la búsqueda; solo dejan de agruparse ahí. La confirmación, dentro de
+  la página, dice cuántos son.
+- La tabla muestra orden, nombre, palabra con su enlace, número de productos y estado, y al pie
+  cuántos productos no entran en ninguna categoría.
+- La web (Inicio y `/categorias`) lee las categorías visibles de la tabla, en su orden, y no
+  muestra las que no agrupan productos publicados. Sin Supabase (modo demo) o con la tabla vacía
+  se arman desde los productos, como antes.
 
 ### HU-15 · Configuración de la tienda
 Como dueño quiero cambiar los datos de la empresa sin tocar código.

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getPublicInventory } from "../../lib/inventory";
 import { SITE, waLink } from "../../lib/site";
-import { categoriasDe, enCategoria, stockNum, precioNum } from "../../lib/productos";
+import { enCategoria, stockNum, precioNum } from "../../lib/productos";
+import { getCategoriasPublicas } from "../../lib/categorias";
 import HeroCarousel from "../components/HeroCarousel";
 import CategoryStrip from "../components/CategoryStrip";
 import ProductCard from "../components/ProductCard";
@@ -30,7 +31,7 @@ export default async function Home() {
     rows = [];
   }
 
-  const categorias = categoriasDe(rows);
+  const categorias = await getCategoriasPublicas(rows);
   const disponibles = rows.filter((r) => enCategoria(r, LINEA.filtro) && stockNum(r) > 0);
   const linea = disponibles.slice(0, LINEA.max);
   const precios = disponibles.map(precioNum).filter((n) => n && n > 0);

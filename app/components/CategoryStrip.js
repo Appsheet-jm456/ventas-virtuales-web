@@ -25,7 +25,7 @@ export default function CategoryStrip({ categorias = [] }) {
 
 export function CategoryTile({ c }) {
   return (
-    <Link className="cat-tile" href={`/productos?categoria=${encodeURIComponent(c.nombre)}`}>
+    <Link className="cat-tile" href={`/productos?categoria=${encodeURIComponent(c.filtro || c.nombre)}`}>
       <span className="cat-img">
         {c.img ? <img src={c.img} alt="" loading="lazy" /> : <span className="cat-ico">💻</span>}
       </span>

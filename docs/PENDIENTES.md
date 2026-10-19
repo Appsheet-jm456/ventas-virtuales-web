@@ -50,10 +50,10 @@
    correo y contraseña y carga CSV con vista previa. **Registro público desactivado.** **Falta:** que el
    dueño dé el correo para crear su usuario, el CSV exportado de Baserow y `/admin` con panel lateral.
    Variables nuevas en Vercel/Hostinger: `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-9. **Rediseño de `/admin` (19 oct):** planeado; **HU-10 (panel lateral) y HU-12 (Productos) hechas y probadas**; Bandeja, Banners, Categorías y Configuración son marcadores («Llega con HU-xx»). Panel lateral plegable y cinco
+9. **Rediseño de `/admin` (19 oct):** planeado; **HU-10 (panel lateral), HU-12 (Productos) y HU-14 (Categorías) hechas y probadas**; Bandeja, Banners y Configuración son marcadores («Llega con HU-xx»). Panel lateral plegable y cinco
    módulos: Bandeja de entrada, Productos, Banners e imágenes, Categorías y Configuración
    (HU-10 a HU-15 en `docs/sdlc/2-especificaciones.md`; maqueta en `docs/diseno/admin-maqueta.html`).
-   Sigue HU-14 (Categorías), luego HU-15, HU-13 y HU-11. **Falta del dueño:** aprobar la maqueta; para
+   Sigue HU-15 (Configuración), luego HU-13 y HU-11. **Falta del dueño:** aprobar la maqueta; para
    HU-13, cuenta y claves de Cloudinary; para HU-11, decidir qué se mide (visitas, clics a WhatsApp).
 10. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 

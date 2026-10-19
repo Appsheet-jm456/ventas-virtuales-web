@@ -13,7 +13,9 @@ Categorías y Configuración. Quedó la maqueta navegable y las historias HU-10 
 panel lateral (HU-10): se abre y se pliega a iconos, y cada módulo tiene su propia dirección.
 Después se rehízo Productos (HU-12): pestañas Listado y Carga CSV, filtros por agotados, ocultos
 y sin foto, un menú Acciones por fila, confirmación antes de eliminar y una plantilla CSV para
-descargar. Bandeja, Banners, Categorías y Configuración siguen como marcadores. Sin cambio de versión del brief.
+descargar. Luego Categorías (HU-14): se crean, editan, ordenan, ocultan y quitan desde el panel,
+y la web ya las toma de ahí; quitar una categoría no toca sus productos. Bandeja, Banners y
+Configuración siguen como marcadores. Sin cambio de versión del brief.
 
 ---
 

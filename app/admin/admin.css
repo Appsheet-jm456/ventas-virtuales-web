@@ -125,3 +125,25 @@
 @media (max-width: 720px) {
   .pr-buscar { max-width: none; flex-basis: 100%; }
 }
+
+/* ---------- Módulo Categorías (HU-14) ---------- */
+.ct-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 12px; align-items: end; }
+.ct-full { grid-column: 1 / -1; }
+.ct-hint { display: block; color: var(--muted); font-size: 12.5px; margin-top: 6px; line-height: 1.45; }
+.ct-hint.warn { color: #9a5b00; }
+.input.mono, .mono.ct-palabra { font-family: var(--mono); }
+.ct-palabra { color: var(--blue); font-size: 12.5px; }
+.ct-url { display: block; color: var(--muted); font-size: 11.5px; }
+.ct-orden { display: flex; gap: 4px; }
+.ct-orden .adm-ibtn, .ct-acc .adm-ibtn { width: 34px; height: 34px; }
+.adm-ibtn:disabled { opacity: .35; cursor: default; }
+.ct-acc { text-align: right; white-space: nowrap; }
+.ct-acc .adm-ibtn { display: inline-grid; vertical-align: middle; }
+.ct-acc > * + * { margin-left: 6px; }
+.ct-quitar:hover:not(:disabled) { color: var(--bad); border-color: var(--bad); }
+.ct-sm { padding: 7px 12px; font-size: 13px; }
+.ct-editando td { background: #f7f9fd; vertical-align: top; }
+.ct-tabla { min-width: 720px; }
+@media (max-width: 720px) {
+  .ct-form { grid-template-columns: minmax(0, 1fr); }
+}
