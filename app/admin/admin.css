@@ -160,7 +160,9 @@
 .cf-grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .cf-field label { font-size: 12.5px; color: var(--text); font-weight: 700; }
 .cf-logo { display: flex; gap: 14px; align-items: center; }
-.cf-logo-img { width: 52px; height: 52px; border: 1px solid var(--border); }
+.cf-logo { align-items: flex-start; }
+.cf-logo-img { width: auto; height: 56px; max-width: 200px; object-fit: contain; padding: 6px 10px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+.cf-logo-txt { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; min-width: 0; }
 .cf-logo .mono { font-family: var(--mono); }
 .cf-preview { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 10px; background: var(--ok-bg); color: var(--text); font-size: 13px; line-height: 1.45; }
 .cf-preview .mono { font-family: var(--mono); color: var(--ok); }
@@ -228,3 +230,43 @@
 .tablewrap { overflow-x: auto; }
 @media (max-width: 900px) { .bj-cols { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 560px) { .bj-alerta { flex-wrap: wrap; } .bj-ir { margin-left: 48px; } }
+
+/* ---------- Banners e imágenes (HU-13) ---------- */
+.bn-prev { max-width: 980px; }
+.bn-prev .hc-slide a { pointer-events: none; }
+.bn-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.bn-form { display: flex; flex-direction: column; gap: 14px; padding: 16px; border: 1.5px solid var(--blue); border-radius: 12px; background: #f7f9fd; margin-bottom: 14px; }
+.bn-imgs { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 16px; }
+.bn-img { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bn-img b { font-size: 12.5px; }
+.bn-thumb { width: 100%; aspect-ratio: 16 / 5; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); background: #fff; display: grid; place-items: center; color: var(--muted); font-size: 13px; }
+.bn-thumb.movil { aspect-ratio: 1; max-width: 180px; }
+.bn-acc-img { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.si { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.si-btn { display: inline-flex; align-items: center; gap: 8px; }
+.bn-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.bn-item { display: grid; grid-template-columns: auto 128px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+.bn-item.editando { display: block; padding: 0; border: 0; }
+.bn-item.editando .bn-form { margin: 0; }
+.bn-item.sobre { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(23, 52, 143, .15); }
+.bn-item.arrastrando { opacity: .45; }
+.bn-grip { cursor: grab; color: var(--muted); display: grid; place-items: center; width: 24px; }
+.bn-mini { width: 128px; aspect-ratio: 16 / 5; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-soft); display: grid; place-items: center; color: var(--muted); font-size: 11px; }
+.bn-txt { min-width: 0; }
+.bn-txt b { display: block; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bn-txt small { color: var(--muted); font-size: 12px; }
+.bn-txt .mono { font-family: var(--mono); color: var(--blue); word-break: break-all; }
+.bn-acc { display: flex; gap: 6px; align-items: center; }
+.bn-acc .adm-ibtn { width: 34px; height: 34px; }
+.cf-tg:disabled { opacity: .5; cursor: default; }
+.bn-cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.bn-cat { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
+.bn-cat img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; background: var(--bg-soft); }
+.bn-cat-txt b { display: block; }
+.bn-cat-txt small { color: var(--muted); font-size: 12px; }
+@media (max-width: 760px) {
+  .bn-imgs { grid-template-columns: minmax(0, 1fr); }
+  .bn-item { grid-template-columns: auto minmax(0, 1fr); }
+  .bn-mini { display: none; }
+  .bn-acc { grid-column: 1 / -1; flex-wrap: wrap; }
+}

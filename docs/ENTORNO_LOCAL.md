@@ -12,15 +12,22 @@ npm run dev
 Abre http://localhost:3000. Sin credenciales arranca en **modo demo** con tres productos de
 ejemplo.
 
-## Conectar Baserow
+## Conectar Supabase y Cloudinary
 
-Crear `.env.local` en la raíz (no se versiona, decisión 0002):
+Crear `.env.local` en la raíz (no se versiona, decisión 0002). Las mismas variables van en Vercel
+(y luego en Hostinger) en los entornos Production, Preview y Development:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 NEXT_PUBLIC_SITE_URL=http://localhost:3000   # en producción: el dominio
+CLOUDINARY_CLOUD_NAME=...      # subida de banners, imágenes de categoría y logo (HU-13)
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...      # secreto: en Vercel como «Secret»; nunca en el chat ni en git
 ```
+
+Las dos `NEXT_PUBLIC_` se incorporan al construir: tras agregarlas o cambiarlas hay que volver a
+desplegar sin caché.
 
 ## Sincronizar con Notion
 

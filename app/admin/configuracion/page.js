@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 
 import { useAdmin } from "../AdminShell";
 import { supabaseNavegador } from "../../../lib/supabase-browser";
+import { cld } from "../../../lib/cdn";
+import SubirImagen, { REGLAS, descartarSubidas } from "../SubirImagen";
 
 // Módulo Configuración del panel (HU-15): datos de la empresa, WhatsApp, redes, horario, reglas
 // del catálogo y cambio de contraseña. Se guarda en la tabla `configuracion` de Supabase.
@@ -54,6 +56,8 @@ export default function ConfiguracionPage() {
   const [okMsg, setOkMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [clave, setClave] = useState({ nueva: "", repetir: "", busy: false, ok: "", error: "" });
+  const [logosSubidos, setLogosSubidos] = useState([]); // subidos y aún sin guardar
+  const [subiendoLogo, setSubiendoLogo] = useState(false);
 
   useEffect(() => { cargar(); }, []);
 
@@ -100,6 +104,8 @@ export default function ConfiguracionPage() {
       const v = { empresa: { ...form.empresa, ...d.empresa }, catalogo: d.catalogo };
       setGuardado(v);
       setForm(v);
+      descartarSubidas(token, logosSubidos.filter((u) => u !== v.empresa.logo));
+      setLogosSubidos([]);
       setOkMsg("Configuración guardada. La web la toma en menos de un minuto.");
     } catch (e) {
       setErrMsg(String(e?.message || e));
@@ -164,10 +170,13 @@ export default function ConfiguracionPage() {
             <textarea id="cf-lema" className="input" rows={2} value={empresa.lema} onChange={setE("lema")} />
           </Campo>
           <div className="cf-logo">
-            <span className="adm-logo cf-logo-img">VV</span>
-            <div>
+            <img className="cf-logo-img" src={empresa.logo ? cld(empresa.logo, "f_auto,q_auto,h_120") : "/logo.png"} alt="Logo actual" />
+            <div className="cf-logo-txt">
               <b>Logo</b>
-              <small className="ct-hint">Cambiar el logo desde aquí llega con HU-13 (imágenes en Cloudinary). Por ahora se usa el archivo <span className="mono">public/logo.png</span>.</small>
+              <small className="ct-hint">{empresa.logo ? "Logo subido desde el panel." : <>Se usa el archivo <span className="mono">public/logo.png</span>.</>} Se guarda con <b>Guardar cambios</b>.</small>
+              <SubirImagen id="cf-logo-subir" reglas={REGLAS.logo} texto={empresa.logo ? "Cambiar logo" : "Subir logo"} onSubiendo={setSubiendoLogo}
+                onSubida={(url) => { setLogosSubidos((l) => [...l, url]); setForm((s) => ({ ...s, empresa: { ...s.empresa, logo: url } })); }} />
+              {empresa.logo && <button type="button" className="pr-link" onClick={() => setForm((s) => ({ ...s, empresa: { ...s.empresa, logo: "" } }))}>Volver al logo del archivo</button>}
             </div>
           </div>
         </section>
@@ -226,8 +235,8 @@ export default function ConfiguracionPage() {
         <div className="cf-savebar">
           <span className={cambios ? "cf-dirty" : "pr-sub"}>{cambios ? "Hay cambios sin guardar" : "Sin cambios por guardar"}</span>
           <div className="cf-acciones">
-            <button type="button" className="btn-ghost" onClick={() => { setForm(guardado); setOkMsg(""); setErrMsg(""); }} disabled={!cambios || busy}>Descartar</button>
-            <button type="button" className="btn pr-btn" onClick={guardar} disabled={!cambios || busy}><Ico d={CHECK} />{busy ? "Guardando…" : "Guardar cambios"}</button>
+            <button type="button" className="btn-ghost" onClick={() => { descartarSubidas(token, logosSubidos); setLogosSubidos([]); setForm(guardado); setOkMsg(""); setErrMsg(""); }} disabled={!cambios || busy}>Descartar</button>
+            <button type="button" className="btn pr-btn" onClick={guardar} disabled={!cambios || busy || subiendoLogo}><Ico d={CHECK} />{busy ? "Guardando…" : subiendoLogo ? "Esperando el logo…" : "Guardar cambios"}</button>
           </div>
         </div>
 

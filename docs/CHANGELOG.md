@@ -18,7 +18,9 @@ y la web ya las toma de ahí; quitar una categoría no toca sus productos. Por �
 dirección, WhatsApp y su mensaje, redes, horario y si se muestran agotados y precios se cambian
 desde el panel, y la web los toma de ahí; también se puede cambiar la contraseña. Y la Bandeja de entrada (HU-11): visitas, clics a
 WhatsApp, productos más consultados y lo que conviene revisar, medidos en la propia base sin
-cookies ni datos personales (decisión 0010). Banners sigue como marcador. En Vercel se agregaron las variables de Supabase. Sin cambio de versión del brief.
+cookies ni datos personales (decisión 0010). Cierra Banners e imágenes (HU-13): banners de la
+portada, imagen de cada categoría y logo se suben a Cloudinary desde el panel (decisión 0007,
+ahora aceptada) y la web los toma de ahí. Con esto el panel nuevo queda completo. En Vercel se agregaron las variables de Supabase. Sin cambio de versión del brief.
 
 ---
 

@@ -1,6 +1,6 @@
 # 0007 · Imágenes en Cloudinary, administradas desde /admin
 
-**Estado:** Propuesta · 13 oct 2026 (pendiente de aprobación del dueño)
+**Estado:** Aceptada · 19 oct 2026 (propuesta el 13 oct) · Ajustada por la 0009: la URL se guarda en Supabase, no en Baserow
 
 ## Contexto
 
@@ -34,3 +34,16 @@ cuenta.
 - El plan gratuito de Cloudinary reparte sus créditos mensuales entre almacenamiento, tráfico y
   transformaciones: no son 25 GB solo de almacenamiento. Hay que vigilar el consumo en su panel.
 - Migrar las fotos de Drive a Cloudinary es un trabajo aparte; mientras tanto conviven las dos.
+
+## Cómo quedó (19 oct 2026, HU-13)
+
+- Cuenta del dueño, plan Free, con una llave propia para la web (**ApiWeb**), no la *Root*.
+- El panel sube banners, imágenes de categoría y el logo a la carpeta `ventas-virtual/` con una
+  **firma** que da `/api/admin/cloudinary` (`lib/cloudinary.js`); el API Secret solo vive en el
+  servidor. La firma fija la carpeta y los formatos aceptados.
+- Antes de subir, el navegador revisa formato, peso y tamaño (banners 16:5 y al menos 1200 px).
+- Las imágenes reemplazadas, quitadas o subidas y no guardadas se **borran de Cloudinary**; el
+  servidor nunca borra una que esté en uso.
+- La web las pide con formato y calidad automáticos y su tamaño (`lib/cdn.js`); las categorías se
+  recortan cuadradas centrando lo importante.
+- Las fotos de productos siguen en Google Drive: migrarlas es otra tarea.

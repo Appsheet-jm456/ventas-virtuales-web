@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getPublicInventory } from "../../lib/inventory";
 import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
+import { getBannersPublicos } from "../../lib/banners";
 import { enCategoria, stockNum, precioNum } from "../../lib/productos";
 import { getCategoriasPublicas } from "../../lib/categorias";
 import HeroCarousel from "../components/HeroCarousel";
@@ -32,7 +33,7 @@ export default async function Home() {
     rows = [];
   }
 
-  const [categorias, site] = await Promise.all([getCategoriasPublicas(rows), getSite()]);
+  const [categorias, site, banners] = await Promise.all([getCategoriasPublicas(rows), getSite(), getBannersPublicos()]);
   const disponibles = rows.filter((r) => enCategoria(r, LINEA.filtro) && stockNum(r) > 0);
   const linea = disponibles.slice(0, LINEA.max);
   const precios = disponibles.map(precioNum).filter((n) => n && n > 0);
@@ -41,7 +42,7 @@ export default async function Home() {
   return (
     <main>
       <div className="wrap hc-wrap">
-        <HeroCarousel whatsapp={site.whatsapp} />
+        <HeroCarousel banners={banners} whatsapp={site.whatsapp} />
       </div>
 
       {demo && (

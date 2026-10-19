@@ -174,7 +174,7 @@ Como dueño quiero subir un CSV cuando hay inventario nuevo para no digitar prod
 Maqueta aprobada para revisión: [docs/diseno/admin-maqueta.html](../diseno/admin-maqueta.html)
 (abrir en el navegador). Alcance: reemplazar la página única de `/admin` por un shell con panel
 lateral izquierdo y cinco módulos. Se reutiliza el acceso (HU-07) y la carga CSV (HU-09).
-Orden de construcción: HU-10, HU-12, HU-14, HU-15 y HU-11 (hechas el 19 oct), HU-15, HU-13 y al final HU-11.
+Orden de construcción: HU-10, HU-12, HU-14, HU-15, HU-11 y HU-13 (todas hechas el 19 oct), HU-15, HU-13 y al final HU-11.
 
 ### HU-10 · Panel lateral plegable
 Como dueño quiero un menú a la izquierda que se abra y se pliegue a iconos para moverme entre módulos sin perder espacio.
@@ -227,16 +227,27 @@ Como dueño quiero gestionar los productos y subir el CSV desde un solo módulo.
 ### HU-13 · Banners e imágenes de categorías
 Como dueño quiero cambiar los banners de la portada y las imágenes de categorías sin tocar código.
 
-- Dado el módulo, entonces veo una vista previa de la portada con el corte diagonal y la rotación
-  reales de Inicio, usando solo los banners activos.
-- Dado **Subir banner**, elijo la imagen de escritorio (1600×500) y, opcional, la de celular
-  (800×800); se suben a Cloudinary (0007) y se rechazan formatos distintos de JPG, PNG o WebP y
-  archivos de más de 2 MB, con el motivo.
-- Dado un banner, puedo editar su título, texto, botón y enlace (ruta de la web, URL o
-  `wa:<mensaje>`), activarlo o desactivarlo y quitarlo.
-- Dada la lista, puedo cambiar el orden arrastrando o con las flechas; el orden se guarda y la
-  web lo respeta.
-- Dadas las categorías, cada una muestra su imagen (800×600) y un botón **Cambiar**.
+> Ajuste del 19 oct: cada banner es una **imagen ya diseñada** (con su texto y corte diagonal),
+> como los de hoy; el panel no superpone texto. Así la portada se ve igual a lo que se sube.
+
+- Dado el módulo, entonces veo una vista previa de la portada con el carrusel real, usando solo
+  los banners activos con imagen. Sin ninguno, la portada usa los banners de respaldo de
+  `lib/site.js` y la vista previa lo dice.
+- Dado **Nuevo banner**, subo la imagen de escritorio (1600×500, proporción 16:5, al menos
+  1200 px de ancho) y, opcional, la de celular (cuadrada, al menos 600 px). Se rechazan, con el
+  motivo, formatos distintos de JPG, PNG o WebP, archivos de más de 2 MB y tamaños que no cumplen.
+  Mientras sube, **Guardar** espera.
+- Dado un banner, puedo editar su nombre interno, texto alternativo y enlace (ruta de la web, URL
+  con https:// o `wa:<mensaje>`), cambiar o quitar sus imágenes, activarlo o desactivarlo y
+  quitarlo con confirmación.
+- Dada la lista, cambio el orden arrastrando o con las flechas; el orden se guarda y la web lo
+  respeta.
+- Dadas las categorías, cada una muestra su imagen y **Subir imagen / Cambiar**; si no es
+  cuadrada, la web la recorta centrada. **Usar la de respaldo** vuelve a la ilustración.
+- Dado **Configuración › Empresa**, puedo subir el logo (PNG, SVG, WebP o JPG, hasta 1 MB) o volver
+  al archivo `public/logo.png`.
+- Las imágenes van a Cloudinary con subida firmada (decisión 0007). Las que se reemplazan, se
+  quitan o se suben sin guardar se borran de Cloudinary.
 
 ### HU-14 · Categorías: crear, actualizar y quitar
 Como dueño quiero administrar las categorías del catálogo.

@@ -50,10 +50,10 @@
    correo y contraseña y carga CSV con vista previa. **Registro público desactivado.** **Falta:** el CSV
    exportado de Baserow (el usuario del dueño ya existe y el panel lateral está hecho).
    Variables nuevas en Vercel/Hostinger: `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-9. **Rediseño de `/admin` (19 oct):** planeado; **HU-10, HU-11 (Bandeja), HU-12, HU-14 y HU-15 hechas y probadas**; Banners e imágenes (HU-13) sigue como marcador, con el diseño aprobado. Panel lateral plegable y cinco
+9. **Rediseño de `/admin` (19 oct):** planeado; **HU-10 a HU-15 hechas y probadas: el panel nuevo está completo.** Panel lateral plegable y cinco
    módulos: Bandeja de entrada, Productos, Banners e imágenes, Categorías y Configuración
    (HU-10 a HU-15 en `docs/sdlc/2-especificaciones.md`; maqueta en `docs/diseno/admin-maqueta.html`).
-   Sigue HU-13: **falta del dueño** crear la cuenta de Cloudinary, pasar Cloud name y API Key, y guardar el API Secret en `.env.local` y en Vercel. **Contraseña del dueño:** de pruebas (`Admin123*`), cambiarla desde Configuración › Cuenta antes de publicar. Falta la recuperación por correo (tarea aparte). **Falta del dueño:** aprobar la maqueta; para
+   **Falta del dueño:** agregar en Vercel las tres variables de Cloudinary y redesplegar; subir los banners y las imágenes reales. Las fotos de productos siguen en Drive (migrarlas es otra tarea). **Contraseña del dueño:** de pruebas (`Admin123*`), cambiarla desde Configuración › Cuenta antes de publicar. Falta la recuperación por correo (tarea aparte). **Falta del dueño:** aprobar la maqueta; para
    HU-13, cuenta y claves de Cloudinary; para HU-11, decidir qué se mide (visitas, clics a WhatsApp).
 10. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
