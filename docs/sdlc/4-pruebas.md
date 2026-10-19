@@ -16,3 +16,15 @@
 ## Plan
 
 Se escribe al cerrar la Fase 2, a partir de los criterios de aceptación.
+
+---
+
+## Pruebas en navegador ya hechas
+
+Corridas con un navegador sin interfaz (Playwright) contra Supabase, con un usuario QA temporal y
+productos `QA-*` ocultos que se borran al terminar. Sirven de guion para las pruebas automáticas.
+
+| Historia | Fecha | Qué se comprobó |
+|---|---|---|
+| HU-10 · Panel lateral | 19 oct 2026 | Login; cinco módulos con icono; plegar y abrir; estado recordado al recargar; módulo activo resaltado; rutas directas (`/admin/categorias`); en 390 px riel fijo, panel superpuesto y sin desborde; la web pública conserva encabezado y pie |
+| HU-12 · Productos | 19 oct 2026 | Estado vacío con enlace a Carga CSV; descarga de la plantilla; vista previa (2 nuevos, 1 error con fila y motivo); confirmar carga; filtros con conteo (Agotados, Ocultos, Sin foto); búsqueda; menú Acciones (abre, cierra con Escape, Marcar agotado); Eliminar con confirmación en la página; sin desborde a 390 px |

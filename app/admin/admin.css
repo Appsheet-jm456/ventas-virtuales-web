@@ -70,3 +70,58 @@
   .adm-site { padding: 0; width: 40px; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) { .adm { transition: none; } }
+
+/* ---------- Módulo Productos (HU-12) ---------- */
+.pr { display: flex; flex-direction: column; gap: 16px; }
+.pr-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+.pr-tabs button { border: 0; background: none; padding: 10px 14px; font: inherit; font-weight: 700; color: var(--muted); border-bottom: 3px solid transparent; white-space: nowrap; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.pr-tabs button[aria-selected="true"] { color: var(--blue); border-bottom-color: var(--blue); }
+.pr-n { font-size: 11.5px; font-weight: 700; background: #e7ebf2; color: var(--muted); border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums; }
+.pr-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
+.pr-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+.pr-buscar { max-width: 340px; flex: 1 1 220px; }
+.pr-filtros { display: flex; flex-wrap: wrap; gap: 6px; }
+.pr-chip { height: 36px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--border); background: #fff; color: var(--text); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.pr-chip:hover { border-color: var(--muted); }
+.pr-chip[aria-pressed="true"] { border-color: var(--blue); color: var(--blue); background: #eef2fc; }
+.pr-chip[aria-pressed="true"] .pr-n { background: var(--blue); color: #fff; }
+.pr-btn { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.pr-tabla { position: relative; }
+.pr-tabla .admin-table { min-width: 760px; }
+.pr-cell { display: flex; align-items: center; gap: 12px; min-width: 240px; }
+.pr-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: var(--bg-soft); border: 1px solid var(--border); flex: none; }
+.pr-thumb.vacia { display: grid; place-items: center; color: #a7b2c4; }
+.pr-txt { min-width: 0; }
+.pr-txt b { display: block; color: var(--text); font-size: 13.5px; }
+.pr-txt small { color: var(--muted); font-size: 12px; }
+.pr-txt .mono { font-family: var(--mono); color: var(--blue); }
+.pr-estado { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.badge.warn { color: #9a5b00; background: #fff3dc; }
+.pr-acc { text-align: right; width: 56px; }
+.pr-menu { position: relative; display: inline-block; }
+.pr-pop { position: fixed; width: 210px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); padding: 6px; z-index: 40; text-align: left; }
+.pr-pop button { display: flex; width: 100%; gap: 10px; align-items: center; border: 0; background: none; padding: 9px 10px; border-radius: 8px; font: inherit; font-size: 13.5px; color: var(--text); cursor: pointer; white-space: nowrap; }
+.pr-pop button:hover, .pr-pop button:focus-visible { background: var(--bg-soft); }
+.pr-pop .bad { color: var(--bad); }
+.pr-vacio { text-align: center; color: var(--muted); padding: 30px 12px !important; }
+.pr-link { border: 0; background: none; padding: 0; font: inherit; color: var(--blue); font-weight: 700; text-decoration: underline; cursor: pointer; }
+.pr-pie { margin: 10px 0 0; color: var(--muted); font-size: 12.5px; }
+.pr-aviso { margin: 0; display: flex; gap: 8px; align-items: center; padding: 10px 14px; border-radius: 10px; font-size: 13.5px; font-weight: 600; }
+.pr-aviso.ok { color: var(--ok); background: var(--ok-bg); }
+.pr-aviso.bad { color: var(--bad); background: var(--bad-bg); }
+.pr-h { margin: 0 0 4px; font-size: 16px; color: var(--blue-ink); }
+.pr-sub { margin: 0 0 12px; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 72ch; }
+.pr-pasos { margin: 0 0 14px; padding-left: 20px; color: var(--text); font-size: 13.5px; line-height: 1.7; }
+.pr-drop { margin-top: 14px; border: 2px dashed var(--border); border-radius: 12px; padding: 28px 16px; text-align: center; background: var(--bg-soft); display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--muted); }
+.pr-drop .adm-i { width: 34px; height: 34px; color: var(--blue); }
+.pr-drop b { color: var(--text); }
+.pr-drop.over { border-color: var(--blue); background: #eef2fc; }
+.pr-vista { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.pr-vista h3 { margin: 0; font-size: 15px; color: var(--blue-ink); }
+.pr-errores { max-height: 260px; overflow: auto; }
+.pr-confirma { max-width: 440px; }
+.pr-confirma p { margin: 0 0 8px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 720px) {
+  .pr-buscar { max-width: none; flex-basis: 100%; }
+}

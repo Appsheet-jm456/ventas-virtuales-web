@@ -11,7 +11,9 @@
 módulos: Bandeja de entrada (métricas), Productos (con la carga CSV), Banners e imágenes,
 Categorías y Configuración. Quedó la maqueta navegable y las historias HU-10 a HU-15. El mismo día se programó el
 panel lateral (HU-10): se abre y se pliega a iconos, y cada módulo tiene su propia dirección.
-Productos conserva el listado y la carga CSV de siempre; los otros cuatro módulos son marcadores. Sin cambio de versión del brief.
+Después se rehízo Productos (HU-12): pestañas Listado y Carga CSV, filtros por agotados, ocultos
+y sin foto, un menú Acciones por fila, confirmación antes de eliminar y una plantilla CSV para
+descargar. Bandeja, Banners, Categorías y Configuración siguen como marcadores. Sin cambio de versión del brief.
 
 ---
 
