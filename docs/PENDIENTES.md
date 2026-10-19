@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 19 de octubre de 2026 · rediseño de `/admin` planeado (HU-10 a HU-15, maqueta en `docs/diseno/admin-maqueta.html`). Antes: 13 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · nuevo diseño publicado en Vercel (PR #1 fusionado) · modelo v2 con Cloudinary propuesto
+> **Última sesión:** 19 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel nuevo completo (HU-07 a HU-15) en la rama `claude/determined-ramanujan-i61gup`, probado y visible en el Preview de Vercel
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -20,42 +20,39 @@
 | Nuevo diseño: Inicio, Categorías, Productos (HU-01 a HU-06), publicado en Vercel | PR #1 |
 | Modelo v2 propuesto y plantillas de Baserow | `docs/notion_modelado_datos.md`, `docs/baserow/` |
 
-## ⏭️ Siguiente (Camino 1 · landing)
+## ⏭️ Siguiente (Camino 1 · landing): llevarla a Hostinger
 
-0. **Notion (19 oct):** al día. La portada «Tienda Web Landing» tiene el brief v1.3, las decisiones
-   0001 a 0009, Arquitectura y las 47 tareas de git (las 5 que solo existían en Notion ya se
-   trajeron: 3 hechas y 2 pendientes). La copia del brief como versión propia (`--version`)
-   requiere autorización del dueño.
+Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 
-1. **Seguridad:** revocar en Baserow el token que se compartió en la conversación del 13 oct y
-   crear uno nuevo (Leer, Crear, Actualizar, Eliminar). Cargarlo en Vercel, Hostinger y `.env.local`.
-2. **Aprobar el modelo v2** (Categorías, Banners, imágenes en Cloudinary — decisión 0007) y crear
-   las dos tablas importando `docs/baserow/*.csv` (guía en `docs/baserow/COMO_IMPORTAR.md`).
-   Pasar los ID de las tablas.
-3. Programar: lectura de Categorías y Banners desde Baserow y subida firmada a Cloudinary desde `/admin`.
-4. Imágenes reales: 2 banners y una por categoría (ver `docs/sdlc/2-especificaciones.md`).
-5. Revisar por qué los productos reales salen sin foto (columna `Foto` vacía o Drive sin compartir).
-6. Renombrar la rama por defecto `claude/github-upload-iteration-cgbvq9` a `main` (o usar ese nombre
-   en Hostinger) y corregir la guía de despliegue.
-7. Desplegar en Hostinger Web Apps y asociar el dominio ([sdlc/5-despliegue.md](./sdlc/5-despliegue.md)); apagar Vercel.
-8. **Supabase Cloud (decisión 0009):** ✅ proyecto creado y migraciones aplicadas por el MCP el
-   14 oct (`supabase/migrations/`): `productos`, `categorias`, `banners`, `configuracion` con RLS
-   (anon lee solo lo activo/visible; escribe solo `authenticated`), 4 categorías, 2 banners y los
-   datos de la empresa. **Falta:** desactivar el registro público en Supabase Auth y crear el
-   usuario del dueño (con RLS actual, cualquier usuario autenticado escribe); exportar el CSV de
-   productos de Baserow para la carga inicial; `/admin` con panel lateral y carga CSV; pasar
-   `lib/inventory.js` a Supabase. Web e InventarIA quedan separadas.
-   **16 oct:** historias HU-07 (acceso), HU-08 (catálogo desde Supabase) y HU-09 (carga CSV)
-   implementadas y probadas contra Supabase: `lib/inventory.js` ya lee Supabase, `/admin` entra con
-   correo y contraseña y carga CSV con vista previa. **Registro público desactivado.** **Falta:** el CSV
-   exportado de Baserow (el usuario del dueño ya existe y el panel lateral está hecho).
-   Variables nuevas en Vercel/Hostinger: `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-9. **Rediseño de `/admin` (19 oct):** planeado; **HU-10 a HU-15 hechas y probadas: el panel nuevo está completo.** Panel lateral plegable y cinco
-   módulos: Bandeja de entrada, Productos, Banners e imágenes, Categorías y Configuración
-   (HU-10 a HU-15 en `docs/sdlc/2-especificaciones.md`; maqueta en `docs/diseno/admin-maqueta.html`).
-   **Falta del dueño:** agregar en Vercel las tres variables de Cloudinary y redesplegar; subir los banners y las imágenes reales. Las fotos de productos siguen en Drive (migrarlas es otra tarea). **Contraseña del dueño:** de pruebas (`Admin123*`), cambiarla desde Configuración › Cuenta antes de publicar. Falta la recuperación por correo (tarea aparte). **Falta del dueño:** aprobar la maqueta; para
-   HU-13, cuenta y claves de Cloudinary; para HU-11, decidir qué se mide (visitas, clics a WhatsApp).
-10. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
+1. **Cargar los productos reales** (dueño): actualizar Baserow, exportar el CSV y subirlo en
+   `/admin/productos › Carga CSV`. Hoy la tabla `productos` de Supabase está vacía.
+2. **Subir banners e imágenes reales** en `/admin/banners` (opcional: hay respaldo).
+3. **Cambiar la contraseña de pruebas** (`Admin123*`) en `/admin/configuracion › Cuenta`.
+4. **Publicar en `main`**: Pull Request de `claude/determined-ramanujan-i61gup` hacia
+   `claude/github-upload-iteration-cgbvq9` (la rama por defecto) y renombrar esta a `main`.
+5. **Hostinger Web Apps**: conectar GitHub (`main`), Node 20, las seis variables, desplegar y
+   verificar en la URL temporal.
+6. **Dominio y SSL**; `NEXT_PUBLIC_SITE_URL` con el dominio (falta saber cuál es) y redesplegar.
+7. **Apagar Vercel** y **revocar el token de Baserow** que quedó guardado allá.
+
+Después del despliegue:
+- Recuperación de contraseña por correo (tarea en Notion).
+- Migrar las fotos de productos de Google Drive a Cloudinary.
+- Pruebas automáticas (Fase 4): hoy hay pruebas en navegador documentadas en `sdlc/4-pruebas.md`.
+- Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
+
+## ✅ Hecho el 19 oct (panel nuevo)
+
+| Historia | Qué | Dónde |
+|---|---|---|
+| HU-10 | Panel lateral plegable, cinco módulos con dirección propia | `app/admin/AdminShell.js` |
+| HU-11 | Bandeja: visitas, clics a WhatsApp, más consultados, para revisar (decisión 0010) | `app/admin/page.js`, tabla `eventos` |
+| HU-12 | Productos: pestañas Listado y Carga CSV, filtros, menú Acciones | `app/admin/productos/` |
+| HU-13 | Banners, imagen por categoría y logo en Cloudinary (decisión 0007) | `app/admin/banners/` |
+| HU-14 | Categorías por palabra que agrupa; la web las lee de Supabase | `app/admin/categorias/` |
+| HU-15 | Configuración de la tienda y cambio de contraseña | `app/admin/configuracion/` |
+
+Vercel tiene las variables de Supabase y Cloudinary. Notion al día con git.
 
 ## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)
 
