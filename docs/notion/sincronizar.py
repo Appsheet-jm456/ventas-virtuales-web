@@ -65,7 +65,18 @@ _INTERVALO_MIN = 0.35  # Notion documenta ~3 req/s de promedio; por debajo evita
                        # el 429 y los cortes de conexion que dispara ese limite.
 
 
+def es_escritura(metodo, ruta):
+    """Toda llamada que cambia Notion. Las consultas de bases van por POST pero solo leen."""
+    if metodo == "GET":
+        return False
+    return not (metodo == "POST" and (ruta.endswith("/query") or ruta == "/search"))
+
+
 def api(metodo, ruta, cuerpo=None, intentos=4):
+    # Red de seguridad de --revisar: aunque una función olvide revisar SIMULAR, nada se escribe.
+    # Antes `--tareas --revisar` creaba y editaba filas de verdad.
+    if SIMULAR and es_escritura(metodo, ruta):
+        return {"simulado": True, "results": []}
     # Con cientos de bloques (DELETE secuencial por bloque en reemplazar_contenido)
     # una rafaga sin throttle dispara el limite de tasa de Notion, que corta la
     # conexion a mitad de camino (http.client.RemoteDisconnected) o responde 429/5xx.
@@ -498,7 +509,7 @@ def publicar_version():
 
     # ¿Ya existe esta versión? Si sí, se actualiza en vez de duplicar.
     existente = None
-    for b in api("GET", f"/blocks/{padre_brief}/children?page_size=100").get("results", []):
+    for b in listar_hijos(padre_brief):
         if b["type"] == "child_page" and b["child_page"]["title"].strip() == titulo:
             existente = b["id"]
 
@@ -555,6 +566,10 @@ def actualizar_portada():
 def buscar_subpagina(raiz_id, titulo):
     """Busca una subpágina por título bajando también dentro de las columnas.
 
+    Lee TODOS los hijos (paginado): con más de 100 bloques las subpáginas quedan después de la
+    primera página de resultados y el script las daba por inexistentes y creaba duplicados
+    (pasó el 19 oct 2026 con «Modelado de Datos» y «Reglas del negocio»).
+
     Notion trata una disposición en columnas como bloques `column_list` →
     `column` → contenido, así que una página arrastrada a una columna deja de
     ser hija directa. Buscar solo en el primer nivel la daba por inexistente y
@@ -563,7 +578,7 @@ def buscar_subpagina(raiz_id, titulo):
     pendientes = [raiz_id]
     while pendientes:
         actual = pendientes.pop(0)
-        for b in api("GET", f"/blocks/{actual}/children?page_size=100").get("results", []):
+        for b in listar_hijos(actual):
             if b["type"] == "child_page" and b["child_page"]["title"].strip() == titulo:
                 return b["id"]
             # Solo se baja por la maquetación, no por las subpáginas: dentro de
@@ -575,7 +590,7 @@ def buscar_subpagina(raiz_id, titulo):
 
 def buscar_base(pagina_id, titulo):
     """Busca una base de datos hija directa de la página, por su título."""
-    for b in api("GET", f"/blocks/{pagina_id}/children?page_size=100").get("results", []):
+    for b in listar_hijos(pagina_id):
         if b["type"] == "child_database" and b["child_database"]["title"].strip() == titulo:
             return b["id"]
     return None
@@ -686,12 +701,15 @@ def sincronizar_filas(database_id, titulo, filas):
     for props in filas:
         pagina = existentes.get(valor_prop(props[titulo]))
         if pagina is None:
-            api("POST", "/pages", {"parent": {"database_id": database_id}, "properties": props})
+            if not SIMULAR:
+                api("POST", "/pages", {"parent": {"database_id": database_id}, "properties": props})
             nuevas += 1
         elif any(valor_prop(pagina["properties"][k]) != valor_prop(v) for k, v in props.items()):
-            api("PATCH", f"/pages/{pagina['id']}", {"properties": props})
+            if not SIMULAR:
+                api("PATCH", f"/pages/{pagina['id']}", {"properties": props})
             actualizadas += 1
-    return f"{actualizadas} actualizadas, {nuevas} nuevas, {len(filas) - actualizadas - nuevas} sin cambios"
+    resumen = f"{actualizadas} actualizadas, {nuevas} nuevas, {len(filas) - actualizadas - nuevas} sin cambios"
+    return ("(ensayo) " + resumen) if SIMULAR else resumen
 
 
 def actualizar_modelo_datos():

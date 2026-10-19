@@ -22,10 +22,12 @@
 
 ## ⏭️ Siguiente (Camino 1 · landing)
 
-0. **PRIORITARIA · Notion:** crear la página «Página Web landing Ventas Virtual» con un brief
-   nuevo (desde el v1.3 de git + Supabase, decisión 0009) y la misma estructura SDLC (Brief, Fases,
-   Tareas, Decisiones). Notion hoy tiene brief v1.0 y 13 de 30 tareas. Antes: decidir qué hacer con
-   las 5 tareas que solo existen en Notion. La copia del brief requiere autorización del dueño.
+0. **Notion (19 oct):** la portada «Tienda Web Landing» ya tiene el brief v1.3, las decisiones
+   0001 a 0009 y la página Arquitectura al día, con las 42 tareas de git más las HU-10 a HU-15.
+   **Falta decidir:** 5 tareas que solo existen en Notion (migrar el alojamiento desde Vercel,
+   filtrar la API a una lista blanca, guía visual, decidir el hosting destino y revisar las
+   columnas de Baserow); varias parecen ya hechas o repetidas. La copia del brief como versión
+   propia (`--version`) requiere autorización del dueño.
 
 1. **Seguridad:** revocar en Baserow el token que se compartió en la conversación del 13 oct y
    crear uno nuevo (Leer, Crear, Actualizar, Eliminar). Cargarlo en Vercel, Hostinger y `.env.local`.
