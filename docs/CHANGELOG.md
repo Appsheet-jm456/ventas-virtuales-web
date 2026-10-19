@@ -16,8 +16,9 @@ y sin foto, un menú Acciones por fila, confirmación antes de eliminar y una pl
 descargar. Luego Categorías (HU-14): se crean, editan, ordenan, ocultan y quitan desde el panel,
 y la web ya las toma de ahí; quitar una categoría no toca sus productos. Por último Configuración (HU-15): nombre, lema,
 dirección, WhatsApp y su mensaje, redes, horario y si se muestran agotados y precios se cambian
-desde el panel, y la web los toma de ahí; también se puede cambiar la contraseña. Bandeja y
-Banners siguen como marcadores. En Vercel se agregaron las variables de Supabase. Sin cambio de versión del brief.
+desde el panel, y la web los toma de ahí; también se puede cambiar la contraseña. Y la Bandeja de entrada (HU-11): visitas, clics a
+WhatsApp, productos más consultados y lo que conviene revisar, medidos en la propia base sin
+cookies ni datos personales (decisión 0010). Banners sigue como marcador. En Vercel se agregaron las variables de Supabase. Sin cambio de versión del brief.
 
 ---
 

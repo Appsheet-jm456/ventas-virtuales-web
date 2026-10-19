@@ -170,7 +170,7 @@ dónde se guardan los pedidos.*
 - [ ] ¿Cuál es el dominio exacto?
 - [ ] ¿Cuántos productos activos hay en Baserow y quién los actualiza de ahora en adelante?
 - [ ] ¿Quién usa el panel admin? ¿Una sola clave basta?
-- [ ] ¿Se miden visitas (Google Analytics o Meta Pixel)?
+- [x] ¿Se miden visitas (Google Analytics o Meta Pixel)? → **Métricas propias en Supabase**, sin cookies ni datos personales (decisión 0010).
 
 **Camino 2 — tienda completa (se responden después):**
 

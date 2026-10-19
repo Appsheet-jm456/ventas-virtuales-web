@@ -145,3 +145,17 @@ llenar la cuenta.
 
 La web sigue funcionando: usa los banners y las imágenes de categoría de `lib/site.js`, como hoy.
 Así se pueden crear las tablas con calma.
+
+## Tabla eventos (Supabase, HU-11 · decisión 0010)
+
+Métricas de la Bandeja de entrada. El esquema vivo de todas las tablas de Supabase está en
+`supabase/migrations/`.
+
+| Columna | Qué guarda |
+|---|---|
+| `tipo` | `visita` (página vista) o `whatsapp` (clic en un enlace de WhatsApp) |
+| `ruta` | La página, sin parámetros |
+| `producto` | Código del producto, solo en clics de «Estoy interesado» |
+| `creado_en` | Hora del servidor |
+
+Sin IP, cookies ni datos del navegador. El público solo inserta; lee el administrador.

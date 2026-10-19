@@ -2,6 +2,7 @@ import Link from "next/link";
 import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
 import Brand from "../components/Brand";
+import Medidor from "../components/Medidor";
 
 const SALUDO = "Hola 👋, quiero información sobre sus computadores.";
 
@@ -58,6 +59,7 @@ export default async function WebLayout({ children }) {
           </nav>
         </header>
 
+        <Medidor />
         {children}
 
         <footer className="site-footer" id="contacto">

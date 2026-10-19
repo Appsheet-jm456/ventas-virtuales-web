@@ -174,7 +174,7 @@ Como dueño quiero subir un CSV cuando hay inventario nuevo para no digitar prod
 Maqueta aprobada para revisión: [docs/diseno/admin-maqueta.html](../diseno/admin-maqueta.html)
 (abrir en el navegador). Alcance: reemplazar la página única de `/admin` por un shell con panel
 lateral izquierdo y cinco módulos. Se reutiliza el acceso (HU-07) y la carga CSV (HU-09).
-Orden de construcción: HU-10, HU-12, HU-14 y HU-15 (hechas el 19 oct), HU-15, HU-13 y al final HU-11.
+Orden de construcción: HU-10, HU-12, HU-14, HU-15 y HU-11 (hechas el 19 oct), HU-15, HU-13 y al final HU-11.
 
 ### HU-10 · Panel lateral plegable
 Como dueño quiero un menú a la izquierda que se abra y se pliegue a iconos para moverme entre módulos sin perder espacio.
@@ -195,17 +195,21 @@ Como dueño quiero un menú a la izquierda que se abra y se pliegue a iconos par
 ### HU-11 · Bandeja de entrada con métricas
 Como dueño quiero ver cómo va la web al entrar al panel para saber qué atender hoy.
 
-- Dado el módulo, entonces veo cuatro indicadores (visitas, clics en WhatsApp, productos
-  publicados y agotados) con su variación frente al periodo anterior; el periodo se elige entre
-  14 días, 30 días y el mes.
-- Dado el periodo, entonces veo una gráfica de visitas por día y clics en WhatsApp, y el ranking
-  de productos con más clics en **Estoy interesado**.
+- Dado el módulo, entonces veo cuatro indicadores: visitas (páginas vistas), clics en WhatsApp,
+  productos publicados (con cuántos ocultos) y agotados (con su porcentaje). Visitas y clics dicen
+  su variación frente al periodo anterior de la misma duración. El periodo se elige entre 7, 14 y
+  30 días y el mes en curso, en hora de Colombia.
+- Dado el periodo, entonces veo una gráfica con las visitas por día (barras, eje izquierdo) y los
+  clics en WhatsApp (línea, eje derecho), y el ranking de los 5 productos con más clics en
+  **Estoy interesado**.
 - Dado el catálogo, entonces la sección **Para revisar** lista lo accionable, cada ítem con un
-  botón que lleva al módulo: productos publicados sin foto, agotados hace más de 30 días,
-  banners desactivados y el resultado de la última carga CSV.
-- Los indicadores de catálogo salen de las tablas actuales. Las visitas y los clics necesitan
-  registrar eventos (tabla `eventos` en Supabase, sin datos personales): hasta que exista, esas
-  tarjetas muestran «Sin datos todavía» y no cifras inventadas.
+  botón al módulo: no hay productos publicados, publicados sin foto, agotados hace más de 30 días
+  (por su última actualización) y banners desactivados o ninguno activo. Si no hay nada: «Todo en
+  orden». (El resultado de la última carga CSV no se guarda; se quitó de esta lista.)
+- Las visitas y los clics se registran en la tabla `eventos` sin cookies ni datos personales
+  (decisión 0010). Los robots no cuentan, el panel no se mide y la misma página repetida en menos
+  de 2 segundos cuenta una vez. Sin eventos en el periodo, la gráfica dice que aún no hay visitas;
+  nunca muestra cifras inventadas.
 
 ### HU-12 · Productos: listado, acciones y carga CSV
 Como dueño quiero gestionar los productos y subir el CSV desde un solo módulo.

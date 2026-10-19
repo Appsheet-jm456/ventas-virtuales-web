@@ -116,7 +116,7 @@ export default async function ProductPage({ params }) {
             </>
           ) : (
             <>
-              <a className="btn-wa" href={wa(msg)} target="_blank" rel="noopener noreferrer">
+              <a className="btn-wa" href={wa(msg)} data-producto={f(r, "Código")} target="_blank" rel="noopener noreferrer">
                 💬 Estoy interesado — WhatsApp
               </a>
               <p className="pd-note">Te atendemos por WhatsApp: {site.whatsappDisplay} · {site.ciudad}</p>
