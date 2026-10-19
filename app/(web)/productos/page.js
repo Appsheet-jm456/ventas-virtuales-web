@@ -1,15 +1,18 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { getPublicInventory } from "../../../lib/inventory";
-import { SITE } from "../../../lib/site";
+import { getSite } from "../../../lib/configuracion";
 import Catalog from "../../components/Catalog";
 
 export const revalidate = 60;
 
-export const metadata = {
-  title: `Productos — ${SITE.nombre}`,
-  description: "Catálogo de portátiles corporativos, torres tiny, partes y accesorios, nuevos y usados, con garantía.",
-};
+export async function generateMetadata() {
+  const site = await getSite();
+  return {
+    title: `Productos — ${site.nombre}`,
+    description: "Catálogo de portátiles corporativos, torres tiny, partes y accesorios, nuevos y usados, con garantía.",
+  };
+}
 
 export default async function ProductosPage() {
   let rows = [];

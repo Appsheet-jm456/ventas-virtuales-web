@@ -48,5 +48,7 @@ tabla de Baserow que comparte con InventarIA. Next.js 14 + React 18, JavaScript.
 - **El cliente solo ve datos de venta** (RN-04): nada de costo, proveedor ni notas internas en
   la API pública.
 - **El modo demo debe seguir funcionando** sin credenciales.
-- Datos de la empresa solo en `lib/site.js`.
+- Datos de la empresa: los edita el dueño en `/admin/configuracion` (tabla `configuracion`, leída
+  con `lib/configuracion.js`); `lib/site.js` es solo el respaldo. Usar `getSite()`, no `SITE`, en la
+  web pública.
 - Tras cambiar código: `npm run build` debe compilar.

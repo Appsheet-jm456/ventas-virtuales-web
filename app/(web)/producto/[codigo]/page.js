@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getPublicInventory } from "../../../../lib/inventory";
 import { parseImages, parseVideos } from "../../../../lib/images";
-import { SITE, waLink } from "../../../../lib/site";
+import { waLink } from "../../../../lib/site";
+import { getSite, mensajeProducto } from "../../../../lib/configuracion";
 import Gallery from "../../../components/Gallery";
 
 export const revalidate = 60;
@@ -21,12 +22,12 @@ async function findProduct(codigo) {
 }
 
 export async function generateMetadata({ params }) {
-  const r = await findProduct(params.codigo);
-  if (!r) return { title: `Producto no encontrado — ${SITE.nombre}` };
+  const [r, site] = await Promise.all([findProduct(params.codigo), getSite()]);
+  if (!r) return { title: `Producto no encontrado — ${site.nombre}` };
   const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Código");
   return {
-    title: `${nombre} — ${SITE.nombre}`,
-    description: f(r, "Descripción").slice(0, 150) || `Compra ${nombre} en ${SITE.nombre}.`,
+    title: `${nombre} — ${site.nombre}`,
+    description: f(r, "Descripción").slice(0, 150) || `Compra ${nombre} en ${site.nombre}.`,
   };
 }
 
@@ -42,7 +43,8 @@ const SPECS = [
 ];
 
 export default async function ProductPage({ params }) {
-  const r = await findProduct(params.codigo);
+  const [r, site] = await Promise.all([findProduct(params.codigo), getSite()]);
+  const wa = (texto) => waLink(texto, site.whatsapp);
 
   if (!r) {
     return (
@@ -51,7 +53,7 @@ export default async function ProductPage({ params }) {
         <h1 className="section-title">Producto no encontrado</h1>
         <p className="section-sub">
           Es posible que ya no esté disponible. <Link href="/productos">Ver el catálogo completo</Link> o{" "}
-          <a href={waLink("Hola 👋, busco un producto que vi en su página y ya no aparece.")} target="_blank" rel="noopener noreferrer">
+          <a href={wa("Hola 👋, busco un producto que vi en su página y ya no aparece.")} target="_blank" rel="noopener noreferrer">
             pregúntanos por WhatsApp
           </a>.
         </p>
@@ -63,7 +65,7 @@ export default async function ProductPage({ params }) {
     || f(r, "Descripción").slice(0, 60) || f(r, "Código");
   const sold = stockNum(r) <= 0;
   const precio = fmtPrecio(r);
-  const msg = `Hola 👋, estoy interesado en el *${nombre}* (código ${f(r, "Código")}) que vi en su página web. ¿Está disponible?`;
+  const msg = mensajeProducto(site.mensajeProducto, nombre, f(r, "Código"));
 
   return (
     <main className="pd wrap">
@@ -107,17 +109,17 @@ export default async function ProductPage({ params }) {
               <span className="btn-wa off">Producto agotado</span>
               <p className="pd-note">
                 ¿Te interesa uno igual?{" "}
-                <a href={waLink(`Hola 👋, el *${nombre}* (código ${f(r, "Código")}) aparece agotado. ¿Tienen uno similar?`)} target="_blank" rel="noopener noreferrer">
+                <a href={wa(`Hola 👋, el *${nombre}* (código ${f(r, "Código")}) aparece agotado. ¿Tienen uno similar?`)} target="_blank" rel="noopener noreferrer">
                   Pregúntanos por WhatsApp
                 </a>
               </p>
             </>
           ) : (
             <>
-              <a className="btn-wa" href={waLink(msg)} target="_blank" rel="noopener noreferrer">
+              <a className="btn-wa" href={wa(msg)} target="_blank" rel="noopener noreferrer">
                 💬 Estoy interesado — WhatsApp
               </a>
-              <p className="pd-note">Te atendemos por WhatsApp: {SITE.whatsappDisplay} · {SITE.ciudad}</p>
+              <p className="pd-note">Te atendemos por WhatsApp: {site.whatsappDisplay} · {site.ciudad}</p>
             </>
           )}
         </div>

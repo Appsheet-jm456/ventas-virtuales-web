@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { getPublicInventory } from "../../../lib/inventory";
-import { SITE } from "../../../lib/site";
+import { getSite } from "../../../lib/configuracion";
 import { getCategoriasPublicas } from "../../../lib/categorias";
 import { CategoryTile } from "../../components/CategoryStrip";
 
 export const revalidate = 60;
 
-export const metadata = {
-  title: `Categorías — ${SITE.nombre}`,
-  description: "Portátiles, torres tiny, partes y accesorios. Elige una categoría y mira lo disponible.",
-};
+export async function generateMetadata() {
+  const site = await getSite();
+  return {
+    title: `Categorías — ${site.nombre}`,
+    description: "Portátiles, torres tiny, partes y accesorios. Elige una categoría y mira lo disponible.",
+  };
+}
 
 export default async function CategoriasPage() {
   let rows = [];

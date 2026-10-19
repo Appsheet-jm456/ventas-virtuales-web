@@ -14,8 +14,10 @@ panel lateral (HU-10): se abre y se pliega a iconos, y cada módulo tiene su pro
 Después se rehízo Productos (HU-12): pestañas Listado y Carga CSV, filtros por agotados, ocultos
 y sin foto, un menú Acciones por fila, confirmación antes de eliminar y una plantilla CSV para
 descargar. Luego Categorías (HU-14): se crean, editan, ordenan, ocultan y quitan desde el panel,
-y la web ya las toma de ahí; quitar una categoría no toca sus productos. Bandeja, Banners y
-Configuración siguen como marcadores. Sin cambio de versión del brief.
+y la web ya las toma de ahí; quitar una categoría no toca sus productos. Por último Configuración (HU-15): nombre, lema,
+dirección, WhatsApp y su mensaje, redes, horario y si se muestran agotados y precios se cambian
+desde el panel, y la web los toma de ahí; también se puede cambiar la contraseña. Bandeja y
+Banners siguen como marcadores. En Vercel se agregaron las variables de Supabase. Sin cambio de versión del brief.
 
 ---
 

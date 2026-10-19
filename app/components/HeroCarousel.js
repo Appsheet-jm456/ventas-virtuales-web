@@ -7,7 +7,7 @@ const INTERVALO = 5000; // ms entre imágenes (HU-02)
 
 // Banner rotativo del Inicio: pasa solo cada 5 s, con flechas, puntos y deslizar en el celular.
 // Se detiene mientras el cursor está encima y no se mueve solo si el usuario pidió menos animación.
-export default function HeroCarousel({ banners = SITE.banners || [] }) {
+export default function HeroCarousel({ banners = SITE.banners || [], whatsapp }) {
   const [i, setI] = useState(0);
   const [pausa, setPausa] = useState(false);
   const inicioToque = useRef(null);
@@ -41,7 +41,7 @@ export default function HeroCarousel({ banners = SITE.banners || [] }) {
     >
       <div className="hc-track" style={{ transform: `translateX(-${i * 100}%)` }}>
         {banners.map((b, k) => {
-          const href = bannerHref(b.href);
+          const href = bannerHref(b.href, whatsapp);
           const externo = /^https?:/.test(href);
           const img = (
             <picture>

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { SITE, waLink } from "../../lib/site";
+import { waLink } from "../../lib/site";
+import { getSite } from "../../lib/configuracion";
 import Brand from "../components/Brand";
 
 const SALUDO = "Hola 👋, quiero información sobre sus computadores.";
@@ -13,13 +14,15 @@ function WaIcon({ size = 24 }) {
 }
 
 // Marco de la web pública: encabezado, pie y botón de WhatsApp. /admin no lo usa.
-export default function WebLayout({ children }) {
+export default async function WebLayout({ children }) {
+  const site = await getSite();
+  const wa = (texto) => waLink(texto, site.whatsapp);
   return (
     <>
         <header className="site-header">
           <div className="wrap hd-top">
-            <Link href="/" className="brand" aria-label={SITE.nombre}>
-              <Brand />
+            <Link href="/" className="brand" aria-label={site.nombre}>
+              <Brand site={site} />
             </Link>
 
             {/* Buscador (HU-01): un formulario normal, funciona aun sin JavaScript. */}
@@ -32,9 +35,9 @@ export default function WebLayout({ children }) {
               </button>
             </form>
 
-            <a className="hd-info hd-wa" href={waLink(SALUDO)} target="_blank" rel="noopener noreferrer">
+            <a className="hd-info hd-wa" href={wa(SALUDO)} target="_blank" rel="noopener noreferrer">
               <span className="hd-ico wa"><WaIcon size={22} /></span>
-              <span><b>WhatsApp</b><small>{SITE.whatsappDisplay}</small></span>
+              <span><b>WhatsApp</b><small>{site.whatsappDisplay}</small></span>
             </a>
             <div className="hd-info hd-ship">
               <span className="hd-ico">
@@ -60,40 +63,40 @@ export default function WebLayout({ children }) {
         <footer className="site-footer" id="contacto">
           <div className="wrap footer-grid">
             <div>
-              <Brand variant="footer" />
-              <p>{SITE.lema}. Ventas online y tienda física.</p>
+              <Brand variant="footer" site={site} />
+              <p>{site.lema}. Ventas online y tienda física.</p>
             </div>
             <div>
               <div className="f-title">Contacto</div>
-              <p className="f-addr">📍 {SITE.direccion}</p>
+              <p className="f-addr">📍 {site.direccion}</p>
               <p>
-                <a href={waLink(SALUDO)} target="_blank" rel="noopener noreferrer">
-                  🟢 WhatsApp: {SITE.whatsappDisplay}
+                <a href={wa(SALUDO)} target="_blank" rel="noopener noreferrer">
+                  🟢 WhatsApp: {site.whatsappDisplay}
                 </a>
               </p>
             </div>
             <div>
               <div className="f-title">Atención</div>
-              {SITE.horario && <p>🕘 {SITE.horario}</p>}
+              {site.horario && <p>🕘 {site.horario}</p>}
               <p>Asesoría y cierre de venta por WhatsApp.</p>
               <p>🚚 Envíos a todo el país.</p>
             </div>
             <div>
               <div className="f-title">Síguenos</div>
-              <p><a href={SITE.instagram} target="_blank" rel="noopener noreferrer">📸 Instagram</a></p>
-              <p><a href={SITE.facebook} target="_blank" rel="noopener noreferrer">👍 Facebook</a></p>
-              <p><a href={SITE.tiktok} target="_blank" rel="noopener noreferrer">🎵 TikTok</a></p>
+              {site.instagram && <p><a href={site.instagram} target="_blank" rel="noopener noreferrer">📸 Instagram</a></p>}
+              {site.facebook && <p><a href={site.facebook} target="_blank" rel="noopener noreferrer">👍 Facebook</a></p>}
+              {site.tiktok && <p><a href={site.tiktok} target="_blank" rel="noopener noreferrer">🎵 TikTok</a></p>}
             </div>
           </div>
           <div className="wrap f-note">
-            Precios e inventario sujetos a cambios. Consulte con su asesor. © {new Date().getFullYear()} {SITE.nombre}.
+            Precios e inventario sujetos a cambios. Consulte con su asesor. © {new Date().getFullYear()} {site.nombre}.
           </div>
         </footer>
 
         {/* Botón flotante de WhatsApp */}
         <a
           className="wa-float"
-          href={waLink(SALUDO)}
+          href={wa(SALUDO)}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Escríbenos por WhatsApp"

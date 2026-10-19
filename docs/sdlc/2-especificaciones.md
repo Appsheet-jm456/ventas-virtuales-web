@@ -174,7 +174,7 @@ Como dueño quiero subir un CSV cuando hay inventario nuevo para no digitar prod
 Maqueta aprobada para revisión: [docs/diseno/admin-maqueta.html](../diseno/admin-maqueta.html)
 (abrir en el navegador). Alcance: reemplazar la página única de `/admin` por un shell con panel
 lateral izquierdo y cinco módulos. Se reutiliza el acceso (HU-07) y la carga CSV (HU-09).
-Orden de construcción: HU-10, HU-12 y HU-14 (hechas el 19 oct), HU-15, HU-13 y al final HU-11.
+Orden de construcción: HU-10, HU-12, HU-14 y HU-15 (hechas el 19 oct), HU-15, HU-13 y al final HU-11.
 
 ### HU-10 · Panel lateral plegable
 Como dueño quiero un menú a la izquierda que se abra y se pliegue a iconos para moverme entre módulos sin perder espacio.
@@ -261,18 +261,24 @@ Como dueño quiero administrar las categorías del catálogo.
 ### HU-15 · Configuración de la tienda
 Como dueño quiero cambiar los datos de la empresa sin tocar código.
 
-- Dado el módulo, entonces veo cinco secciones: Empresa, Contacto y WhatsApp, Redes sociales,
-  Horario y Catálogo, con navegación interna.
+- Dado el módulo, entonces veo seis secciones con navegación interna: Empresa, Contacto y
+  WhatsApp, Redes sociales, Horario, Catálogo y Cuenta.
 - Dados los datos de `lib/site.js` (nombre, lema, ciudad, dirección, WhatsApp, redes, horario),
-  entonces el panel los lee de la tabla `configuracion` y la web los usa desde ahí; `lib/site.js`
-  queda como valor de respaldo (modo demo).
-- Dado el mensaje prellenado, entonces `{producto}` se reemplaza por el nombre del equipo y veo
-  una vista previa del enlace de WhatsApp.
-- Dado el WhatsApp, entonces solo acepta números con indicativo.
-- Dados los interruptores **Mostrar agotados** y **Mostrar precios**, la web los respeta.
+  entonces el panel los lee de la tabla `configuracion` (claves `empresa` y `catalogo`) y la web
+  los usa desde ahí: encabezado, pie, títulos de pestaña y todos los enlaces de WhatsApp.
+  `lib/site.js` queda como respaldo (modo demo, tabla vacía o Supabase caído).
+- Dado el mensaje del botón «Estoy interesado», entonces `{producto}` se reemplaza por el nombre
+  del equipo y `{codigo}` por su código, y veo una vista previa del enlace de WhatsApp.
+- Dado el WhatsApp, entonces solo acepta números con indicativo (10 a 15 dígitos); espacios, `+`
+  y guiones se limpian solos. Las redes deben empezar por `https://`; vacías no se muestran.
+- Dado **Mostrar agotados** apagado, los agotados desaparecen de la web; dado **Mostrar precios**
+  apagado, los productos dicen «Precio: consultar». El panel sigue viendo todo.
 - Dados cambios sin guardar, la barra inferior lo avisa y ofrece **Guardar cambios** y
-  **Descartar**; al guardar veo la confirmación.
-- Dado el logo, puedo cambiarlo por una imagen PNG o SVG.
+  **Descartar**; el navegador avisa si se sale de la página con cambios pendientes.
+- Dada la sección **Cuenta**, puedo cambiar la contraseña del panel (mínimo 8 caracteres,
+  repetida dos veces). Agregado el 19 oct tras perderse la contraseña del dueño.
+- Cambiar el **logo** desde el panel queda para HU-13, porque necesita la subida de imágenes a
+  Cloudinary; por ahora se usa `public/logo.png`.
 
 ---
 

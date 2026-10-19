@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPublicInventory } from "../../lib/inventory";
-import { SITE, waLink } from "../../lib/site";
+import { waLink } from "../../lib/site";
+import { getSite } from "../../lib/configuracion";
 import { enCategoria, stockNum, precioNum } from "../../lib/productos";
 import { getCategoriasPublicas } from "../../lib/categorias";
 import HeroCarousel from "../components/HeroCarousel";
@@ -31,7 +32,7 @@ export default async function Home() {
     rows = [];
   }
 
-  const categorias = await getCategoriasPublicas(rows);
+  const [categorias, site] = await Promise.all([getCategoriasPublicas(rows), getSite()]);
   const disponibles = rows.filter((r) => enCategoria(r, LINEA.filtro) && stockNum(r) > 0);
   const linea = disponibles.slice(0, LINEA.max);
   const precios = disponibles.map(precioNum).filter((n) => n && n > 0);
@@ -40,7 +41,7 @@ export default async function Home() {
   return (
     <main>
       <div className="wrap hc-wrap">
-        <HeroCarousel />
+        <HeroCarousel whatsapp={site.whatsapp} />
       </div>
 
       {demo && (
@@ -86,7 +87,7 @@ export default async function Home() {
         <div className="wrap trust-in">
           <div className="trust-item"><span className="trust-ico" aria-hidden="true">🛡️</span><div><b>Garantía</b><small>En todos nuestros equipos</small></div></div>
           <div className="trust-item"><span className="trust-ico" aria-hidden="true">🚚</span><div><b>Envíos nacionales</b><small>A todo el país</small></div></div>
-          <div className="trust-item"><span className="trust-ico" aria-hidden="true">📍</span><div><b>Tienda física</b><small>{SITE.ciudad}</small></div></div>
+          <div className="trust-item"><span className="trust-ico" aria-hidden="true">📍</span><div><b>Tienda física</b><small>{site.ciudad}</small></div></div>
           <div className="trust-item"><span className="trust-ico" aria-hidden="true">💬</span><div><b>Asesoría directa</b><small>Por WhatsApp</small></div></div>
         </div>
       </section>
@@ -99,7 +100,7 @@ export default async function Home() {
           </div>
           <a
             className="btn-hero wa"
-            href={waLink("Hola 👋, estoy buscando un equipo y no lo encontré en el catálogo.")}
+            href={waLink("Hola 👋, estoy buscando un equipo y no lo encontré en el catálogo.", site.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
           >
