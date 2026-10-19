@@ -269,9 +269,9 @@ Como dueño quiero administrar las categorías del catálogo.
   la página, dice cuántos son.
 - La tabla muestra orden, nombre, palabra con su enlace, número de productos y estado, y al pie
   cuántos productos no entran en ninguna categoría.
-- La web (Inicio y `/categorias`) lee las categorías visibles de la tabla, en su orden, y no
-  muestra las que no agrupan productos publicados. Sin Supabase (modo demo) o con la tabla vacía
-  se arman desde los productos, como antes.
+- La web (Inicio y `/categorias`) lee las categorías visibles de la tabla, en su orden, y las
+  muestra aunque no agrupen productos, con «0 disponibles» (decidido por el dueño el 19 oct). Sin
+  Supabase (modo demo) o con la tabla vacía se arman desde los productos, como antes.
 
 ### HU-15 · Configuración de la tienda
 Como dueño quiero cambiar los datos de la empresa sin tocar código.
