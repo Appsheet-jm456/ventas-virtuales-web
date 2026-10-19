@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 13 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · nuevo diseño publicado en Vercel (PR #1 fusionado) · modelo v2 con Cloudinary propuesto
+> **Última sesión:** 19 de octubre de 2026 · rediseño de `/admin` planeado (HU-10 a HU-15, maqueta en `docs/diseno/admin-maqueta.html`). Antes: 13 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · nuevo diseño publicado en Vercel (PR #1 fusionado) · modelo v2 con Cloudinary propuesto
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -50,7 +50,12 @@
    correo y contraseña y carga CSV con vista previa. **Registro público desactivado.** **Falta:** que el
    dueño dé el correo para crear su usuario, el CSV exportado de Baserow y `/admin` con panel lateral.
    Variables nuevas en Vercel/Hostinger: `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-9. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
+9. **Rediseño de `/admin` (19 oct):** planeado, sin programar. Panel lateral plegable y cinco
+   módulos: Bandeja de entrada, Productos, Banners e imágenes, Categorías y Configuración
+   (HU-10 a HU-15 en `docs/sdlc/2-especificaciones.md`; maqueta en `docs/diseno/admin-maqueta.html`).
+   Orden: HU-10, HU-12, HU-14, HU-15, HU-13, HU-11. **Falta del dueño:** aprobar la maqueta; para
+   HU-13, cuenta y claves de Cloudinary; para HU-11, decidir qué se mide (visitas, clics a WhatsApp).
+10. Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
 ## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)
 

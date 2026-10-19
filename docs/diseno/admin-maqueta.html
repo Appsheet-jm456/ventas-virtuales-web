@@ -1,0 +1,613 @@
+<title>Panel Admin Ventas Virtual</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Concepto: shell de una pantalla. Panel lateral izquierdo que se colapsa a riel de iconos; contenido por módulo. Paleta de la landing (azul corporativo). */
+:root {
+  --blue: #17348f;
+  --blue-ink: #0b1c4d;
+  --bg: #f2f5fa;
+  --surface: #ffffff;
+  --surface-2: #f7f9fc;
+  --border: #dfe5ee;
+  --text: #1d2733;
+  --muted: #5c6b80;
+  --side: #0e2160;
+  --side-text: #c9d6ff;
+  --side-active: #ffffff;
+  --side-active-bg: rgba(255,255,255,.14);
+  --accent-soft: #e8edfb;
+  --ok: #148a3c; --ok-bg: #e6f6ec;
+  --bad: #c62828; --bad-bg: #fdeaea;
+  --warn: #9a5b00; --warn-bg: #fff3dc;
+  --wa: #25d366;
+  --shadow: 0 4px 18px rgba(13,32,84,.10);
+  --sans: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --blue: #7f9bff; --blue-ink: #e6ecff; --bg: #0c1220; --surface: #141c2f; --surface-2: #19223a;
+    --border: #26314d; --text: #e6ebf5; --muted: #93a1ba; --side: #080d1a; --side-text: #9fb0d8;
+    --side-active: #fff; --side-active-bg: rgba(127,155,255,.18); --accent-soft: #1e2a4d;
+    --ok: #4cd37d; --ok-bg: #12301f; --bad: #ff7b7b; --bad-bg: #3a1a1c; --warn: #ffc261; --warn-bg: #3a2c10;
+    --shadow: 0 4px 18px rgba(0,0,0,.4); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --blue: #7f9bff; --blue-ink: #e6ecff; --bg: #0c1220; --surface: #141c2f; --surface-2: #19223a;
+  --border: #26314d; --text: #e6ebf5; --muted: #93a1ba; --side: #080d1a; --side-text: #9fb0d8;
+  --side-active: #fff; --side-active-bg: rgba(127,155,255,.18); --accent-soft: #1e2a4d;
+  --ok: #4cd37d; --ok-bg: #12301f; --bad: #ff7b7b; --bad-bg: #3a1a1c; --warn: #ffc261; --warn-bg: #3a2c10;
+  --shadow: 0 4px 18px rgba(0,0,0,.4); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid #7fa2ff; outline-offset: 2px; border-radius: 6px; }
+svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Shell ---------- */
+.shell { display: grid; grid-template-columns: var(--sw, 252px) minmax(0, 1fr); height: 100%; transition: grid-template-columns .22s ease; }
+.shell.mini { --sw: 68px; }
+.side { background: var(--side); color: var(--side-text); display: flex; flex-direction: column; min-width: 0; overflow: hidden; position: relative; z-index: 30; }
+.brand { display: flex; align-items: center; gap: 12px; padding: 16px 14px; height: 64px; }
+.logo { width: 40px; height: 40px; border-radius: 10px; background: #fff; color: #17348f; font-weight: 800; display: grid; place-items: center; flex: none; letter-spacing: -.02em; }
+.brand-t { white-space: nowrap; line-height: 1.15; overflow: hidden; }
+.brand-t b { display: block; color: #fff; font-size: 15px; }
+.brand-t small { font-size: 12px; opacity: .75; }
+.nav { flex: 1; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+.nav-h { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 12px 12px 6px; opacity: .6; white-space: nowrap; }
+.nav button { display: flex; align-items: center; gap: 14px; width: 100%; height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: none; color: var(--side-text); text-align: left; white-space: nowrap; font-weight: 600; position: relative; }
+.nav button:hover { background: rgba(255,255,255,.08); color: #fff; }
+.nav button[aria-current="page"] { background: var(--side-active-bg); color: var(--side-active); }
+.nav button[aria-current="page"]::before { content: ""; position: absolute; left: -10px; top: 10px; bottom: 10px; width: 4px; border-radius: 0 4px 4px 0; background: #fff; }
+.badge { margin-left: auto; background: #ffb020; color: #3a2500; border-radius: 999px; font-size: 11px; font-weight: 800; padding: 2px 7px; }
+.mini .brand-t, .mini .nav-h, .mini .badge, .mini .side-foot .who { display: none; }
+.mini .nav button span.lbl { display: none; }
+.mini .nav button { justify-content: center; padding: 0; }
+.mini .nav button:hover::after { content: attr(data-tip); position: fixed; left: 76px; background: #0b1c4d; color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 12.5px; box-shadow: var(--shadow); z-index: 60; pointer-events: none; }
+.side-foot { padding: 10px; border-top: 1px solid rgba(255,255,255,.1); display: flex; align-items: center; gap: 10px; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: #2d4cc0; color: #fff; display: grid; place-items: center; font-weight: 700; flex: none; }
+.who { line-height: 1.2; white-space: nowrap; overflow: hidden; font-size: 13px; }
+.who b { display: block; color: #fff; }
+.who a { color: var(--side-text); font-size: 12px; text-decoration: underline; background: none; border: 0; padding: 0; cursor: pointer; }
+.mini .side-foot { justify-content: center; }
+
+/* ---------- Main ---------- */
+.main { display: flex; flex-direction: column; min-width: 0; height: 100%; }
+.top { display: flex; align-items: center; gap: 12px; height: 64px; padding-inline: max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-right, 0px)); background: var(--surface); border-bottom: 1px solid var(--border); flex: none; }
+.ibtn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; color: var(--text); }
+.ibtn:hover { background: var(--accent-soft); }
+.top h1 { font-size: 18px; margin: 0; font-weight: 800; color: var(--blue-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.top .sp { flex: 1; }
+.sitelink { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--border); text-decoration: none; color: var(--text); font-weight: 600; white-space: nowrap; }
+.sitelink:hover { background: var(--accent-soft); }
+.content { flex: 1; overflow-y: auto; padding: 24px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); }
+.page { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+.sample { font-size: 12px; color: var(--muted); }
+
+/* ---------- Common ---------- */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; min-width: 0; }
+.card h2 { margin: 0 0 4px; font-size: 16px; color: var(--blue-ink); }
+.card .sub { color: var(--muted); margin: 0 0 14px; font-size: 13px; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.row.sb { justify-content: space-between; }
+.btn { height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); font-weight: 700; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.btn:hover { background: var(--accent-soft); }
+.btn.pri { background: var(--blue); border-color: var(--blue); color: #fff; }
+:root[data-theme="dark"] .btn.pri { color: #0b1c4d; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.pri { color: #0b1c4d; } }
+.btn.pri:hover { filter: brightness(1.1); }
+.btn.danger { color: var(--bad); }
+.btn.sm { height: 34px; padding: 0 12px; font-size: 13px; }
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.bad { background: var(--bad-bg); color: var(--bad); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.pill.mute { background: var(--accent-soft); color: var(--muted); }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { font-weight: 700; font-size: 13px; }
+.field small { color: var(--muted); }
+.in { height: 42px; border: 1.5px solid var(--border); background: var(--surface); border-radius: 10px; padding: 0 12px; min-width: 0; width: 100%; }
+textarea.in { height: auto; padding: 10px 12px; resize: vertical; }
+.in:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(23,52,143,.12); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+.tabs button { border: 0; background: none; padding: 10px 14px; font-weight: 700; color: var(--muted); border-bottom: 3px solid transparent; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--blue); border-bottom-color: var(--blue); }
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 640px; }
+th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: 0; }
+.thumb { width: 44px; height: 44px; border-radius: 8px; flex: none; }
+.pcell { display: flex; align-items: center; gap: 12px; min-width: 220px; }
+.pcell b { display: block; }
+.pcell small { color: var(--muted); }
+.menu { position: relative; display: inline-block; }
+.menu .pop { position: absolute; right: 0; top: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); padding: 6px; z-index: 20; min-width: 170px; }
+.menu .pop button { display: flex; width: 100%; gap: 10px; align-items: center; border: 0; background: none; padding: 9px 10px; border-radius: 8px; text-align: left; }
+.menu .pop button:hover { background: var(--accent-soft); }
+.menu .pop .bad { color: var(--bad); }
+
+/* ---------- Bandeja ---------- */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.kpi { display: flex; flex-direction: column; gap: 6px; }
+.kpi .l { color: var(--muted); font-size: 13px; font-weight: 600; }
+.kpi .v { font-size: 30px; font-weight: 800; color: var(--blue-ink); letter-spacing: -.02em; line-height: 1; }
+.kpi .d { font-size: 12.5px; font-weight: 700; }
+.up { color: var(--ok); } .down { color: var(--bad); }
+.cols { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; }
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font-size: 11px; font-family: var(--sans); }
+.chart .grid { stroke: var(--border); stroke-width: 1; }
+.chart .bar { fill: var(--blue); opacity: .85; }
+.chart .bar.hi { opacity: 1; }
+.chart .ln { fill: none; stroke: var(--wa); stroke-width: 2.5; }
+.legend { display: flex; gap: 16px; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; }
+.rank { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.rank li { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; }
+.rank .bar { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--accent-soft); overflow: hidden; }
+.rank .bar i { display: block; height: 100%; background: var(--blue); border-radius: 3px; }
+.alerts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.alerts li { display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); }
+.alerts li > div { flex: 1; min-width: 0; }
+.alerts .ic { width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; flex: none; }
+.alerts .ic.warn { background: var(--warn-bg); color: var(--warn); }
+.alerts .ic.bad { background: var(--bad-bg); color: var(--bad); }
+.alerts .ic.ok { background: var(--ok-bg); color: var(--ok); }
+
+/* ---------- CSV ---------- */
+.drop { border: 2px dashed var(--border); border-radius: 12px; padding: 28px 16px; text-align: center; background: var(--surface-2); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.drop.over { border-color: var(--blue); background: var(--accent-soft); }
+.drop svg.i { width: 34px; height: 34px; color: var(--blue); }
+.steps { display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.steps b { color: var(--text); }
+.stat { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- Banners ---------- */
+.stage { position: relative; aspect-ratio: 16 / 5; width: 100%; border-radius: 12px; overflow: hidden; background: #0e2160; color: #fff; isolation: isolate; }
+.stage .slide { position: absolute; inset: 0; opacity: 0; transition: opacity .5s; }
+.stage .slide.on { opacity: 1; }
+.stage .photo { position: absolute; inset: 0; }
+.stage .cut { position: absolute; inset: 0; clip-path: polygon(0 0, 58% 0, 42% 100%, 0 100%); background: linear-gradient(120deg, rgba(14,33,96,.96), rgba(23,52,143,.9)); display: flex; flex-direction: column; justify-content: center; padding: 0 0 0 5%; gap: 8px; }
+.stage .cut h3 { margin: 0; font-size: clamp(16px, 3.2vw, 32px); line-height: 1.1; max-width: 46%; text-wrap: balance; }
+.stage .cut p { margin: 0; font-size: clamp(11px, 1.4vw, 15px); opacity: .85; max-width: 40%; }
+.stage .cut span { align-self: flex-start; background: var(--wa); color: #05391f; font-weight: 800; border-radius: 999px; padding: 5px 14px; font-size: clamp(10px, 1.3vw, 13px); }
+.dots { position: absolute; bottom: 8px; right: 12px; display: flex; gap: 6px; z-index: 2; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.4); }
+.dots i.on { background: #fff; }
+.blist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.bitem { display: grid; grid-template-columns: auto 96px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.bitem.drag { opacity: .4; }
+.bitem.target { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(23,52,143,.15); }
+.grip { cursor: grab; color: var(--muted); display: grid; place-items: center; width: 28px; height: 40px; }
+.bthumb { width: 96px; height: 40px; border-radius: 6px; overflow: hidden; position: relative; }
+.bthumb::after { content: ""; position: absolute; inset: 0; clip-path: polygon(0 0, 58% 0, 42% 100%, 0 100%); background: rgba(14,33,96,.85); }
+.bitem b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bitem small { color: var(--muted); }
+.bact { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.catimgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.catimg { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.catimg .ph { aspect-ratio: 4 / 3; position: relative; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 18px; }
+.catimg .cap { padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.size { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* ---------- Config ---------- */
+.cfg { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 20px; align-items: start; }
+.cfgnav { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; }
+.cfgnav a { padding: 9px 12px; border-radius: 8px; color: var(--muted); text-decoration: none; font-weight: 600; }
+.cfgnav a:hover { background: var(--accent-soft); color: var(--text); }
+.cfgstack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.switch:last-child { border-bottom: 0; }
+.switch small { color: var(--muted); display: block; }
+.tg { width: 44px; height: 26px; border-radius: 999px; border: 0; background: var(--border); position: relative; flex: none; transition: background .15s; }
+.tg::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .15s; }
+.tg[aria-checked="true"] { background: var(--ok); }
+.tg[aria-checked="true"]::after { transform: translateX(18px); }
+.savebar { position: sticky; bottom: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; box-shadow: var(--shadow); }
+
+.toast { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translate(-50%, 20px); background: #0b1c4d; color: #fff; padding: 11px 18px; border-radius: 10px; opacity: 0; pointer-events: none; transition: .25s; z-index: 80; box-shadow: var(--shadow); max-width: calc(100% - 32px); }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+.scrim { display: none; }
+
+@media (max-width: 860px) {
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  .cfg { grid-template-columns: minmax(0, 1fr); }
+  .cfgnav { flex-direction: row; overflow-x: auto; position: static; }
+  .cfgnav a { white-space: nowrap; }
+}
+@media (max-width: 720px) {
+  /* En celular el riel de iconos queda fijo y el panel abierto se superpone */
+  .shell { grid-template-columns: 64px minmax(0, 1fr); }
+  .shell.mini { --sw: 64px; }
+  .shell:not(.mini) .side { position: fixed; inset: 0 auto 0 0; width: 252px; box-shadow: 8px 0 30px rgba(0,0,0,.35); }
+  .shell:not(.mini) .scrim { display: block; position: fixed; inset: 0; background: rgba(5,10,30,.45); z-index: 25; }
+  .side { position: relative; }
+  .sitelink span { display: none; }
+  .sitelink { padding: 0; width: 40px; justify-content: center; }
+  .bitem { grid-template-columns: auto minmax(0, 1fr); }
+  .bitem .bthumb { display: none; }
+  .bact { grid-column: 1 / -1; justify-content: flex-start; }
+  .stage .cut h3, .stage .cut p { max-width: 50%; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="shell" id="shell">
+  <aside class="side" id="side" aria-label="Menú del panel">
+    <div class="brand">
+      <div class="logo">VV</div>
+      <div class="brand-t"><b>Ventas Virtual</b><small>Panel de administración</small></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">
+      <div class="avatar">JM</div>
+      <div class="who"><b>Dueño</b><button type="button" class="linkbtn" id="logout" style="background:none;border:0;padding:0;color:var(--side-text);text-decoration:underline;font-size:12px;">Cerrar sesión</button></div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <div class="main">
+    <header class="top">
+      <button class="ibtn" id="toggle" type="button" aria-label="Abrir o cerrar el menú" aria-expanded="true"></button>
+      <h1 id="title">Bandeja de entrada</h1>
+      <span class="sp"></span>
+      <button class="ibtn" id="theme" type="button" aria-label="Cambiar tema"></button>
+      <a class="sitelink" href="#" id="site"></a>
+    </header>
+    <main class="content" id="content"><div class="page" id="page"></div></main>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  var ICONS = {
+    inbox: '<path d="M3 13l2.5-7.5A2 2 0 0 1 7.4 4h9.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5h-5.5a2.5 2.5 0 0 1-5 0H3z"/>',
+    box: '<path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.5L12 12.5l8.7-5M12 22V12.5"/>',
+    image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 8"/>',
+    tag: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+    menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
+    dots: '<circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/>',
+    ext: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+    grip: '<circle cx="9" cy="6" r="1.3"/><circle cx="15" cy="6" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18" r="1.3"/><circle cx="15" cy="18" r="1.3"/>',
+    up: '<path d="M12 19V5M6 11l6-6 6 6"/>',
+    down: '<path d="M12 5v14M6 13l6 6 6-6"/>',
+    edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>',
+    trash: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>',
+    eye: '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',
+    eyeoff: '<path d="M17.9 17.9A10.9 10.9 0 0 1 12 19C5 19 1 12 1 12a18 18 0 0 1 5.1-5.9M9.9 4.2A10.7 10.7 0 0 1 12 5c7 0 11 7 11 7a18 18 0 0 1-2.2 3.2M1 1l22 22"/>',
+    slash: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
+    warn: '<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+    check: '<path d="M20 6L9 17l-5-5"/>',
+    file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z"/>'
+  };
+  function ic(n) { return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[n] || '') + '</svg>'; }
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function money(n) { return '$' + n.toLocaleString('es-CO'); }
+  function toast(t) { var el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function () { el.classList.remove('on'); }, 2200); }
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) {} return null; }
+
+  var MODS = [
+    { id: 'bandeja', name: 'Bandeja de entrada', icon: 'inbox', badge: 3 },
+    { id: 'productos', name: 'Productos', icon: 'box' },
+    { id: 'banners', name: 'Banners e imágenes', icon: 'image' },
+    { id: 'categorias', name: 'Categorías', icon: 'tag' },
+    { id: 'config', name: 'Configuración', icon: 'gear' }
+  ];
+
+  /* ---------- Datos de ejemplo ---------- */
+  var PRODUCTS = [
+    { id: 1, n: 'Lenovo ThinkPad T14 Gen 2', s: 'Core i5-1145G7 · 16 GB · 512 GB SSD', cat: 'Portátiles', p: 1890000, st: 4, vis: true, c1: '#2d4cc0', c2: '#0e2160', foto: true },
+    { id: 2, n: 'Dell Latitude 7420', s: 'Core i7-1185G7 · 16 GB · 256 GB SSD', cat: 'Portátiles', p: 2150000, st: 2, vis: true, c1: '#1f6f8b', c2: '#0b3a4d', foto: true },
+    { id: 3, n: 'HP EliteDesk 800 G5 Tiny', s: 'Core i5-9500T · 8 GB · 256 GB SSD', cat: 'Torres Tiny', p: 780000, st: 9, vis: true, c1: '#5b4bb7', c2: '#2a1f70', foto: true },
+    { id: 4, n: 'Lenovo ThinkCentre M720q', s: 'Core i3-8100T · 8 GB · 240 GB SSD', cat: 'Torres Tiny', p: 620000, st: 0, vis: true, c1: '#b0562b', c2: '#5a2410', foto: true },
+    { id: 5, n: 'HP ProBook 440 G8', s: 'Core i5-1135G7 · 8 GB · 256 GB SSD', cat: 'Portátiles', p: 1650000, st: 3, vis: true, c1: '#148a3c', c2: '#0a4a20', foto: false },
+    { id: 6, n: 'Monitor Dell P2419H 24"', s: 'IPS · Full HD · HDMI', cat: 'Accesorios', p: 350000, st: 6, vis: false, c1: '#7a8499', c2: '#3b4356', foto: true },
+    { id: 7, n: 'Memoria RAM DDR4 8 GB SODIMM', s: '2666 MHz · portátil', cat: 'Partes', p: 95000, st: 24, vis: true, c1: '#a02866', c2: '#52123a', foto: false }
+  ];
+  var CATS = [
+    { id: 1, n: 'Portátiles', slug: 'portatil', c1: '#2d4cc0', c2: '#0e2160', vis: true },
+    { id: 2, n: 'Torres Tiny', slug: 'torres-tiny', c1: '#5b4bb7', c2: '#2a1f70', vis: true },
+    { id: 3, n: 'Partes', slug: 'partes', c1: '#a02866', c2: '#52123a', vis: true },
+    { id: 4, n: 'Accesorios', slug: 'accesorios', c1: '#1f6f8b', c2: '#0b3a4d', vis: true }
+  ];
+  var BANNERS = [
+    { id: 1, t: 'Portátiles corporativos con garantía', d: 'Equipos probados, listos para trabajar', cta: 'Ver portátiles', href: '/productos?categoria=portatil', c1: '#2d4cc0', c2: '#101f5e', on: true },
+    { id: 2, t: 'Torres Tiny desde $620.000', d: 'Poco espacio, mucho rendimiento', cta: 'Ver torres', href: '/productos?categoria=torres-tiny', c1: '#5b4bb7', c2: '#241a66', on: true },
+    { id: 3, t: '¿No encuentras tu equipo?', d: 'Escríbenos y lo buscamos', cta: 'Escribir por WhatsApp', href: 'wa:Hola, busco un equipo', c1: '#148a3c', c2: '#0a3d1d', on: false }
+  ];
+
+  /* ---------- Shell ---------- */
+  var current = 'bandeja';
+  var shell = $('#shell');
+  function renderNav() {
+    var h = '<div class="nav-h">Módulos</div>';
+    MODS.forEach(function (m) {
+      h += '<button type="button" data-id="' + m.id + '" data-tip="' + m.name + '" title="' + m.name + '"' + (m.id === current ? ' aria-current="page"' : '') + '>' + ic(m.icon) + '<span class="lbl">' + m.name + '</span>' + (m.badge ? '<span class="badge">' + m.badge + '</span>' : '') + '</button>';
+    });
+    $('#nav').innerHTML = h;
+  }
+  function setMini(v) {
+    shell.classList.toggle('mini', v);
+    $('#toggle').setAttribute('aria-expanded', String(!v));
+    store('vv-admin-mini', v ? '1' : '0');
+  }
+  $('#toggle').innerHTML = ic('menu');
+  $('#theme').innerHTML = ic('sun');
+  $('#site').innerHTML = ic('ext') + '<span>Ver la web</span>';
+  $('#theme').onclick = function () {
+    var r = document.documentElement, dark = r.getAttribute('data-theme') === 'dark' || (!r.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+    r.setAttribute('data-theme', dark ? 'light' : 'dark');
+  };
+  $('#toggle').onclick = function () { setMini(!shell.classList.contains('mini')); };
+  $('#scrim').onclick = function () { setMini(true); };
+  $('#logout').onclick = function () { toast('Sesión cerrada (ejemplo)'); };
+  $('#site').onclick = function (e) { e.preventDefault(); toast('Abre la landing en otra pestaña'); };
+  $('#nav').onclick = function (e) {
+    var b = e.target.closest('button[data-id]'); if (!b) return;
+    go(b.getAttribute('data-id'));
+    if (matchMedia('(max-width:720px)').matches) setMini(true);
+  };
+  var initMini = store('vv-admin-mini');
+  setMini(initMini === null ? matchMedia('(max-width:720px)').matches : initMini === '1');
+
+  function go(id) {
+    current = id;
+    var m = MODS.filter(function (x) { return x.id === id; })[0];
+    $('#title').textContent = m.name;
+    renderNav();
+    VIEWS[id]();
+    $('#content').scrollTop = 0;
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  }
+  function page(html) { $('#page').innerHTML = html; }
+
+  /* ---------- 1 · Bandeja ---------- */
+  function bandeja() {
+    var clicks = [14, 22, 18, 31, 27, 19, 12, 24, 35, 29, 33, 41, 38, 46];
+    var visits = [120, 180, 150, 210, 190, 140, 100, 170, 230, 205, 240, 280, 260, 310];
+    var W = 560, H = 210, pl = 34, pb = 24, pt = 10, pr = 8, mx = 350;
+    var bw = (W - pl - pr) / clicks.length;
+    function y(v) { return pt + (H - pt - pb) * (1 - v / mx); }
+    var g = '';
+    [0, 100, 200, 300].forEach(function (t) { g += '<line class="grid" x1="' + pl + '" x2="' + (W - pr) + '" y1="' + y(t) + '" y2="' + y(t) + '"/><text x="' + (pl - 6) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + t + '</text>'; });
+    var bars = '', line = '';
+    visits.forEach(function (v, i) {
+      var x = pl + i * bw + bw * .18;
+      bars += '<rect class="bar' + (i === visits.length - 1 ? ' hi' : '') + '" x="' + x + '" y="' + y(v) + '" width="' + (bw * .64) + '" height="' + (y(0) - y(v)) + '" rx="3"/>';
+      line += (i ? 'L' : 'M') + (pl + i * bw + bw / 2) + ' ' + y(clicks[i] * 5);
+      if (i % 3 === 0 || i === visits.length - 1) bars += '<text x="' + (x + bw * .32) + '" y="' + (H - 6) + '" text-anchor="middle">' + (6 + i) + ' oct</text>';
+    });
+    var top = [['Lenovo ThinkPad T14 Gen 2', 86], ['Dell Latitude 7420', 61], ['HP EliteDesk 800 G5 Tiny', 44], ['HP ProBook 440 G8', 27]];
+    var rank = top.map(function (t) { return '<li><span>' + t[0] + '</span><b class="num">' + t[1] + '</b><div class="bar"><i style="width:' + (t[1] / 86 * 100) + '%"></i></div></li>'; }).join('');
+    page(
+      '<div class="row sb"><div><div style="font-size:22px;font-weight:800;color:var(--blue-ink)">Buenos días</div><div class="sample">Datos de ejemplo. Se conectan a Supabase y a los clics de WhatsApp en la historia de métricas.</div></div>' +
+      '<div class="row"><select class="in" style="width:auto" aria-label="Periodo" id="per"><option>Últimos 14 días</option><option>Últimos 30 días</option><option>Este mes</option></select></div></div>' +
+      '<div class="kpis">' +
+      kpi('Visitas', '2.915', '▲ 18% vs. periodo anterior', 'up') +
+      kpi('Clics en WhatsApp', '416', '▲ 9% vs. periodo anterior', 'up') +
+      kpi('Productos publicados', '112', '6 sin foto', 'down') +
+      kpi('Agotados', '8', '3 con más de 30 días', 'down') + '</div>' +
+      '<div class="cols"><section class="card"><h2>Visitas y clics a WhatsApp</h2><p class="sub">Cuántos visitantes llegan y cuántos escriben a un asesor.</p>' +
+      '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Barras de visitas por día y línea de clics en WhatsApp">' + g + bars + '<path class="ln" d="' + line + '"/></svg>' +
+      '<div class="legend"><span><i style="background:var(--blue)"></i>Visitas por día</span><span><i style="background:var(--wa)"></i>Clics en WhatsApp (x5)</span></div></section>' +
+      '<section class="card"><h2>Más consultados</h2><p class="sub">Clics en «Estoy interesado» por producto.</p><ul class="rank">' + rank + '</ul></section></div>' +
+      '<section class="card"><h2>Para revisar</h2><p class="sub">Lo que conviene atender hoy.</p><ul class="alerts">' +
+      alert('warn', 'warn', '6 productos publicados sin foto', 'No cargan bien en el catálogo y venden menos.', 'Ver productos', 'productos') +
+      alert('bad', 'slash', '3 productos agotados hace más de 30 días', 'Considera ocultarlos o reponer el stock.', 'Revisar', 'productos') +
+      alert('warn', 'image', 'El banner «¿No encuentras tu equipo?» está desactivado', 'La portada muestra solo 2 banners.', 'Ir a banners', 'banners') +
+      alert('ok', 'check', 'Última carga CSV: 112 productos sin errores', 'Hace 2 días.', '', '') + '</ul></section>'
+    );
+    $$('[data-go]').forEach(function (b) { b.onclick = function () { go(b.getAttribute('data-go')); }; });
+  }
+  function kpi(l, v, d, cls) { return '<div class="card kpi"><span class="l">' + l + '</span><span class="v num">' + v + '</span><span class="d ' + cls + '">' + d + '</span></div>'; }
+  function alert(cls, icon, t, d, btn, to) {
+    return '<li><span class="ic ' + cls + '">' + ic(icon) + '</span><div><b>' + t + '</b><div class="sample">' + d + '</div></div>' + (btn ? '<button type="button" class="btn sm" data-go="' + to + '">' + btn + '</button>' : '') + '</li>';
+  }
+
+  /* ---------- 2 · Productos ---------- */
+  var ptab = 'lista', pq = '', pfilter = 'todos', openMenu = null;
+  function productos() {
+    var rows = PRODUCTS.filter(function (p) {
+      var q = pq.toLowerCase();
+      var okq = !q || (p.n + ' ' + p.s + ' ' + p.cat).toLowerCase().indexOf(q) > -1;
+      var okf = pfilter === 'todos' || (pfilter === 'agotados' && p.st === 0) || (pfilter === 'ocultos' && !p.vis) || (pfilter === 'sinfoto' && !p.foto);
+      return okq && okf;
+    });
+    var body = rows.map(function (p) {
+      var stp = p.st === 0 ? '<span class="pill bad">Agotado</span>' : '<span class="pill ok">' + p.st + ' en stock</span>';
+      return '<tr><td><div class="pcell"><div class="thumb" style="background:linear-gradient(135deg,' + p.c1 + ',' + p.c2 + ')"></div><div><b>' + esc(p.n) + '</b><small>' + esc(p.s) + '</small></div></div></td>' +
+        '<td>' + esc(p.cat) + '</td><td class="num">' + money(p.p) + '</td><td>' + stp + (p.foto ? '' : ' <span class="pill warn">Sin foto</span>') + '</td>' +
+        '<td>' + (p.vis ? '<span class="pill mute">Visible</span>' : '<span class="pill mute" style="opacity:.7">Oculto</span>') + '</td>' +
+        '<td style="text-align:right"><div class="menu"><button type="button" class="ibtn" data-menu="' + p.id + '" aria-label="Acciones de ' + esc(p.n) + '" aria-haspopup="menu">' + ic('dots') + '</button>' +
+        (openMenu === p.id ? '<div class="pop" role="menu"><button type="button" data-act="edit" data-id="' + p.id + '">' + ic('edit') + 'Editar</button><button type="button" data-act="stock" data-id="' + p.id + '">' + ic('slash') + (p.st === 0 ? 'Reponer 1' : 'Marcar agotado') + '</button><button type="button" data-act="vis" data-id="' + p.id + '">' + ic(p.vis ? 'eyeoff' : 'eye') + (p.vis ? 'Ocultar' : 'Mostrar') + '</button><button type="button" class="bad" data-act="del" data-id="' + p.id + '">' + ic('trash') + 'Eliminar</button></div>' : '') +
+        '</div></td></tr>';
+    }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">Ningún producto coincide con la búsqueda.</td></tr>';
+    var filters = [['todos', 'Todos'], ['agotados', 'Agotados'], ['ocultos', 'Ocultos'], ['sinfoto', 'Sin foto']].map(function (f) {
+      return '<button type="button" class="btn sm" data-f="' + f[0] + '"' + (pfilter === f[0] ? ' style="background:var(--accent-soft);border-color:var(--blue);color:var(--blue)"' : '') + '>' + f[1] + '</button>';
+    }).join('');
+    var list = '<section class="card"><div class="row sb" style="margin-bottom:14px"><div class="row" style="flex:1;min-width:0"><input class="in" id="pq" type="search" placeholder="Buscar por nombre, marca o categoría" value="' + esc(pq) + '" style="max-width:340px" aria-label="Buscar productos"><div class="row" style="gap:6px">' + filters + '</div></div>' +
+      '<button type="button" class="btn pri" id="newp">' + ic('plus') + 'Nuevo producto</button></div>' +
+      '<div class="tablewrap"><table><thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th></th></tr></thead><tbody>' + body + '</tbody></table></div>' +
+      '<div class="sample" style="margin-top:10px">Mostrando ' + rows.length + ' de ' + PRODUCTS.length + ' productos de ejemplo.</div></section>';
+    var csv = '<section class="card"><h2>Cargar productos por CSV</h2><p class="sub">Sube el archivo, revisa la vista previa y confirma. Nada se guarda en Supabase hasta que confirmes.</p>' +
+      '<div class="steps" style="margin-bottom:14px"><span><b>1.</b> Descarga la plantilla</span> · <span><b>2.</b> Sube el archivo</span> · <span><b>3.</b> Revisa y confirma</span></div>' +
+      '<div class="row" style="margin-bottom:14px"><button type="button" class="btn" id="tpl">' + ic('file') + 'Descargar plantilla CSV</button></div>' +
+      '<div class="drop" id="drop">' + ic('upload') + '<b>Arrastra el CSV aquí</b><span class="sample">o</span><label class="btn pri" for="csvf" style="cursor:pointer">Elegir archivo</label><input type="file" id="csvf" accept=".csv,text/csv" hidden></div>' +
+      '<div id="prev" hidden></div></section>';
+    page('<div class="tabs" role="tablist"><button type="button" role="tab" data-t="lista" aria-selected="' + (ptab === 'lista') + '">Listado</button><button type="button" role="tab" data-t="csv" aria-selected="' + (ptab === 'csv') + '">Carga CSV</button></div>' + (ptab === 'lista' ? list : csv));
+    $$('.tabs button').forEach(function (b) { b.onclick = function () { ptab = b.getAttribute('data-t'); productos(); }; });
+    if (ptab === 'lista') {
+      var q = $('#pq'); q.oninput = function () { pq = q.value; var pos = q.selectionStart; productos(); var n = $('#pq'); n.focus(); n.setSelectionRange(pos, pos); };
+      $$('[data-f]').forEach(function (b) { b.onclick = function () { pfilter = b.getAttribute('data-f'); productos(); }; });
+      $$('[data-menu]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); var id = +b.getAttribute('data-menu'); openMenu = openMenu === id ? null : id; productos(); }; });
+      $$('[data-act]').forEach(function (b) {
+        b.onclick = function () {
+          var p = PRODUCTS.filter(function (x) { return x.id === +b.getAttribute('data-id'); })[0], a = b.getAttribute('data-act');
+          openMenu = null;
+          if (a === 'stock') { p.st = p.st === 0 ? 1 : 0; toast(p.st === 0 ? 'Marcado como agotado' : 'Stock repuesto'); }
+          if (a === 'vis') { p.vis = !p.vis; toast(p.vis ? 'Producto visible en la web' : 'Producto oculto en la web'); }
+          if (a === 'edit') toast('Aquí abre el formulario de edición');
+          if (a === 'del') { PRODUCTS.splice(PRODUCTS.indexOf(p), 1); toast('Producto eliminado'); }
+          productos();
+        };
+      });
+      $('#newp').onclick = function () { toast('Aquí abre el formulario de nuevo producto'); };
+    } else csvWire();
+  }
+  document.addEventListener('click', function () { if (openMenu !== null && current === 'productos') { openMenu = null; productos(); } });
+
+  function csvWire() {
+    var drop = $('#drop'), f = $('#csvf');
+    $('#tpl').onclick = function () { toast('Se descarga plantilla-productos.csv'); };
+    function handle(text) {
+      var lines = text.split(/\r?\n/).filter(Boolean), head = lines.shift().split(','), data = lines.map(function (l) { return l.split(','); });
+      var bad = 0;
+      var rows = data.slice(0, 5).map(function (r) { var e = !r[0] || isNaN(+r[3]); if (e) bad++; return '<tr><td>' + esc(r[0] || '—') + '</td><td>' + esc(r[1] || '') + '</td><td>' + esc(r[2] || '') + '</td><td class="num">' + esc(r[3] || '') + '</td><td>' + (e ? '<span class="pill bad">Revisar</span>' : '<span class="pill ok">Listo</span>') + '</td></tr>'; }).join('');
+      var p = $('#prev'); p.hidden = false;
+      p.innerHTML = '<h2 style="margin:18px 0 8px;font-size:15px;color:var(--blue-ink)">Vista previa</h2><div class="stat" style="margin-bottom:10px"><span class="pill ok">' + (data.length - bad) + ' filas válidas</span><span class="pill ' + (bad ? 'bad' : 'mute') + '">' + bad + ' con errores</span></div>' +
+        '<div class="tablewrap"><table><thead><tr><th>' + head.slice(0, 4).map(esc).join('</th><th>') + '</th><th>Estado</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+        '<div class="row" style="margin-top:14px"><button type="button" class="btn pri" id="okcsv">' + ic('check') + 'Confirmar carga</button><button type="button" class="btn" id="nocsv">Cancelar</button></div>';
+      $('#okcsv').onclick = function () { toast(data.length + ' productos cargados en Supabase (ejemplo)'); p.hidden = true; };
+      $('#nocsv').onclick = function () { p.hidden = true; };
+    }
+    function read(file) { if (!file) return; var r = new FileReader(); r.onload = function () { handle(String(r.result)); }; r.readAsText(file); }
+    f.onchange = function () { read(f.files[0]); };
+    ['dragenter', 'dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
+    ['dragleave', 'drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
+    drop.addEventListener('drop', function (e) { read(e.dataTransfer.files[0]); });
+    handle('nombre,marca,categoria,precio\nLenovo ThinkPad T14,Lenovo,Portátiles,1890000\nDell Latitude 7420,Dell,Portátiles,2150000\nHP EliteDesk 800 G5,HP,Torres Tiny,780000\nMemoria RAM 8 GB,Kingston,Partes,sin precio');
+  }
+
+  /* ---------- 3 · Banners e imágenes ---------- */
+  var cur = 0, timer = null, dragIdx = null;
+  function banners() {
+    var active = BANNERS.filter(function (b) { return b.on; });
+    var slides = active.map(function (b, i) {
+      return '<div class="slide' + (i === cur % Math.max(active.length, 1) ? ' on' : '') + '"><div class="photo" style="background:linear-gradient(135deg,' + b.c1 + ',' + b.c2 + ')"></div><div class="cut"><h3>' + esc(b.t) + '</h3><p>' + esc(b.d) + '</p><span>' + esc(b.cta) + '</span></div></div>';
+    }).join('');
+    var dots = active.map(function (b, i) { return '<i class="' + (i === cur % active.length ? 'on' : '') + '"></i>'; }).join('');
+    var list = BANNERS.map(function (b, i) {
+      return '<li class="bitem" draggable="true" data-i="' + i + '"><span class="grip" title="Arrastra para ordenar">' + ic('grip') + '</span><div class="bthumb" style="background:linear-gradient(135deg,' + b.c1 + ',' + b.c2 + ')"></div><div style="min-width:0"><b>' + esc(b.t) + '</b><small>' + (b.on ? 'Activo' : 'Desactivado') + ' · Posición ' + (i + 1) + ' · ' + esc(b.href) + '</small></div>' +
+        '<div class="bact"><button type="button" class="ibtn" data-b="up" data-i="' + i + '" aria-label="Subir" ' + (i === 0 ? 'disabled style="opacity:.4"' : '') + '>' + ic('up') + '</button><button type="button" class="ibtn" data-b="down" data-i="' + i + '" aria-label="Bajar" ' + (i === BANNERS.length - 1 ? 'disabled style="opacity:.4"' : '') + '>' + ic('down') + '</button>' +
+        '<button type="button" class="tg" role="switch" aria-checked="' + b.on + '" data-b="on" data-i="' + i + '" aria-label="Activar banner"></button><button type="button" class="ibtn" data-b="edit" data-i="' + i + '" aria-label="Editar">' + ic('edit') + '</button><button type="button" class="ibtn" data-b="del" data-i="' + i + '" aria-label="Quitar">' + ic('trash') + '</button></div></li>';
+    }).join('');
+    var imgs = CATS.map(function (c) {
+      return '<div class="catimg"><div class="ph" style="background:linear-gradient(135deg,' + c.c1 + ',' + c.c2 + ')">' + esc(c.n) + '</div><div class="cap"><span class="size">800×600</span><button type="button" class="btn sm" data-img="' + c.id + '">' + ic('upload') + 'Cambiar</button></div></div>';
+    }).join('');
+    page(
+      '<section class="card"><div class="row sb"><div><h2>Vista previa de la portada</h2><p class="sub" style="margin:0">Así rota el banner en Inicio. El corte diagonal es parte del diseño.</p></div><button type="button" class="btn pri" id="newb">' + ic('upload') + 'Subir banner</button></div>' +
+      '<div class="stage" id="stage" style="margin-top:14px">' + (slides || '<div style="padding:40px;text-align:center">No hay banners activos</div>') + '<div class="dots">' + dots + '</div></div>' +
+      '<div class="sample" style="margin-top:8px">Escritorio 1600×500 px · Celular 800×800 px (opcional) · JPG, PNG o WebP hasta 2 MB. La diagonal y el texto se aplican solos.</div></section>' +
+      '<section class="card"><h2>Orden de los banners</h2><p class="sub">Arrastra con el icono de puntos, o usa las flechas. El primero se ve primero en la web.</p><ul class="blist" id="blist">' + list + '</ul></section>' +
+      '<section class="card"><h2>Imágenes de categorías</h2><p class="sub">La imagen que aparece en la sección Categorías de Inicio.</p><div class="catimgs">' + imgs + '</div></section>'
+    );
+    clearInterval(timer);
+    if (active.length > 1) timer = setInterval(function () { if (current !== 'banners') return clearInterval(timer); cur = (cur + 1) % active.length; var sl = $$('#stage .slide'), dd = $$('#stage .dots i'); sl.forEach(function (s, i) { s.classList.toggle('on', i === cur); }); dd.forEach(function (s, i) { s.classList.toggle('on', i === cur); }); }, 2600);
+    $('#newb').onclick = function () { toast('Aquí se elige la imagen y se sube a Cloudinary'); };
+    $$('[data-img]').forEach(function (b) { b.onclick = function () { toast('Aquí se sube la nueva imagen de la categoría'); }; });
+    $$('#blist [data-b]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.getAttribute('data-i'), a = b.getAttribute('data-b');
+        if (a === 'up' && i > 0) { BANNERS.splice(i - 1, 0, BANNERS.splice(i, 1)[0]); }
+        if (a === 'down' && i < BANNERS.length - 1) { BANNERS.splice(i + 1, 0, BANNERS.splice(i, 1)[0]); }
+        if (a === 'on') BANNERS[i].on = !BANNERS[i].on;
+        if (a === 'del') { BANNERS.splice(i, 1); toast('Banner quitado'); }
+        if (a === 'edit') { toast('Aquí abre el formulario del banner'); return; }
+        cur = 0; banners();
+      };
+    });
+    $$('.bitem').forEach(function (li) {
+      li.addEventListener('dragstart', function (e) { dragIdx = +li.getAttribute('data-i'); li.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(dragIdx)); } catch (x) {} });
+      li.addEventListener('dragend', function () { li.classList.remove('drag'); });
+      li.addEventListener('dragover', function (e) { e.preventDefault(); $$('.bitem').forEach(function (x) { x.classList.remove('target'); }); li.classList.add('target'); });
+      li.addEventListener('drop', function (e) { e.preventDefault(); var to = +li.getAttribute('data-i'); if (dragIdx !== null && dragIdx !== to) { BANNERS.splice(to, 0, BANNERS.splice(dragIdx, 1)[0]); cur = 0; toast('Orden actualizado'); banners(); } });
+    });
+  }
+
+  /* ---------- 4 · Categorías ---------- */
+  var editCat = null;
+  function categorias() {
+    var rows = CATS.map(function (c) {
+      var n = PRODUCTS.filter(function (p) { return p.cat === c.n; }).length;
+      if (editCat === c.id) {
+        return '<tr><td><div class="thumb" style="background:linear-gradient(135deg,' + c.c1 + ',' + c.c2 + ')"></div></td><td><input class="in" id="en" value="' + esc(c.n) + '" aria-label="Nombre"></td><td><input class="in" id="es" value="' + esc(c.slug) + '" aria-label="Enlace" style="font-family:var(--mono)"></td><td class="num">' + n + '</td><td></td><td style="text-align:right;white-space:nowrap"><button type="button" class="btn sm pri" data-c="save" data-id="' + c.id + '">Guardar</button> <button type="button" class="btn sm" data-c="cancel">Cancelar</button></td></tr>';
+      }
+      return '<tr><td><div class="thumb" style="background:linear-gradient(135deg,' + c.c1 + ',' + c.c2 + ')"></div></td><td><b>' + esc(c.n) + '</b></td><td><span class="size">/productos?categoria=' + esc(c.slug) + '</span></td><td class="num">' + n + '</td><td>' + (c.vis ? '<span class="pill ok">Visible</span>' : '<span class="pill mute">Oculta</span>') + '</td>' +
+        '<td style="text-align:right;white-space:nowrap"><button type="button" class="ibtn" data-c="edit" data-id="' + c.id + '" aria-label="Editar ' + esc(c.n) + '">' + ic('edit') + '</button> <button type="button" class="ibtn" data-c="vis" data-id="' + c.id + '" aria-label="Mostrar u ocultar">' + ic(c.vis ? 'eyeoff' : 'eye') + '</button> <button type="button" class="ibtn" data-c="del" data-id="' + c.id + '" aria-label="Quitar ' + esc(c.n) + '">' + ic('trash') + '</button></td></tr>';
+    }).join('');
+    page(
+      '<section class="card"><h2>Nueva categoría</h2><p class="sub">El enlace se crea solo desde el nombre. La imagen se sube en Banners e imágenes.</p><form class="row" id="cf" style="align-items:flex-end"><div class="field" style="flex:1;min-width:220px"><label for="cn">Nombre</label><input class="in" id="cn" placeholder="Ej: Impresoras" required></div><button class="btn pri" type="submit">' + ic('plus') + 'Agregar categoría</button></form></section>' +
+      '<section class="card"><div class="tablewrap"><table><thead><tr><th style="width:64px">Imagen</th><th>Nombre</th><th>Enlace</th><th>Productos</th><th>Estado</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div><div class="sample" style="margin-top:10px">Al quitar una categoría, sus productos pasan a «Sin categoría». No se borran.</div></section>'
+    );
+    $('#cf').onsubmit = function (e) {
+      e.preventDefault(); var v = $('#cn').value.trim(); if (!v) return;
+      var slug = v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      CATS.push({ id: Date.now(), n: v, slug: slug, c1: '#17348f', c2: '#0e2160', vis: true }); toast('Categoría «' + v + '» agregada'); categorias();
+    };
+    $$('[data-c]').forEach(function (b) {
+      b.onclick = function () {
+        var a = b.getAttribute('data-c'), id = +b.getAttribute('data-id'), c = CATS.filter(function (x) { return x.id === id; })[0];
+        if (a === 'edit') editCat = id;
+        if (a === 'cancel') editCat = null;
+        if (a === 'save') { c.n = $('#en').value.trim() || c.n; c.slug = $('#es').value.trim() || c.slug; editCat = null; toast('Categoría actualizada'); }
+        if (a === 'vis') { c.vis = !c.vis; toast(c.vis ? 'Categoría visible' : 'Categoría oculta'); }
+        if (a === 'del') { CATS.splice(CATS.indexOf(c), 1); toast('Categoría quitada'); }
+        categorias();
+      };
+    });
+  }
+
+  /* ---------- 5 · Configuración ---------- */
+  var CFG = { nombre: 'Ventas Virtual Colombia', lema: 'Distribuidores de computadores corporativos nuevos y usados', ciudad: 'Cali, Colombia', dir: 'Av. Estación #23dn-68 local 2-107, San Vicente, Cali (CC Pasarela, segundo piso)', wa: '573175591252', waShow: '317 559 1252', msg: 'Hola, estoy interesado en: {producto}', ig: 'https://www.instagram.com/ventasvirtualcol/', fb: 'https://www.facebook.com/p/Ventas-Virtual-Colombia-100092489010584/', tt: 'https://www.tiktok.com/@ventasvirtualcol', hor: 'Lunes a sábado, 9:00 a.m. a 6:00 p.m.', agotados: true, precios: true };
+  function fld(id, label, key, hint, type) {
+    return '<div class="field"><label for="' + id + '">' + label + '</label><input class="in" id="' + id + '" data-k="' + key + '" value="' + esc(CFG[key]) + '"' + (type ? ' type="' + type + '"' : '') + '>' + (hint ? '<small>' + hint + '</small>' : '') + '</div>';
+  }
+  function config() {
+    page(
+      '<div class="cfg"><nav class="cfgnav" aria-label="Secciones"><a href="#c-emp" data-s="c-emp">Empresa</a><a href="#c-con" data-s="c-con">Contacto y WhatsApp</a><a href="#c-red" data-s="c-red">Redes sociales</a><a href="#c-hor" data-s="c-hor">Horario</a><a href="#c-cat" data-s="c-cat">Catálogo</a></nav>' +
+      '<div class="cfgstack">' +
+      '<section class="card" id="c-emp"><h2>Empresa</h2><p class="sub">Aparece en el encabezado, el pie de página y las políticas.</p><div class="grid2">' + fld('k1', 'Nombre comercial', 'nombre') + fld('k2', 'Ciudad', 'ciudad') + '</div><div class="field" style="margin-top:16px"><label for="k3">Lema</label><textarea class="in" id="k3" data-k="lema" rows="2">' + esc(CFG.lema) + '</textarea></div>' +
+      '<div class="row" style="margin-top:16px;align-items:center"><div class="logo" style="width:56px;height:56px;border:1px solid var(--border);background:#fff">VV</div><div><b>Logo</b><div class="sample">PNG o SVG con fondo transparente</div></div><button type="button" class="btn sm" data-toast="Aquí se sube el logo">' + ic('upload') + 'Cambiar logo</button></div></section>' +
+      '<section class="card" id="c-con"><h2>Contacto y WhatsApp</h2><p class="sub">El botón «Estoy interesado» abre WhatsApp con este número y mensaje.</p><div class="field"><label for="k4">Dirección del local</label><textarea class="in" id="k4" data-k="dir" rows="2">' + esc(CFG.dir) + '</textarea></div><div class="grid2" style="margin-top:16px">' + fld('k5', 'WhatsApp (con indicativo)', 'wa', 'Solo números. Ej: 573175591252') + fld('k6', 'Cómo se muestra el número', 'waShow') + '</div>' +
+      '<div class="field" style="margin-top:16px"><label for="k7">Mensaje prellenado</label><input class="in" id="k7" data-k="msg" value="' + esc(CFG.msg) + '"><small>Usa {producto} para insertar el nombre del equipo.</small></div>' +
+      '<div class="alerts" style="margin-top:14px"><li style="align-items:flex-start"><span class="ic ok">' + ic('chat') + '</span><div><b>Vista previa del mensaje</b><div id="wapv" class="sample" style="color:var(--text);font-size:13px"></div></div></li></div></section>' +
+      '<section class="card" id="c-red"><h2>Redes sociales</h2><p class="sub">Déjalo vacío para ocultar el icono.</p><div class="grid2">' + fld('k8', 'Instagram', 'ig') + fld('k9', 'Facebook', 'fb') + fld('k10', 'TikTok', 'tt') + '</div></section>' +
+      '<section class="card" id="c-hor"><h2>Horario de atención</h2><p class="sub">Se muestra en el pie de página. Vacío = no se muestra.</p>' + fld('k11', 'Horario', 'hor') + '</section>' +
+      '<section class="card" id="c-cat"><h2>Catálogo</h2><p class="sub">Reglas de cómo se ve el inventario.</p>' +
+      sw('agotados', 'Mostrar productos agotados', 'Se ven con la etiqueta Agotado y sin botón de WhatsApp.') + sw('precios', 'Mostrar precios', 'Si lo apagas, el cliente debe consultar el precio por WhatsApp.') + '</section>' +
+      '<div class="savebar"><span class="sample" id="dirty">Sin cambios por guardar</span><div class="row"><button type="button" class="btn" id="undo">Descartar</button><button type="button" class="btn pri" id="save">' + ic('check') + 'Guardar cambios</button></div></div>' +
+      '</div></div>'
+    );
+    var dirty = $('#dirty');
+    function pv() { var n = CFG.wa || ''; $('#wapv').textContent = 'wa.me/' + n + ' → «' + (CFG.msg || '').replace('{producto}', 'Lenovo ThinkPad T14 Gen 2') + '»'; }
+    pv();
+    $$('[data-k]').forEach(function (el) { el.oninput = function () { CFG[el.getAttribute('data-k')] = el.value; dirty.textContent = 'Hay cambios sin guardar'; pv(); }; });
+    $$('.tg[data-sw]').forEach(function (t) { t.onclick = function () { var k = t.getAttribute('data-sw'); CFG[k] = !CFG[k]; t.setAttribute('aria-checked', String(CFG[k])); dirty.textContent = 'Hay cambios sin guardar'; }; });
+    $$('[data-toast]').forEach(function (b) { b.onclick = function () { toast(b.getAttribute('data-toast')); }; });
+    $$('.cfgnav a').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); var t = document.getElementById(a.getAttribute('data-s')); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; });
+    $('#save').onclick = function () { dirty.textContent = 'Guardado hace un momento'; toast('Configuración guardada en Supabase (ejemplo)'); };
+    $('#undo').onclick = function () { config(); toast('Cambios descartados'); };
+  }
+  function sw(k, t, d) { return '<div class="switch"><div><b>' + t + '</b><small>' + d + '</small></div><button type="button" class="tg" role="switch" data-sw="' + k + '" aria-checked="' + CFG[k] + '" aria-label="' + t + '"></button></div>'; }
+
+  var VIEWS = { bandeja: bandeja, productos: productos, banners: banners, categorias: categorias, config: config };
+  var h = (location.hash || '').replace('#', '');
+  go(VIEWS[h] ? h : 'bandeja');
+})();
+</script>

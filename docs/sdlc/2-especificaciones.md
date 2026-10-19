@@ -169,6 +169,99 @@ Como dueño quiero subir un CSV cuando hay inventario nuevo para no digitar prod
 
 ---
 
+## Rediseño de /admin: panel lateral y cinco módulos
+
+Maqueta aprobada para revisión: [docs/diseno/admin-maqueta.html](../diseno/admin-maqueta.html)
+(abrir en el navegador). Alcance: reemplazar la página única de `/admin` por un shell con panel
+lateral izquierdo y cinco módulos. Se reutiliza el acceso (HU-07) y la carga CSV (HU-09).
+Orden de construcción: HU-10, HU-12, HU-14, HU-15, HU-13 y al final HU-11.
+
+### HU-10 · Panel lateral plegable
+Como dueño quiero un menú a la izquierda que se abra y se pliegue a iconos para moverme entre módulos sin perder espacio.
+
+- Dado `/admin` con sesión, entonces veo el panel lateral con cinco módulos, cada uno con icono y
+  nombre: Bandeja de entrada, Productos, Banners e imágenes, Categorías y Configuración.
+- Dado el botón de menú, cuando lo presiono, entonces el panel alterna entre abierto (icono y
+  nombre) y plegado (solo iconos); con el panel plegado, al pasar sobre un icono veo su nombre.
+- Dado que recargo la página, entonces el panel conserva su estado y el módulo activo se
+  resalta; cada módulo tiene su propia dirección (`/admin/productos`, etc.).
+- Dado un celular, entonces el panel arranca plegado, queda fijo como riel de iconos y al abrirlo
+  se superpone al contenido, con un fondo que lo cierra al tocarlo.
+- Dado el encabezado, entonces muestra el nombre del módulo, el cambio de tema claro/oscuro y un
+  enlace **Ver la web**. **Cerrar sesión** está al pie del panel.
+- Todo módulo se puede usar con teclado y los iconos tienen nombre accesible.
+
+### HU-11 · Bandeja de entrada con métricas
+Como dueño quiero ver cómo va la web al entrar al panel para saber qué atender hoy.
+
+- Dado el módulo, entonces veo cuatro indicadores (visitas, clics en WhatsApp, productos
+  publicados y agotados) con su variación frente al periodo anterior; el periodo se elige entre
+  14 días, 30 días y el mes.
+- Dado el periodo, entonces veo una gráfica de visitas por día y clics en WhatsApp, y el ranking
+  de productos con más clics en **Estoy interesado**.
+- Dado el catálogo, entonces la sección **Para revisar** lista lo accionable, cada ítem con un
+  botón que lleva al módulo: productos publicados sin foto, agotados hace más de 30 días,
+  banners desactivados y el resultado de la última carga CSV.
+- Los indicadores de catálogo salen de las tablas actuales. Las visitas y los clics necesitan
+  registrar eventos (tabla `eventos` en Supabase, sin datos personales): hasta que exista, esas
+  tarjetas muestran «Sin datos todavía» y no cifras inventadas.
+
+### HU-12 · Productos: listado, acciones y carga CSV
+Como dueño quiero gestionar los productos y subir el CSV desde un solo módulo.
+
+- Dado el módulo, entonces veo dos pestañas: **Listado** y **Carga CSV**.
+- Dado el listado, entonces cada fila muestra foto, nombre y especificaciones, categoría, precio,
+  stock, si falta la foto y si está visible u oculto.
+- Dado el listado, puedo buscar por nombre, marca o categoría y filtrar por Todos, Agotados,
+  Ocultos y Sin foto.
+- Dada una fila, el menú **Acciones** ofrece Editar, Marcar agotado/Reponer, Ocultar/Mostrar y
+  Eliminar; Eliminar pide confirmación dentro de la página.
+- Dado **Nuevo producto**, abre el formulario de creación con las columnas de venta (RN-04).
+- Dada la pestaña **Carga CSV**, funciona según HU-09 y añade la descarga de una plantilla CSV.
+
+### HU-13 · Banners e imágenes de categorías
+Como dueño quiero cambiar los banners de la portada y las imágenes de categorías sin tocar código.
+
+- Dado el módulo, entonces veo una vista previa de la portada con el corte diagonal y la rotación
+  reales de Inicio, usando solo los banners activos.
+- Dado **Subir banner**, elijo la imagen de escritorio (1600×500) y, opcional, la de celular
+  (800×800); se suben a Cloudinary (0007) y se rechazan formatos distintos de JPG, PNG o WebP y
+  archivos de más de 2 MB, con el motivo.
+- Dado un banner, puedo editar su título, texto, botón y enlace (ruta de la web, URL o
+  `wa:<mensaje>`), activarlo o desactivarlo y quitarlo.
+- Dada la lista, puedo cambiar el orden arrastrando o con las flechas; el orden se guarda y la
+  web lo respeta.
+- Dadas las categorías, cada una muestra su imagen (800×600) y un botón **Cambiar**.
+
+### HU-14 · Categorías: crear, actualizar y quitar
+Como dueño quiero administrar las categorías del catálogo.
+
+- Dado **Agregar categoría**, con un nombre, entonces se crea con un enlace generado del nombre
+  (sin tildes ni espacios) y queda visible.
+- Dada una categoría, puedo editar nombre y enlace, mostrarla u ocultarla y quitarla.
+- Dado un nombre o enlace repetido, entonces veo el motivo y no se guarda.
+- Dada una categoría con productos, al quitarla los productos **no se borran**: pasan a «Sin
+  categoría» y la pantalla avisa cuántos.
+- La tabla muestra imagen, nombre, enlace, número de productos y estado.
+
+### HU-15 · Configuración de la tienda
+Como dueño quiero cambiar los datos de la empresa sin tocar código.
+
+- Dado el módulo, entonces veo cinco secciones: Empresa, Contacto y WhatsApp, Redes sociales,
+  Horario y Catálogo, con navegación interna.
+- Dados los datos de `lib/site.js` (nombre, lema, ciudad, dirección, WhatsApp, redes, horario),
+  entonces el panel los lee de la tabla `configuracion` y la web los usa desde ahí; `lib/site.js`
+  queda como valor de respaldo (modo demo).
+- Dado el mensaje prellenado, entonces `{producto}` se reemplaza por el nombre del equipo y veo
+  una vista previa del enlace de WhatsApp.
+- Dado el WhatsApp, entonces solo acepta números con indicativo.
+- Dados los interruptores **Mostrar agotados** y **Mostrar precios**, la web los respeta.
+- Dados cambios sin guardar, la barra inferior lo avisa y ofrece **Guardar cambios** y
+  **Descartar**; al guardar veo la confirmación.
+- Dado el logo, puedo cambiarlo por una imagen PNG o SVG.
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |

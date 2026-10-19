@@ -5,6 +5,15 @@
 
 ---
 
+## 19 oct 2026 · Planeado el nuevo panel de administración
+
+`/admin` pasará de una sola página a un panel lateral izquierdo que se pliega a iconos, con cinco
+módulos: Bandeja de entrada (métricas), Productos (con la carga CSV), Banners e imágenes,
+Categorías y Configuración. Quedó la maqueta navegable y las historias HU-10 a HU-15. Aún no se
+programa. Sin cambio de versión del brief.
+
+---
+
 ## 16 oct 2026 · La web lee y se administra desde Supabase
 
 El catálogo ya sale de Supabase en vez de Baserow (decisión 0009). El panel `/admin` pide correo
