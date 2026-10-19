@@ -22,12 +22,10 @@
 
 ## ⏭️ Siguiente (Camino 1 · landing)
 
-0. **Notion (19 oct):** la portada «Tienda Web Landing» ya tiene el brief v1.3, las decisiones
-   0001 a 0009 y la página Arquitectura al día, con las 42 tareas de git más las HU-10 a HU-15.
-   **Falta decidir:** 5 tareas que solo existen en Notion (migrar el alojamiento desde Vercel,
-   filtrar la API a una lista blanca, guía visual, decidir el hosting destino y revisar las
-   columnas de Baserow); varias parecen ya hechas o repetidas. La copia del brief como versión
-   propia (`--version`) requiere autorización del dueño.
+0. **Notion (19 oct):** al día. La portada «Tienda Web Landing» tiene el brief v1.3, las decisiones
+   0001 a 0009, Arquitectura y las 47 tareas de git (las 5 que solo existían en Notion ya se
+   trajeron: 3 hechas y 2 pendientes). La copia del brief como versión propia (`--version`)
+   requiere autorización del dueño.
 
 1. **Seguridad:** revocar en Baserow el token que se compartió en la conversación del 13 oct y
    crear uno nuevo (Leer, Crear, Actualizar, Eliminar). Cargarlo en Vercel, Hostinger y `.env.local`.
@@ -49,8 +47,8 @@
    `lib/inventory.js` a Supabase. Web e InventarIA quedan separadas.
    **16 oct:** historias HU-07 (acceso), HU-08 (catálogo desde Supabase) y HU-09 (carga CSV)
    implementadas y probadas contra Supabase: `lib/inventory.js` ya lee Supabase, `/admin` entra con
-   correo y contraseña y carga CSV con vista previa. **Registro público desactivado.** **Falta:** que el
-   dueño dé el correo para crear su usuario, el CSV exportado de Baserow y `/admin` con panel lateral.
+   correo y contraseña y carga CSV con vista previa. **Registro público desactivado.** **Falta:** el CSV
+   exportado de Baserow (el usuario del dueño ya existe y el panel lateral está hecho).
    Variables nuevas en Vercel/Hostinger: `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 9. **Rediseño de `/admin` (19 oct):** planeado; **HU-10 (panel lateral), HU-12 (Productos) y HU-14 (Categorías) hechas y probadas**; Bandeja, Banners y Configuración son marcadores («Llega con HU-xx»). Panel lateral plegable y cinco
    módulos: Bandeja de entrada, Productos, Banners e imágenes, Categorías y Configuración
