@@ -174,7 +174,7 @@ Como dueño quiero subir un CSV cuando hay inventario nuevo para no digitar prod
 Maqueta aprobada para revisión: [docs/diseno/admin-maqueta.html](../diseno/admin-maqueta.html)
 (abrir en el navegador). Alcance: reemplazar la página única de `/admin` por un shell con panel
 lateral izquierdo y cinco módulos. Se reutiliza el acceso (HU-07) y la carga CSV (HU-09).
-Orden de construcción: HU-10, HU-12, HU-14, HU-15, HU-13 y al final HU-11.
+Orden de construcción: HU-10 (hecha el 19 oct), HU-12, HU-14, HU-15, HU-13 y al final HU-11.
 
 ### HU-10 · Panel lateral plegable
 Como dueño quiero un menú a la izquierda que se abra y se pliegue a iconos para moverme entre módulos sin perder espacio.
@@ -187,8 +187,9 @@ Como dueño quiero un menú a la izquierda que se abra y se pliegue a iconos par
   resalta; cada módulo tiene su propia dirección (`/admin/productos`, etc.).
 - Dado un celular, entonces el panel arranca plegado, queda fijo como riel de iconos y al abrirlo
   se superpone al contenido, con un fondo que lo cierra al tocarlo.
-- Dado el encabezado, entonces muestra el nombre del módulo, el cambio de tema claro/oscuro y un
-  enlace **Ver la web**. **Cerrar sesión** está al pie del panel.
+- Dado el encabezado, entonces muestra el nombre del módulo y un enlace **Ver la web** (pestaña
+  nueva). **Cerrar sesión** está al pie del panel. El tema oscuro de la maqueta queda para después:
+  los estilos actuales de la web son solo claros.
 - Todo módulo se puede usar con teclado y los iconos tienen nombre accesible.
 
 ### HU-11 · Bandeja de entrada con métricas

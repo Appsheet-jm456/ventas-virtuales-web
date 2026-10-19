@@ -9,8 +9,9 @@
 
 `/admin` pasará de una sola página a un panel lateral izquierdo que se pliega a iconos, con cinco
 módulos: Bandeja de entrada (métricas), Productos (con la carga CSV), Banners e imágenes,
-Categorías y Configuración. Quedó la maqueta navegable y las historias HU-10 a HU-15. Aún no se
-programa. Sin cambio de versión del brief.
+Categorías y Configuración. Quedó la maqueta navegable y las historias HU-10 a HU-15. El mismo día se programó el
+panel lateral (HU-10): se abre y se pliega a iconos, y cada módulo tiene su propia dirección.
+Productos conserva el listado y la carga CSV de siempre; los otros cuatro módulos son marcadores. Sin cambio de versión del brief.
 
 ---
 

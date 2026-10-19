@@ -43,7 +43,8 @@
 |---|---|
 | `app/page.js` | Inicio: hero y catálogo con filtros |
 | `app/producto/[codigo]/page.js` | Detalle: galería, especificaciones, botón WhatsApp |
-| `app/admin/page.js` | Panel de administración |
+| `app/admin/` | Panel de administración: `AdminShell.js` (acceso y panel lateral), `layout.js` y una carpeta por módulo (`productos/`, `banners/`…) |
+| `app/(web)/` | Páginas públicas con el encabezado y pie de la web (`layout.js`); `/admin` no lo usa |
 | `app/api/products/route.js` | Catálogo en JSON |
 | `app/api/admin/route.js` | Escrituras protegidas |
 | `app/components/` | Catalog, Gallery, Brand |

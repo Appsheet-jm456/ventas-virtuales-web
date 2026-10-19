@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { getPublicInventory } from "../../../lib/inventory";
-import { parseImages, parseVideos } from "../../../lib/images";
-import { SITE, waLink } from "../../../lib/site";
-import Gallery from "../../components/Gallery";
+import { getPublicInventory } from "../../../../lib/inventory";
+import { parseImages, parseVideos } from "../../../../lib/images";
+import { SITE, waLink } from "../../../../lib/site";
+import Gallery from "../../../components/Gallery";
 
 export const revalidate = 60;
 

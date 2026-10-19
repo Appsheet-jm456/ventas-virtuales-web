@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { getPublicInventory } from "../../lib/inventory";
-import { SITE } from "../../lib/site";
-import Catalog from "../components/Catalog";
+import { getPublicInventory } from "../../../lib/inventory";
+import { SITE } from "../../../lib/site";
+import Catalog from "../../components/Catalog";
 
 export const revalidate = 60;
 

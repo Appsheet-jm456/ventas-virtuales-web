@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { getPublicInventory } from "../../lib/inventory";
-import { SITE } from "../../lib/site";
-import { categoriasDe } from "../../lib/productos";
-import { CategoryTile } from "../components/CategoryStrip";
+import { getPublicInventory } from "../../../lib/inventory";
+import { SITE } from "../../../lib/site";
+import { categoriasDe } from "../../../lib/productos";
+import { CategoryTile } from "../../components/CategoryStrip";
 
 export const revalidate = 60;
 

@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { getPublicInventory } from "../lib/inventory";
-import { SITE, waLink } from "../lib/site";
-import { categoriasDe, enCategoria, stockNum, precioNum } from "../lib/productos";
-import HeroCarousel from "./components/HeroCarousel";
-import CategoryStrip from "./components/CategoryStrip";
-import ProductCard from "./components/ProductCard";
-import Rail from "./components/Rail";
+import { getPublicInventory } from "../../lib/inventory";
+import { SITE, waLink } from "../../lib/site";
+import { categoriasDe, enCategoria, stockNum, precioNum } from "../../lib/productos";
+import HeroCarousel from "../components/HeroCarousel";
+import CategoryStrip from "../components/CategoryStrip";
+import ProductCard from "../components/ProductCard";
+import Rail from "../components/Rail";
 
 // El Inicio se refresca cada 60 s (lee Baserow en el servidor).
 export const revalidate = 60;

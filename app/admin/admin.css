@@ -1,0 +1,72 @@
+/* Marco de /admin (HU-10): panel lateral plegable a iconos + encabezado. Solo el marco; las
+   tablas y modales del módulo Productos siguen con los estilos de globals.css. */
+.adm {
+  --adm-side: #0e2160;
+  --adm-side-text: #c9d6ff;
+  --adm-w: 252px;
+  display: grid; grid-template-columns: var(--adm-w) minmax(0, 1fr);
+  height: 100dvh; background: var(--bg-soft);
+  transition: grid-template-columns .22s ease;
+}
+.adm.mini { --adm-w: 68px; }
+.adm-center { min-height: 100dvh; display: grid; place-items: center; padding: 16px; background: var(--bg-soft); }
+.adm-center .admin-gate { margin: 0; width: 100%; }
+
+.adm-i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ---------- Panel lateral ---------- */
+.adm-side { background: var(--adm-side); color: var(--adm-side-text); display: flex; flex-direction: column; min-width: 0; overflow: hidden; z-index: 30; }
+.adm-brand { display: flex; align-items: center; gap: 12px; padding: 12px 14px; height: 64px; }
+.adm-logo { width: 40px; height: 40px; border-radius: 10px; background: #fff; color: var(--blue); font-weight: 800; display: grid; place-items: center; flex: none; letter-spacing: -.02em; }
+.adm-brand-t { white-space: nowrap; line-height: 1.15; overflow: hidden; }
+.adm-brand-t b { display: block; color: #fff; font-size: 15px; }
+.adm-brand-t small { font-size: 12px; opacity: .75; }
+.adm-nav { flex: 1; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+.adm-nav-h { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 12px 12px 6px; opacity: .6; white-space: nowrap; }
+.adm-link {
+  display: flex; align-items: center; gap: 14px; width: 100%; height: 44px; padding: 0 12px;
+  border: 0; border-radius: 10px; background: none; color: var(--adm-side-text);
+  font: inherit; font-weight: 600; text-align: left; white-space: nowrap; text-decoration: none; cursor: pointer; position: relative;
+}
+.adm-link:hover { background: rgba(255, 255, 255, .08); color: #fff; text-decoration: none; }
+.adm-link[aria-current="page"] { background: rgba(255, 255, 255, .14); color: #fff; }
+.adm-link[aria-current="page"]::before { content: ""; position: absolute; left: -10px; top: 10px; bottom: 10px; width: 4px; border-radius: 0 4px 4px 0; background: #fff; }
+.adm-foot { padding: 10px; border-top: 1px solid rgba(255, 255, 255, .1); }
+
+.adm.mini .adm-brand-t, .adm.mini .adm-nav-h, .adm.mini .adm-lbl { display: none; }
+.adm.mini .adm-link { justify-content: center; padding: 0; }
+.adm.mini .adm-link:hover::after {
+  content: attr(data-tip); position: fixed; left: 76px; background: var(--blue-ink); color: #fff;
+  padding: 6px 10px; border-radius: 8px; font-size: 12.5px; box-shadow: var(--shadow); z-index: 60; pointer-events: none;
+}
+.adm-scrim { display: none; }
+
+/* ---------- Encabezado y contenido ---------- */
+.adm-main { display: flex; flex-direction: column; min-width: 0; height: 100dvh; }
+.adm-top {
+  display: flex; align-items: center; gap: 12px; height: 64px; flex: none;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  background: #fff; border-bottom: 1px solid var(--border);
+}
+.adm-top h1 { font-size: 18px; margin: 0; font-weight: 800; color: var(--blue-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.adm-sp { flex: 1; }
+.adm-ibtn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: #fff; display: grid; place-items: center; color: var(--text); cursor: pointer; flex: none; }
+.adm-ibtn:hover { background: var(--bg-soft); }
+.adm-site { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--border); color: var(--text); font-weight: 600; white-space: nowrap; text-decoration: none; background: #fff; }
+.adm-site:hover { background: var(--bg-soft); text-decoration: none; }
+.adm-content { flex: 1; overflow-y: auto; padding: 24px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); }
+.adm-page { max-width: 1200px; margin: 0 auto; }
+
+.adm-soon { background: #fff; border: 1px dashed var(--border); border-radius: 12px; padding: 36px 20px; text-align: center; color: var(--muted); }
+.adm-soon h2 { margin: 0 0 6px; color: var(--blue-ink); font-size: 17px; }
+.adm-soon p { margin: 0 auto; max-width: 480px; line-height: 1.5; }
+
+/* En celular el riel de iconos queda fijo y el panel abierto se superpone al contenido. */
+@media (max-width: 720px) {
+  .adm, .adm.mini { grid-template-columns: 64px minmax(0, 1fr); }
+  .adm:not(.mini) .adm-side { position: fixed; inset: 0 auto 0 0; width: 252px; box-shadow: 8px 0 30px rgba(0, 0, 0, .35); }
+  .adm:not(.mini) .adm-scrim { display: block; position: fixed; inset: 0; background: rgba(5, 10, 30, .45); z-index: 25; }
+  .adm-site span { display: none; }
+  .adm-site { padding: 0; width: 40px; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) { .adm { transition: none; } }
