@@ -5,6 +5,12 @@
 
 ---
 
+## 21 oct 2026 · Editar producto en pantalla completa (HU-18)
+
+Crear y editar un producto ya no abre una ventana angosta: abre su propia página, con los datos en secciones (Información general, Especificaciones, Fotos y video) y a la derecha el estado en la tienda, el precio y el stock. Una barra fija abajo muestra si hay cambios sin guardar y los botones Guardar y Cancelar. Sin cambio de versión del brief.
+
+---
+
 ## 21 oct 2026 · Fotos de productos en Cloudinary (HU-17)
 
 En el formulario de producto ahora se suben las fotos desde el computador (varias a la vez, con portada y opción de quitar) y se guardan en Cloudinary, en la carpeta del producto. Hay una pestaña nueva, **Migrar fotos**, que copia a Cloudinary las fotos que hoy son enlaces de Drive y avisa cuáles no pudo leer. Los videos siguen igual. Sin cambio de versión del brief.

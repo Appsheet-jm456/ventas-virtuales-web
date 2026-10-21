@@ -46,6 +46,13 @@ function moduloActivo(pathname) {
   return MODULOS.filter((m) => m.ruta !== "/admin").find((m) => pathname.startsWith(m.ruta + "/")) || MODULOS[0];
 }
 
+// Título del encabezado: el del módulo, salvo en las páginas de crear o editar producto (HU-18).
+function tituloDe(pathname, modulo) {
+  if (pathname === "/admin/productos/nuevo") return "Nuevo producto";
+  if (/^\/admin\/productos\/[^/]+$/.test(pathname)) return "Editar producto";
+  return modulo.nombre;
+}
+
 export default function AdminShell({ children }) {
   const pathname = usePathname() || "/admin";
   const [email, setEmail] = useState("");
@@ -166,7 +173,7 @@ export default function AdminShell({ children }) {
             >
               <Ico n="menu" />
             </button>
-            <h1>{actual.nombre}</h1>
+            <h1>{tituloDe(pathname, actual)}</h1>
             <span className="adm-sp" />
             <Link className="adm-site" href="/" target="_blank" rel="noopener noreferrer" aria-label="Ver la web">
               <Ico n="ext" /><span>Ver la web</span>

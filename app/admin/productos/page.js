@@ -1,42 +1,21 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { useAdmin } from "../AdminShell";
 import { parseImages } from "../../../lib/images";
-import { descartarSubidas } from "../SubirImagen";
-import FotosProducto, { listaDe } from "./FotosProducto";
+import { listaDe } from "./FotosProducto";
+import { FIELDS, HIDDEN_VALUES, CLAVE_AVISO } from "./campos";
 
 // Módulo Productos del panel (HU-12). Pestañas Listado y Carga CSV (HU-09). El acceso y el panel
 // lateral los pone AdminShell; cada petición lleva el token de la sesión y el servidor lo verifica.
 
 const f = (r, k) => (r?.[k] ?? "").toString().trim();
 const stockNum = (r) => parseInt(f(r, "Stock") || "0", 10) || 0;
-// ¿Está oculto de la tienda web? (columna "Oculto")
-const HIDDEN_VALUES = ["sí", "si", "true", "1", "x", "oculto", "yes", "y"];
 const isHidden = (r) => HIDDEN_VALUES.includes((f(r, "Oculto") || "").toLowerCase());
 const nombreDe = (r) => [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Descripción") || f(r, "Código");
 const specsDe = (r) => [f(r, "Procesador"), f(r, "RAM"), f(r, "Almacenamiento"), f(r, "Estado")].filter(Boolean).join(" · ");
-
-// Campos del formulario, en el orden de la plantilla CSV.
-const FIELDS = [
-  { key: "Código", label: "Código *", ph: "100-101-1234" },
-  { key: "Categoría", label: "Categoría", ph: "Portátil usado" },
-  { key: "Descripción", label: "Nombre producto (Descripción)", ph: "PORTATIL LENOVO THINKPAD…", full: true, area: true },
-  { key: "Marca", label: "Marca", ph: "Lenovo" },
-  { key: "Modelo", label: "Modelo", ph: "ThinkPad X1 Carbon Gen 9" },
-  { key: "Procesador", label: "Procesador", ph: "Core i7 1185G7" },
-  { key: "Generación", label: "Generación", ph: "11" },
-  { key: "RAM", label: "RAM", ph: "16GB" },
-  { key: "Almacenamiento", label: "Almacenamiento", ph: "512GB NVMe" },
-  { key: "Estado", label: "Estado", ph: "Grado A" },
-  { key: "Precio", label: "Precio", ph: "1800000", num: true },
-  { key: "Stock", label: "Stock", ph: "1", num: true },
-  { key: "Foto", label: "Fotos (la primera es la portada)", ph: "https://res.cloudinary.com/…", full: true, area: true },
-  { key: "Video", label: "Video — URL", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
-];
-
-const EMPTY = { ...Object.fromEntries(FIELDS.map((c) => [c.key, ""])), Oculto: "" };
 
 // Plantilla CSV: encabezados que entiende la carga y una fila de ejemplo que, si se carga por
 // error, queda oculta y agotada.
@@ -101,10 +80,8 @@ export default function ProductosPage() {
   // que el contenedor con scroll de la tabla no lo recorte.
   const [menu, setMenu] = useState(null);
 
-  // Modal de edición/creación. editing = { id|null, fields }
-  const [editing, setEditing] = useState(null);
+  const router = useRouter();
   const [busy, setBusy] = useState(false);
-  const [formError, setFormError] = useState("");
   const [okMsg, setOkMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
   // Confirmación de borrado dentro de la página: la fila a eliminar.
@@ -113,14 +90,16 @@ export default function ProductosPage() {
   const [csv, setCsv] = useState(null);
   const [arrastre, setArrastre] = useState(false);
   const fileRef = useRef(null);
-  // Fotos subidas a Cloudinary en el formulario abierto (HU-17): si no se guardan, se borran.
-  const subidasRef = useRef([]);
-  const [subiendoFoto, setSubiendoFoto] = useState(false);
   // Migración de fotos de Drive a Cloudinary: { total, hechos, migrados, fallidos, corriendo, fin } o null.
   const [mig, setMig] = useState(null);
 
   useEffect(() => {
     load();
+    // Aviso que deja el formulario de página completa (HU-18) al guardar.
+    try {
+      const aviso = sessionStorage.getItem(CLAVE_AVISO);
+      if (aviso) { setOkMsg(aviso); sessionStorage.removeItem(CLAVE_AVISO); }
+    } catch {}
   }, []);
 
   // El menú Acciones se cierra al hacer clic fuera o con Escape.
@@ -173,19 +152,9 @@ export default function ProductosPage() {
 
   function avisar(ok, err = "") { setOkMsg(ok); setErrMsg(err); }
 
-  function openNew() {
-    setFormError(""); avisar("");
-    subidasRef.current = [];
-    setEditing({ id: null, fields: { ...EMPTY }, fotosOriginales: [] });
-  }
-  function openEdit(r) {
-    setFormError(""); avisar("");
-    const fields = {};
-    for (const c of FIELDS) fields[c.key] = f(r, c.key);
-    fields["Oculto"] = f(r, "Oculto");
-    subidasRef.current = [];
-    setEditing({ id: r._id, fields, fotosOriginales: listaDe(fields["Foto"]) });
-  }
+  // Crear y editar abren su propia página (HU-18).
+  const openNew = () => router.push("/admin/productos/nuevo");
+  const openEdit = (r) => router.push(`/admin/productos/${r._id}`);
 
   // Acción rápida desde el menú: actualiza solo los campos indicados.
   async function quickUpdate(r, fields, okText) {
@@ -258,35 +227,6 @@ export default function ProductosPage() {
       await load();
     } catch (err) {
       setCsv((c) => ({ ...c, busy: false, error: String(err?.message || err) }));
-    }
-  }
-
-  // Cierra el formulario sin guardar y borra de Cloudinary las fotos subidas que no se usan.
-  function cerrarForm() {
-    descartarSubidas(token, subidasRef.current);
-    subidasRef.current = [];
-    setEditing(null);
-  }
-
-  async function save() {
-    if (!editing) return;
-    setFormError("");
-    if (!editing.fields["Código"].trim()) { setFormError("El Código es obligatorio."); return; }
-    setBusy(true);
-    try {
-      const d = editing.id
-        ? await callAdmin({ op: "update", id: editing.id, fields: editing.fields })
-        : await callAdmin({ op: "create", fields: editing.fields });
-      avisar(d.mensaje || "Guardado.");
-      // Sube lo que ya no se usa: fotos nuevas que se quitaron y fotos guardadas que se quitaron.
-      descartarSubidas(token, [...subidasRef.current, ...editing.fotosOriginales]);
-      subidasRef.current = [];
-      setEditing(null);
-      await load();
-    } catch (e) {
-      setFormError(String(e?.message || e));
-    } finally {
-      setBusy(false);
     }
   }
 
@@ -588,93 +528,6 @@ export default function ProductosPage() {
               <div className="modal-actions">
                 <button type="button" className="btn-ghost" onClick={() => setBorrar(null)} disabled={busy} autoFocus>Cancelar</button>
                 <button type="button" className="btn-danger" onClick={confirmarBorrado} disabled={busy}>{busy ? "Eliminando…" : "Eliminar"}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal crear/editar */}
-      {editing && (
-        <div className="modal-overlay" onClick={() => !busy && !subiendoFoto && cerrarForm()}>
-          <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="editar-t" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-head">
-              <h2 id="editar-t">{editing.id ? `Editar ${editing.fields["Código"] || "producto"}` : "Nuevo producto"}</h2>
-              <button type="button" className="close-btn" onClick={cerrarForm} aria-label="Cerrar">✕</button>
-            </div>
-            <div className="modal-body">
-              <div className="estado-panel">
-                <div className="ep-label">Estado en la tienda web</div>
-                <div className="ep-row">
-                  <div className="seg">
-                    <button
-                      type="button"
-                      className={`seg-btn${(parseInt(editing.fields["Stock"] || "0", 10) || 0) > 0 ? " active-ok" : ""}`}
-                      onClick={() => setEditing((s) => ({ ...s, fields: { ...s.fields, Stock: (parseInt(s.fields["Stock"] || "0", 10) || 0) > 0 ? s.fields["Stock"] : "1" } }))}
-                    >
-                      Disponible
-                    </button>
-                    <button
-                      type="button"
-                      className={`seg-btn${(parseInt(editing.fields["Stock"] || "0", 10) || 0) <= 0 ? " active-bad" : ""}`}
-                      onClick={() => setEditing((s) => ({ ...s, fields: { ...s.fields, Stock: "0" } }))}
-                    >
-                      Agotado / Vendido
-                    </button>
-                  </div>
-                  <label className="ep-check">
-                    <input
-                      type="checkbox"
-                      checked={HIDDEN_VALUES.includes((editing.fields["Oculto"] || "").toLowerCase())}
-                      onChange={(e) => setEditing((s) => ({ ...s, fields: { ...s.fields, Oculto: e.target.checked ? "Sí" : "" } }))}
-                    />
-                    <span>Ocultar de la web (no se elimina de la base)</span>
-                  </label>
-                </div>
-                <p className="ep-hint">
-                  <b>Agotado/Vendido:</b> el equipo sigue visible con la cinta “Equipo agotado”.{" "}
-                  <b>Ocultar:</b> desaparece del catálogo para los clientes, pero se conserva en la base.
-                </p>
-              </div>
-              <div className="form-grid">
-                {FIELDS.map((c) => (
-                  <div key={c.key} className={`field${c.full ? " full" : ""}`}>
-                    <label htmlFor={c.key === "Foto" ? "campo-Foto-subir" : `campo-${c.key}`}>{c.label}</label>
-                    {c.key === "Foto" ? (
-                      <FotosProducto
-                        value={editing.fields.Foto}
-                        codigo={editing.fields["Código"]}
-                        disabled={busy}
-                        onSubiendo={setSubiendoFoto}
-                        onSubida={(u) => { subidasRef.current = [...subidasRef.current, u]; }}
-                        onChange={(v) => setEditing((s) => ({ ...s, fields: { ...s.fields, Foto: v } }))}
-                      />
-                    ) : c.area ? (
-                      <textarea
-                        id={`campo-${c.key}`}
-                        className="input"
-                        rows={2}
-                        value={editing.fields[c.key]}
-                        placeholder={c.ph}
-                        onChange={(e) => setEditing((s) => ({ ...s, fields: { ...s.fields, [c.key]: e.target.value } }))}
-                      />
-                    ) : (
-                      <input
-                        id={`campo-${c.key}`}
-                        className="input"
-                        inputMode={c.num ? "numeric" : undefined}
-                        value={editing.fields[c.key]}
-                        placeholder={c.ph}
-                        onChange={(e) => setEditing((s) => ({ ...s, fields: { ...s.fields, [c.key]: e.target.value } }))}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-              {formError && <div className="form-error">{formError}</div>}
-              <div className="modal-actions">
-                <button type="button" className="btn-ghost" onClick={cerrarForm} disabled={busy || subiendoFoto}>Cancelar</button>
-                <button type="button" className="btn" onClick={save} disabled={busy || subiendoFoto}>{busy ? "Guardando…" : subiendoFoto ? "Subiendo fotos…" : "Guardar"}</button>
               </div>
             </div>
           </div>

@@ -310,6 +310,22 @@ Como dueño quiero subir las fotos de un producto desde mi computador y pasar a 
 
 ---
 
+## HU-18 · Editar producto en pantalla completa
+
+Como dueño quiero que al editar o crear un producto se abra una página completa, con los datos organizados por secciones, para trabajar con comodidad y que se vea profesional. Reemplaza el modal angosto de Productos.
+
+- Dado el listado, entonces **Editar** (menú de la fila) y **Nuevo producto** llevan a páginas propias, `/admin/productos/<id>` y `/admin/productos/nuevo`, con enlace directo y el botón «Atrás» del navegador funcionando. Productos sigue resaltado en el panel lateral y el título del encabezado dice «Editar producto» o «Nuevo producto».
+- Dada la página, entonces veo el enlace «← Productos», el nombre del producto con su Código y una barra inferior fija con **Guardar** y **Cancelar**.
+- Dadas las secciones en dos columnas (una sola en celular):
+  - Columna principal: **Información general** (Código, Categoría, Descripción, Marca, Modelo), **Especificaciones** (Procesador, Generación, RAM, Almacenamiento, Estado) y **Fotos y video** (la galería de HU-17 y el enlace del video).
+  - Columna lateral: **Estado en la tienda** (Disponible o Agotado/Vendido, y Ocultar de la web) y **Precio e inventario** (Precio en pesos y Stock).
+- Dado un producto que no existe o un enlace viejo, entonces veo «Producto no encontrado» con el enlace de regreso al listado.
+- Dado guardar, entonces vuelvo al listado con el aviso «Producto actualizado» o «creado», y las fotos que ya no se usan se borran de Cloudinary (igual que en HU-17).
+- Dado cancelar o salir sin guardar, entonces las fotos subidas y no guardadas se borran de Cloudinary y, si hay cambios, el navegador avisa antes de salir.
+- Se conserva todo lo anterior: el Código es obligatorio, la carga CSV, la migración de fotos y las acciones rápidas del menú (agotado, ocultar, eliminar).
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
