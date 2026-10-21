@@ -5,6 +5,12 @@
 
 ---
 
+## 21 oct 2026 · Tablero de tareas reordenado
+
+Las tareas del panel nuevo pasan a llamarse «HU-11 ...» a «HU-15 ...» (el código de la historia primero) y siguen como tareas de Implementación. Se quitó «Actualizar la lista de productos en Baserow»; se agregó la migración de fotos de productos a Cloudinary y un marcador HU-16 para las mejoras de frontend y estilo que entregará el dueño. Sin cambio de versión del brief.
+
+---
+
 ## 19 oct 2026 · Planeado el nuevo panel de administración
 
 `/admin` pasará de una sola página a un panel lateral izquierdo que se pliega a iconos, con cinco

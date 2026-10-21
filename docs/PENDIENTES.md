@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 19 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel nuevo completo (HU-07 a HU-15) en la rama `claude/determined-ramanujan-i61gup`, probado y visible en el Preview de Vercel
+> **Última sesión:** 21 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel nuevo completo (HU-07 a HU-15) en la rama `claude/determined-ramanujan-i61gup`, probado y visible en el Preview de Vercel
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -24,7 +24,7 @@
 
 Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 
-1. **Cargar los productos reales** (dueño): actualizar Baserow, exportar el CSV y subirlo en
+1. **Cargar los productos reales** (dueño): exportar el CSV del inventario y subirlo en
    `/admin/productos › Carga CSV`. Hoy la tabla `productos` de Supabase está vacía.
 2. **Subir banners e imágenes reales** en `/admin/banners` (opcional: hay respaldo).
 3. **Cambiar la contraseña de pruebas** (`Admin123*`) en `/admin/configuracion › Cuenta`.
@@ -37,7 +37,9 @@ Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 
 Después del despliegue:
 - Recuperación de contraseña por correo (tarea en Notion).
-- Migrar las fotos de productos de Google Drive a Cloudinary.
+- **Migrar fotos de productos de Baserow (Drive) a Cloudinary** (tarea en Notion).
+- **HU-16 Mejoras de frontend y estilo**: el dueño entrega las mejoras y se documentan como
+  HU-16, HU-17, HU-18... en el orden en que deban ejecutarse (historia y criterios antes del código).
 - Pruebas automáticas (Fase 4): hoy hay pruebas en navegador documentadas en `sdlc/4-pruebas.md`.
 - Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
