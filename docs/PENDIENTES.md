@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 21 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel nuevo completo (HU-07 a HU-15) en la rama `claude/determined-ramanujan-i61gup`, probado y visible en el Preview de Vercel
+> **Última sesión:** 21 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel de productos mejorado (HU-17 a HU-20: fotos en Cloudinary, edición en página completa, columna Código, filtros y paginación) en la rama `claude/determined-ramanujan-i61gup`. Próxima sesión: mejoras de la web pública (HU-16 en adelante)
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -39,8 +39,8 @@ Después del despliegue:
 - Recuperación de contraseña por correo (tarea en Notion).
 - **HU-17 Fotos de productos en Cloudinary**: hecha y probada por el dueño el 21 oct; falta migrar las fotos reales cuando se cargue el CSV.
 - **HU-18 Editar producto en pantalla completa**: hecha y aprobada por el dueño el 21 oct.
-- **HU-19 Columna Código y filtros del listado**: construida y probada en navegador el 21 oct; falta el visto bueno del dueño.
-- **HU-20 Tamaño de la tabla y paginación**: construida y probada en navegador el 21 oct; falta el visto bueno del dueño.
+- **HU-19 Columna Código y filtros del listado**: hecha y aprobada por el dueño el 21 oct.
+- **HU-20 Tamaño de la tabla y paginación**: hecha y aprobada por el dueño el 21 oct.
 - **HU-16 Mejoras de frontend y estilo**: el dueño entrega las mejoras y se documentan como
   HU-16, HU-17, HU-18... en el orden en que deban ejecutarse (historia y criterios antes del código).
 - Pruebas automáticas (Fase 4): hoy hay pruebas en navegador documentadas en `sdlc/4-pruebas.md`.
