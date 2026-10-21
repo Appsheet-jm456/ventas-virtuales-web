@@ -335,3 +335,17 @@
   .pr-ver-filtros { display: inline-flex; }
 }
 .pff-head .pr-link { white-space: nowrap; font-size: 12.5px; }
+
+/* Paginación y tamaño de la tabla (HU-20) */
+.pr-pag { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 12px; }
+.pr-pag .pr-pie { margin: 0; }
+.pr-ver { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.pr-ver .input { width: auto; padding: 6px 10px; }
+.pr-paginas { margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.pr-paginas button { min-width: 34px; height: 34px; padding: 0 10px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--text); font-weight: 600; font-size: 13px; cursor: pointer; }
+.pr-paginas button:hover:not(:disabled):not([aria-current="page"]) { border-color: var(--blue); color: var(--blue); }
+.pr-paginas button[aria-current="page"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.pr-paginas button:disabled { opacity: .45; cursor: default; }
+.pr-paginas span { color: var(--muted); padding: 0 2px; }
+@media (max-width: 900px) { .pr-paginas { margin-left: 0; } }
+.pr-tabla { scroll-margin-top: 12px; }

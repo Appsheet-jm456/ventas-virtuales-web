@@ -5,6 +5,12 @@
 
 ---
 
+## 21 oct 2026 · Tabla de productos por páginas (HU-20)
+
+El listado muestra 20 productos por página, con páginas numeradas (1, 2, 3, 4…) y botones Anterior y Siguiente. El selector **Ver** permite 20, 25, 50, 100 o Todos. Debajo de la tabla se lee qué se está viendo («Mostrando 21–40 de 134 productos»). La página y el tamaño se conservan al ir a editar y volver. Sin cambio de versión del brief.
+
+---
+
 ## 21 oct 2026 · Listado de productos con Código y filtros (HU-19)
 
 La tabla de productos empieza ahora por el Código. A la izquierda hay un panel de filtros por Modelo, RAM, Procesador, Generación y rango de precio; las listas salen de los productos cargados, muestran cuántos hay de cada uno y se van acotando según lo que se elige. Los filtros se conservan al ir a editar y volver. En celular el panel se abre con el botón Filtros. Sin cambio de versión del brief.

@@ -9,8 +9,26 @@ import { listaDe } from "./FotosProducto";
 import { FIELDS, HIDDEN_VALUES, CLAVE_AVISO } from "./campos";
 import FiltrosProductos, { FILTROS_VACIOS, cumpleFiltros, filtrosActivos } from "./FiltrosProductos";
 
-// Búsqueda y filtros del listado: se recuerdan en la pestaña al ir a editar y volver (HU-19).
+// Búsqueda, filtros y página del listado: se recuerdan en la pestaña al ir a editar y volver
+// (HU-19 y HU-20).
 const CLAVE_FILTROS = "vv-productos-filtros";
+
+// Tamaños de la tabla (HU-20). 0 = Todos, sin páginas.
+const TAMANOS = [20, 25, 50, 100, 0];
+
+// Botones de la paginación: primera, última y vecinas de la actual, con "…" en los saltos.
+function botonesPagina(total, actual) {
+  const set = new Set([1, total, actual - 1, actual, actual + 1].filter((n) => n >= 1 && n <= total));
+  if (actual <= 3) [2, 3, 4].forEach((n) => n <= total && set.add(n));
+  if (actual >= total - 2) [total - 3, total - 2, total - 1].forEach((n) => n >= 1 && set.add(n));
+  const lista = [...set].sort((a, b) => a - b);
+  const out = [];
+  lista.forEach((n, i) => {
+    if (i && n - lista[i - 1] > 1) out.push("…" + n);
+    out.push(n);
+  });
+  return out;
+}
 
 // Módulo Productos del panel (HU-12). Pestañas Listado y Carga CSV (HU-09). El acceso y el panel
 // lateral los pone AdminShell; cada petición lleva el token de la sesión y el servidor lo verifica.
@@ -84,6 +102,10 @@ export default function ProductosPage() {
   const [fl, setFl] = useState(FILTROS_VACIOS);
   const [verFiltros, setVerFiltros] = useState(false);
   const filtrosLeidos = useRef(false);
+  // Paginación (HU-20).
+  const [pagina, setPagina] = useState(1);
+  const [porPagina, setPorPagina] = useState(20);
+  const tablaRef = useRef(null);
   // Menú Acciones abierto: { id, top, left, arriba }. Flota sobre la página (position: fixed) para
   // que el contenedor con scroll de la tabla no lo recorte.
   const [menu, setMenu] = useState(null);
@@ -105,7 +127,11 @@ export default function ProductosPage() {
     load();
     try {
       const g = JSON.parse(sessionStorage.getItem(CLAVE_FILTROS) || "null");
-      if (g) { setQ(g.q || ""); setFiltro(g.filtro || "todos"); setFl({ ...FILTROS_VACIOS, ...(g.fl || {}) }); }
+      if (g) {
+        setQ(g.q || ""); setFiltro(g.filtro || "todos"); setFl({ ...FILTROS_VACIOS, ...(g.fl || {}) });
+        if (TAMANOS.includes(g.porPagina)) setPorPagina(g.porPagina);
+        if (g.pagina > 0) setPagina(g.pagina);
+      }
     } catch {}
     filtrosLeidos.current = true;
     // Aviso que deja el formulario de página completa (HU-18) al guardar.
@@ -156,8 +182,8 @@ export default function ProductosPage() {
 
   useEffect(() => {
     if (!filtrosLeidos.current) return;
-    try { sessionStorage.setItem(CLAVE_FILTROS, JSON.stringify({ q, filtro, fl })); } catch {}
-  }, [q, filtro, fl]);
+    try { sessionStorage.setItem(CLAVE_FILTROS, JSON.stringify({ q, filtro, fl, pagina, porPagina })); } catch {}
+  }, [q, filtro, fl, pagina, porPagina]);
 
   // Lo que deja la búsqueda y el botón de arriba; sobre eso trabajan los filtros del panel.
   const base = useMemo(() => {
@@ -170,6 +196,20 @@ export default function ProductosPage() {
   }, [rows, q, filtro]);
   const filtered = useMemo(() => base.filter((r) => cumpleFiltros(r, fl)), [base, fl]);
   const nFiltros = filtrosActivos(fl);
+
+  // Página visible. Si la página quedó vacía (por ejemplo tras eliminar), se usa la última.
+  const totalPaginas = porPagina ? Math.max(1, Math.ceil(filtered.length / porPagina)) : 1;
+  const paginaVista = Math.min(pagina, totalPaginas);
+  const desde = porPagina ? (paginaVista - 1) * porPagina : 0;
+  const visibles = porPagina ? filtered.slice(desde, desde + porPagina) : filtered;
+  // Al pasar de página, si el inicio de la tabla quedó fuera de la vista, se sube hasta él.
+  function irAPagina(n) {
+    setPagina(n);
+    const t = tablaRef.current;
+    if (t && t.getBoundingClientRect().top < 0) t.scrollIntoView({ block: "start" });
+  }
+  // Cambiar búsqueda o filtros vuelve a la página 1.
+  const conPagina1 = (fn) => (v) => { fn(v); setPagina(1); };
 
   function avisar(ok, err = "") { setOkMsg(ok); setErrMsg(err); }
 
@@ -337,13 +377,13 @@ export default function ProductosPage() {
               className="input pr-buscar"
               type="search"
               value={q}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={(e) => conPagina1(setQ)(e.target.value)}
               placeholder="Buscar por código, marca, modelo o categoría"
               aria-label="Buscar productos"
             />
             <div className="pr-filtros" role="group" aria-label="Filtrar">
               {FILTROS.map((x) => (
-                <button key={x.id} type="button" className="pr-chip" aria-pressed={filtro === x.id} onClick={() => setFiltro(x.id)}>
+                <button key={x.id} type="button" className="pr-chip" aria-pressed={filtro === x.id} onClick={() => conPagina1(setFiltro)(x.id)}>
                   {x.nombre} <span className="pr-n">{conteos[x.id] ?? 0}</span>
                 </button>
               ))}
@@ -360,10 +400,10 @@ export default function ProductosPage() {
 
           <div className="pr-lista">
           <aside className={`pr-lado${verFiltros ? " abierto" : ""}`} aria-label="Filtros del listado">
-            <FiltrosProductos rows={base} fl={fl} onChange={setFl} />
+            <FiltrosProductos rows={base} fl={fl} onChange={conPagina1(setFl)} />
           </aside>
           <div className="pr-principal">
-          <div className="admin-table-wrap pr-tabla">
+          <div className="admin-table-wrap pr-tabla" ref={tablaRef}>
             <table className="admin-table">
               <thead>
                 <tr>
@@ -371,7 +411,7 @@ export default function ProductosPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((r) => {
+                {visibles.map((r) => {
                   const sinFoto = parseImages(r).length === 0;
                   const abierto = menu?.id === r._id;
                   return (
@@ -435,13 +475,34 @@ export default function ProductosPage() {
                   <tr><td colSpan={7} className="pr-vacio">
                     {loading ? "Cargando…" : rows.length === 0
                       ? <>Aún no hay productos. Créalos con <b>Nuevo producto</b> o súbelos en <button type="button" className="pr-link" onClick={() => setTab("csv")}>Carga CSV</button>.</>
-                      : <>Ningún producto coincide con la búsqueda o los filtros.{nFiltros > 0 && <> <button type="button" className="pr-link" onClick={() => setFl(FILTROS_VACIOS)}>Limpiar filtros</button></>}</>}
+                      : <>Ningún producto coincide con la búsqueda o los filtros.{nFiltros > 0 && <> <button type="button" className="pr-link" onClick={() => conPagina1(setFl)(FILTROS_VACIOS)}>Limpiar filtros</button></>}</>}
                   </td></tr>
                 )}
               </tbody>
             </table>
           </div>
-          <p className="pr-pie">Mostrando {filtered.length} de {rows.length} productos.</p>
+          <div className="pr-pag">
+            <p className="pr-pie">
+              {filtered.length
+                ? <>Mostrando {desde + 1}–{desde + visibles.length} de {filtered.length} productos{filtered.length < rows.length ? ` (filtrados de ${rows.length})` : ""}.</>
+                : <>Mostrando 0 de {rows.length} productos.</>}
+            </p>
+            <label className="pr-ver">
+              Ver
+              <select className="input" value={porPagina} onChange={(e) => { setPorPagina(Number(e.target.value)); setPagina(1); }} aria-label="Productos por página">
+                {TAMANOS.map((n) => <option key={n} value={n}>{n || "Todos"}</option>)}
+              </select>
+            </label>
+            {totalPaginas > 1 && (
+              <nav className="pr-paginas" aria-label="Páginas del listado">
+                <button type="button" onClick={() => irAPagina(paginaVista - 1)} disabled={paginaVista === 1}>‹ Anterior</button>
+                {botonesPagina(totalPaginas, paginaVista).map((n) => typeof n === "number"
+                  ? <button key={n} type="button" aria-current={n === paginaVista ? "page" : undefined} onClick={() => irAPagina(n)}>{n}</button>
+                  : <span key={n} aria-hidden="true">…</span>)}
+                <button type="button" onClick={() => irAPagina(paginaVista + 1)} disabled={paginaVista === totalPaginas}>Siguiente ›</button>
+              </nav>
+            )}
+          </div>
           </div>
           </div>
         </section>

@@ -341,6 +341,32 @@ Como dueño quiero ver el Código de cada producto en su propia columna y filtra
 
 ---
 
+## HU-20 · Tamaño de la tabla de productos y paginación
+
+Como dueño quiero que el listado muestre los productos por páginas numeradas y poder elegir cuántos ver a la vez, para que la tabla cargue y se lea bien cuando el inventario crezca.
+
+**Tamaño de la tabla:**
+
+| Opción «Ver» | Productos por página | Uso |
+|---|---|---|
+| **20** (por defecto) | 20 | Lo normal al entrar |
+| 25 | 25 | Un poco más por página |
+| 50 | 50 | Revisión rápida de muchos equipos |
+| 100 | 100 | Ampliado |
+| Todos | Todo lo filtrado | Ampliado al máximo, sin páginas |
+
+- Dado el listado, entonces muestra **20 productos** por página y debajo de la tabla una paginación numerada **1, 2, 3, 4…** con **Anterior** y **Siguiente**. La página actual está resaltada; Anterior se desactiva en la primera y Siguiente en la última.
+- Dadas muchas páginas, entonces se muestran la primera, la última y las vecinas de la actual, con «…» en los saltos (por ejemplo 1 … 4 5 6 … 12), para que la barra no desborde.
+- Dado el selector **Ver**, entonces puedo elegir 20, 25, 50, 100 o Todos. Al cambiarlo vuelvo a la página 1.
+- Dada la tabla, entonces debajo dice qué estoy viendo: «Mostrando 21–40 de 134 productos» (y «filtrados de N» si hay búsqueda o filtros).
+- Dados la búsqueda, los botones de arriba o los filtros del panel (HU-19), entonces la paginación cuenta solo lo filtrado y vuelve a la página 1 al cambiarlos.
+- Dado que marco agotado, oculto o elimino un producto y la página queda vacía, entonces paso a la última página que tenga productos.
+- Dado que entro a editar y vuelvo, entonces sigo en la misma página y con el mismo tamaño (se recuerdan en la pestaña junto con los filtros).
+- Con una sola página, la paginación no se muestra; el selector Ver sí.
+- Dado que cambio de página desde abajo, entonces la vista sube al inicio de la tabla para empezar a leer desde el primer producto.
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
