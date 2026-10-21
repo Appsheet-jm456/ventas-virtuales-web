@@ -38,7 +38,7 @@ Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 Después del despliegue:
 - Recuperación de contraseña por correo (tarea en Notion).
 - **HU-17 Fotos de productos en Cloudinary**: hecha y probada por el dueño el 21 oct; falta migrar las fotos reales cuando se cargue el CSV.
-- **HU-18 Editar producto en pantalla completa**: construida y probada en navegador el 21 oct; falta el visto bueno del dueño.
+- **HU-18 Editar producto en pantalla completa**: hecha y aprobada por el dueño el 21 oct.
 - **HU-16 Mejoras de frontend y estilo**: el dueño entrega las mejoras y se documentan como
   HU-16, HU-17, HU-18... en el orden en que deban ejecutarse (historia y criterios antes del código).
 - Pruebas automáticas (Fase 4): hoy hay pruebas en navegador documentadas en `sdlc/4-pruebas.md`.
