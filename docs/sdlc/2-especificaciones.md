@@ -301,7 +301,7 @@ Como dueño quiero cambiar los datos de la empresa sin tocar código.
 
 Como dueño quiero subir las fotos de un producto desde mi computador y pasar a Cloudinary las que hoy están en Drive, para que la web cargue rápido y no dependa de compartir cada archivo (decisión 0007). Solo fotos: los videos siguen como enlaces.
 
-- Dado el formulario de producto, entonces veo las fotos como miniaturas y el botón **Subir fotos** (varias a la vez; JPG, PNG o WebP; al menos 600 px de ancho; hasta 2 MB cada una; máximo 8 por producto). Puedo quitar una y marcar otra como **portada** (la primera). Como respaldo puedo pegar una URL.
+- Dado el formulario de producto, entonces veo las fotos como miniaturas y el botón **Subir fotos** (varias a la vez; JPG, PNG o WebP; al menos 400 px de ancho, mejor 800 o más; hasta 2 MB cada una; máximo 8 por producto). Puedo quitar una y marcar otra como **portada** (la primera). Como respaldo puedo pegar una URL.
 - Dado que no escribí el Código, entonces no puedo subir: las fotos se guardan en `ventas-virtual/productos/<código>/` y en la base va solo la URL.
 - Dada una foto subida que no se guarda (cancelo el formulario o la quito antes de guardar), o una foto guardada que quito, entonces se borra de Cloudinary; nunca se borra una que esté en uso por un producto, banner, categoría o el logo.
 - Dada la pestaña **Migrar fotos**, entonces veo cuántos productos tienen fotos fuera de Cloudinary; al migrar se copian en tandas de 3 productos con barra de avance y se reemplaza el enlace en el producto.

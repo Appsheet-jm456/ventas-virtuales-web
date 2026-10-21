@@ -22,8 +22,8 @@ export const REGLAS = {
     ayuda: "Cuadrada de 600×600 px o más · si no es cuadrada se recorta centrada",
   },
   producto: {
-    destino: "producto", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 2, minAncho: 600,
-    ayuda: "JPG, PNG o WebP · al menos 600 px de ancho · hasta 2 MB cada una",
+    destino: "producto", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 2, minAncho: 400,
+    ayuda: "JPG, PNG o WebP · al menos 400 px de ancho (mejor 800 o más) · hasta 2 MB cada una",
   },
   logo: {
     destino: "logo", formatos: ["image/png", "image/svg+xml", "image/webp", "image/jpeg"], maxMB: 1,
