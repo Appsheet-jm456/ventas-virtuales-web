@@ -35,6 +35,8 @@ Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 6. **Dominio y SSL**; `NEXT_PUBLIC_SITE_URL` con el dominio (falta saber cuál es) y redesplegar.
 7. **Apagar Vercel** y **revocar el token de Baserow** que quedó guardado allá.
 
+Operación (21 oct): consulta diaria y copia de seguridad de Supabase con cron en atlasjm, para evitar la pausa del plan gratuito (`scripts/supabase-diario.py`, decisión 0009).
+
 Después del despliegue:
 - Recuperación de contraseña por correo (tarea en Notion).
 - **HU-17 Fotos de productos en Cloudinary**: hecha y probada por el dueño el 21 oct; falta migrar las fotos reales cuando se cargue el CSV.

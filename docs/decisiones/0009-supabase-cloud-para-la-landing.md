@@ -39,6 +39,11 @@ internet estén arriba, y habría que exponerlo.
 
 - El plan gratuito pausa el proyecto tras 7 días sin actividad y no incluye copias automáticas:
   exportar copias periódicas y revisar la pausa antes de publicar.
+  **Resuelto el 21 oct 2026:** `scripts/supabase-diario.py` corre con cron en el servidor atlasjm
+  todos los días a las 03:15 UTC (10:15 p. m. en Colombia). Lee las cinco tablas, lo que mantiene
+  activo el proyecto, y guarda una copia JSON por tabla en `~/respaldos/ventas-virtual/AAAA-MM-DD/`
+  (se conservan 30 días; registro en `~/respaldos/ventas-virtual/diario.log`). No copia las
+  cuentas de Supabase Auth. Si el servidor se apaga más de una semana, la pausa vuelve a ser posible.
 - Si más adelante repetir la carga pesa demasiado, se puede agregar una sincronización con
   Baserow sin cambiar el modelo.
 - El ecommerce decide su propia base (decisión 0003 de su repo).
