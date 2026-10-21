@@ -326,6 +326,21 @@ Como dueño quiero que al editar o crear un producto se abra una página complet
 
 ---
 
+## HU-19 · Listado de productos: columna Código y filtros por características
+
+Como dueño quiero ver el Código de cada producto en su propia columna y filtrar el listado por sus características, para encontrar rápido el equipo que voy a editar, marcar agotado o volver a poner disponible. Este listado es donde se administra lo que se ve en la web.
+
+- Dada la tabla, entonces la primera columna es **Código** y la siguiente **Producto** (foto, nombre y especificaciones, ya sin el código repetido).
+- Dado el listado, entonces los filtros van en un **panel a la izquierda de la tabla**, a lo alto (como en Mercado Libre); en celular el panel se abre y se cierra con un botón **Filtros** encima de la tabla.
+- Dado el panel de filtros, entonces puedo filtrar por **Modelo**, **RAM**, **Procesador** y **Generación** con listas desplegables, y por **Precio mínimo** y **Precio máximo** en pesos.
+- Dados los filtros, entonces son **dinámicos**: las opciones salen de los productos cargados (no de una lista fija), cada opción dice cuántos productos tiene, y al elegir un filtro las demás listas solo muestran lo que todavía tiene resultados. Valores escritos distinto («8GB» y «8 GB») cuentan como uno.
+- Dados varios filtros, entonces se combinan entre sí, con la búsqueda y con los botones Todos, Agotados, Ocultos y Sin foto. Veo cuántos filtros hay activos y un botón **Limpiar filtros**.
+- Dado un precio mínimo mayor que el máximo, entonces el panel lo avisa y no oculta todo sin explicación.
+- Dado que entro a editar un producto y vuelvo, entonces la búsqueda y los filtros siguen como los dejé (se recuerdan en esta pestaña del navegador).
+- Dado el celular, entonces los filtros se acomodan en una columna sin desbordar la pantalla.
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |

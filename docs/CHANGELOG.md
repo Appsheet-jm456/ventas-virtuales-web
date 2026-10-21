@@ -5,6 +5,12 @@
 
 ---
 
+## 21 oct 2026 · Listado de productos con Código y filtros (HU-19)
+
+La tabla de productos empieza ahora por el Código. A la izquierda hay un panel de filtros por Modelo, RAM, Procesador, Generación y rango de precio; las listas salen de los productos cargados, muestran cuántos hay de cada uno y se van acotando según lo que se elige. Los filtros se conservan al ir a editar y volver. En celular el panel se abre con el botón Filtros. Sin cambio de versión del brief.
+
+---
+
 ## 21 oct 2026 · Editar producto en pantalla completa (HU-18)
 
 Crear y editar un producto ya no abre una ventana angosta: abre su propia página, con los datos en secciones (Información general, Especificaciones, Fotos y video) y a la derecha el estado en la tienda, el precio y el stock. Una barra fija abajo muestra si hay cambios sin guardar y los botones Guardar y Cancelar. Sin cambio de versión del brief.

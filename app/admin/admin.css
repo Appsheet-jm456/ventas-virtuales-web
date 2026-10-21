@@ -314,3 +314,24 @@
   .pf-grid { grid-template-columns: 1fr; }
   .pf-lado { position: static; order: -1; }
 }
+
+/* Listado con panel de filtros a la izquierda (HU-19) */
+.pr-lista { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 14px; align-items: start; }
+.pr-principal { min-width: 0; }
+.pr-lado { position: sticky; top: 12px; }
+.pf-filtros { display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-soft); padding: 14px; }
+.pff-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.pff-head h3 { margin: 0; font-size: 14.5px; color: var(--blue-ink); display: inline-flex; align-items: center; gap: 6px; }
+.pf-filtros .input { background: #fff; width: 100%; }
+.pff-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+.pff-rango { display: flex; align-items: center; gap: 6px; }
+.pff-rango .input { min-width: 0; }
+.pff-rango span { color: var(--muted); }
+.pr-ver-filtros { display: none; }
+@media (max-width: 900px) {
+  .pr-lista { grid-template-columns: 1fr; }
+  .pr-lado { position: static; display: none; }
+  .pr-lado.abierto { display: block; }
+  .pr-ver-filtros { display: inline-flex; }
+}
+.pff-head .pr-link { white-space: nowrap; font-size: 12.5px; }

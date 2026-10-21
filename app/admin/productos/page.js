@@ -7,6 +7,10 @@ import { useAdmin } from "../AdminShell";
 import { parseImages } from "../../../lib/images";
 import { listaDe } from "./FotosProducto";
 import { FIELDS, HIDDEN_VALUES, CLAVE_AVISO } from "./campos";
+import FiltrosProductos, { FILTROS_VACIOS, cumpleFiltros, filtrosActivos } from "./FiltrosProductos";
+
+// Búsqueda y filtros del listado: se recuerdan en la pestaña al ir a editar y volver (HU-19).
+const CLAVE_FILTROS = "vv-productos-filtros";
 
 // Módulo Productos del panel (HU-12). Pestañas Listado y Carga CSV (HU-09). El acceso y el panel
 // lateral los pone AdminShell; cada petición lleva el token de la sesión y el servidor lo verifica.
@@ -76,6 +80,10 @@ export default function ProductosPage() {
   const [loading, setLoading] = useState(false);
   const [q, setQ] = useState("");
   const [filtro, setFiltro] = useState("todos");
+  // Filtros por características (HU-19) y, en celular, si el panel está abierto.
+  const [fl, setFl] = useState(FILTROS_VACIOS);
+  const [verFiltros, setVerFiltros] = useState(false);
+  const filtrosLeidos = useRef(false);
   // Menú Acciones abierto: { id, top, left, arriba }. Flota sobre la página (position: fixed) para
   // que el contenedor con scroll de la tabla no lo recorte.
   const [menu, setMenu] = useState(null);
@@ -95,6 +103,11 @@ export default function ProductosPage() {
 
   useEffect(() => {
     load();
+    try {
+      const g = JSON.parse(sessionStorage.getItem(CLAVE_FILTROS) || "null");
+      if (g) { setQ(g.q || ""); setFiltro(g.filtro || "todos"); setFl({ ...FILTROS_VACIOS, ...(g.fl || {}) }); }
+    } catch {}
+    filtrosLeidos.current = true;
     // Aviso que deja el formulario de página completa (HU-18) al guardar.
     try {
       const aviso = sessionStorage.getItem(CLAVE_AVISO);
@@ -141,7 +154,13 @@ export default function ProductosPage() {
     [rows]
   );
 
-  const filtered = useMemo(() => {
+  useEffect(() => {
+    if (!filtrosLeidos.current) return;
+    try { sessionStorage.setItem(CLAVE_FILTROS, JSON.stringify({ q, filtro, fl })); } catch {}
+  }, [q, filtro, fl]);
+
+  // Lo que deja la búsqueda y el botón de arriba; sobre eso trabajan los filtros del panel.
+  const base = useMemo(() => {
     const nq = norm(q);
     const fil = FILTROS.find((x) => x.id === filtro) || FILTROS[0];
     return rows.filter((r) =>
@@ -149,6 +168,8 @@ export default function ProductosPage() {
       (!nq || norm([f(r, "Código"), f(r, "Marca"), f(r, "Modelo"), f(r, "Categoría"), f(r, "Descripción")].join(" ")).includes(nq))
     );
   }, [rows, q, filtro]);
+  const filtered = useMemo(() => base.filter((r) => cumpleFiltros(r, fl)), [base, fl]);
+  const nFiltros = filtrosActivos(fl);
 
   function avisar(ok, err = "") { setOkMsg(ok); setErrMsg(err); }
 
@@ -327,6 +348,9 @@ export default function ProductosPage() {
                 </button>
               ))}
             </div>
+            <button type="button" className="btn-ghost pr-ver-filtros" aria-expanded={verFiltros} onClick={() => setVerFiltros((v) => !v)}>
+              Filtros{nFiltros ? ` (${nFiltros})` : ""}
+            </button>
             <span className="adm-sp" />
             <button type="button" className="adm-ibtn" onClick={load} disabled={loading} aria-label="Recargar" title="Recargar">
               <Ico d={I.reload} />
@@ -334,11 +358,16 @@ export default function ProductosPage() {
             <button type="button" className="btn pr-btn" onClick={openNew}><Ico d={I.plus} />Nuevo producto</button>
           </div>
 
+          <div className="pr-lista">
+          <aside className={`pr-lado${verFiltros ? " abierto" : ""}`} aria-label="Filtros del listado">
+            <FiltrosProductos rows={base} fl={fl} onChange={setFl} />
+          </aside>
+          <div className="pr-principal">
           <div className="admin-table-wrap pr-tabla">
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th><span className="sr">Acciones</span></th>
+                  <th>Código</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th><span className="sr">Acciones</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -347,12 +376,13 @@ export default function ProductosPage() {
                   const abierto = menu?.id === r._id;
                   return (
                     <tr key={r._id}>
+                      <td className="mono">{f(r, "Código") || "—"}</td>
                       <td>
                         <div className="pr-cell">
                           <Miniatura r={r} />
                           <div className="pr-txt">
                             <b>{nombreDe(r)}</b>
-                            <small><span className="mono">{f(r, "Código")}</span>{specsDe(r) ? ` · ${specsDe(r)}` : ""}</small>
+                            {specsDe(r) && <small>{specsDe(r)}</small>}
                           </div>
                         </div>
                       </td>
@@ -402,16 +432,18 @@ export default function ProductosPage() {
                   );
                 })}
                 {filtered.length === 0 && (
-                  <tr><td colSpan={6} className="pr-vacio">
+                  <tr><td colSpan={7} className="pr-vacio">
                     {loading ? "Cargando…" : rows.length === 0
                       ? <>Aún no hay productos. Créalos con <b>Nuevo producto</b> o súbelos en <button type="button" className="pr-link" onClick={() => setTab("csv")}>Carga CSV</button>.</>
-                      : "Ningún producto coincide con la búsqueda o el filtro."}
+                      : <>Ningún producto coincide con la búsqueda o los filtros.{nFiltros > 0 && <> <button type="button" className="pr-link" onClick={() => setFl(FILTROS_VACIOS)}>Limpiar filtros</button></>}</>}
                   </td></tr>
                 )}
               </tbody>
             </table>
           </div>
           <p className="pr-pie">Mostrando {filtered.length} de {rows.length} productos.</p>
+          </div>
+          </div>
         </section>
       )}
 
