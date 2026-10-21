@@ -5,6 +5,12 @@
 
 ---
 
+## 21 oct 2026 · Fotos de productos en Cloudinary (HU-17)
+
+En el formulario de producto ahora se suben las fotos desde el computador (varias a la vez, con portada y opción de quitar) y se guardan en Cloudinary, en la carpeta del producto. Hay una pestaña nueva, **Migrar fotos**, que copia a Cloudinary las fotos que hoy son enlaces de Drive y avisa cuáles no pudo leer. Los videos siguen igual. Sin cambio de versión del brief.
+
+---
+
 ## 21 oct 2026 · Tablero de tareas reordenado
 
 Las tareas del panel nuevo pasan a llamarse «HU-11 ...» a «HU-15 ...» (el código de la historia primero) y siguen como tareas de Implementación. Se quitó «Actualizar la lista de productos en Baserow»; se agregó la migración de fotos de productos a Cloudinary y un marcador HU-16 para las mejoras de frontend y estilo que entregará el dueño. Sin cambio de versión del brief.

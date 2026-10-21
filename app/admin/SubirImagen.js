@@ -21,6 +21,10 @@ export const REGLAS = {
     destino: "categoria", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 2, minAncho: 400,
     ayuda: "Cuadrada de 600×600 px o más · si no es cuadrada se recorta centrada",
   },
+  producto: {
+    destino: "producto", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 2, minAncho: 600,
+    ayuda: "JPG, PNG o WebP · al menos 600 px de ancho · hasta 2 MB cada una",
+  },
   logo: {
     destino: "logo", formatos: ["image/png", "image/svg+xml", "image/webp", "image/jpeg"], maxMB: 1,
     ayuda: "PNG o SVG con fondo transparente · hasta 1 MB",
@@ -68,39 +72,47 @@ export async function descartarSubidas(token, urls) {
   }
 }
 
-export default function SubirImagen({ reglas, onSubida, onSubiendo, texto = "Subir imagen", disabled, id }) {
+export default function SubirImagen({ reglas, onSubida, onSubiendo, texto = "Subir imagen", disabled, id, codigo, multiple = false }) {
   const { token, logout } = useAdmin();
   const input = useRef(null);
   const [estado, setEstado] = useState({ subiendo: false, error: "" });
 
-  async function subir(file) {
-    if (!file) return;
+  // Sube una sola imagen y devuelve su URL.
+  async function subirUna(file) {
+    const problema = await revisar(file, reglas);
+    if (problema) throw new Error(`${file.name}: ${problema}`);
+    const res = await fetch("/api/admin/cloudinary", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${await token()}` },
+      body: JSON.stringify({ destino: reglas.destino, codigo }),
+    });
+    if (res.status === 401) { logout(); throw new Error("Sesión expirada: vuelve a entrar."); }
+    const f = await res.json();
+    if (f.error) throw new Error(f.error);
+    const datos = new FormData();
+    datos.append("file", file);
+    for (const k of ["api_key", "timestamp", "signature", "folder", "allowed_formats"]) datos.append(k, f[k]);
+    const sub = await fetch(`https://api.cloudinary.com/v1_1/${f.cloud_name}/image/upload`, { method: "POST", body: datos });
+    const r = await sub.json();
+    if (!sub.ok || !r.secure_url) throw new Error("Cloudinary no aceptó la imagen: " + (r.error?.message || sub.status));
+    return r.secure_url;
+  }
+
+  // Sube una o varias; cada foto buena se entrega apenas termina y los errores se suman.
+  async function subir(archivos) {
+    if (!archivos.length) return;
     setEstado({ subiendo: true, error: "" });
     onSubiendo?.(true);
-    try {
-      const problema = await revisar(file, reglas);
-      if (problema) throw new Error(problema);
-      const res = await fetch("/api/admin/cloudinary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await token()}` },
-        body: JSON.stringify({ destino: reglas.destino }),
-      });
-      if (res.status === 401) { logout(); return; }
-      const f = await res.json();
-      if (f.error) throw new Error(f.error);
-      const datos = new FormData();
-      datos.append("file", file);
-      for (const k of ["api_key", "timestamp", "signature", "folder", "allowed_formats"]) datos.append(k, f[k]);
-      const sub = await fetch(`https://api.cloudinary.com/v1_1/${f.cloud_name}/image/upload`, { method: "POST", body: datos });
-      const r = await sub.json();
-      if (!sub.ok || !r.secure_url) throw new Error("Cloudinary no aceptó la imagen: " + (r.error?.message || sub.status));
-      setEstado({ subiendo: false, error: "" });
-      onSubida(r.secure_url);
-    } catch (e) {
-      setEstado({ subiendo: false, error: String(e?.message || e) });
-    } finally {
-      onSubiendo?.(false);
+    const errores = [];
+    for (const file of archivos) {
+      try {
+        onSubida(await subirUna(file));
+      } catch (e) {
+        errores.push(String(e?.message || e));
+      }
     }
+    setEstado({ subiendo: false, error: errores.join(" ") });
+    onSubiendo?.(false);
   }
 
   return (
@@ -114,8 +126,9 @@ export default function SubirImagen({ reglas, onSubida, onSubiendo, texto = "Sub
         id={id}
         type="file"
         accept={reglas.formatos.join(",")}
+        multiple={multiple}
         hidden
-        onChange={(e) => { const file = e.target.files?.[0]; e.target.value = ""; subir(file); }}
+        onChange={(e) => { const archivos = [...(e.target.files || [])]; e.target.value = ""; subir(archivos); }}
       />
       <small className="ct-hint">{reglas.ayuda}</small>
       {estado.error && <div className="form-error" role="alert">{estado.error}</div>}

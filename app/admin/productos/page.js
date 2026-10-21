@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useAdmin } from "../AdminShell";
 import { parseImages } from "../../../lib/images";
+import { descartarSubidas } from "../SubirImagen";
+import FotosProducto, { listaDe } from "./FotosProducto";
 
 // Módulo Productos del panel (HU-12). Pestañas Listado y Carga CSV (HU-09). El acceso y el panel
 // lateral los pone AdminShell; cada petición lleva el token de la sesión y el servidor lo verifica.
@@ -30,7 +32,7 @@ const FIELDS = [
   { key: "Estado", label: "Estado", ph: "Grado A" },
   { key: "Precio", label: "Precio", ph: "1800000", num: true },
   { key: "Stock", label: "Stock", ph: "1", num: true },
-  { key: "Foto", label: "Foto(s) — URL (separadas por coma)", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
+  { key: "Foto", label: "Fotos (la primera es la portada)", ph: "https://res.cloudinary.com/…", full: true, area: true },
   { key: "Video", label: "Video — URL", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
 ];
 
@@ -111,6 +113,11 @@ export default function ProductosPage() {
   const [csv, setCsv] = useState(null);
   const [arrastre, setArrastre] = useState(false);
   const fileRef = useRef(null);
+  // Fotos subidas a Cloudinary en el formulario abierto (HU-17): si no se guardan, se borran.
+  const subidasRef = useRef([]);
+  const [subiendoFoto, setSubiendoFoto] = useState(false);
+  // Migración de fotos de Drive a Cloudinary: { total, hechos, migrados, fallidos, corriendo, fin } o null.
+  const [mig, setMig] = useState(null);
 
   useEffect(() => {
     load();
@@ -168,14 +175,16 @@ export default function ProductosPage() {
 
   function openNew() {
     setFormError(""); avisar("");
-    setEditing({ id: null, fields: { ...EMPTY } });
+    subidasRef.current = [];
+    setEditing({ id: null, fields: { ...EMPTY }, fotosOriginales: [] });
   }
   function openEdit(r) {
     setFormError(""); avisar("");
     const fields = {};
     for (const c of FIELDS) fields[c.key] = f(r, c.key);
     fields["Oculto"] = f(r, "Oculto");
-    setEditing({ id: r._id, fields });
+    subidasRef.current = [];
+    setEditing({ id: r._id, fields, fotosOriginales: listaDe(fields["Foto"]) });
   }
 
   // Acción rápida desde el menú: actualiza solo los campos indicados.
@@ -252,6 +261,13 @@ export default function ProductosPage() {
     }
   }
 
+  // Cierra el formulario sin guardar y borra de Cloudinary las fotos subidas que no se usan.
+  function cerrarForm() {
+    descartarSubidas(token, subidasRef.current);
+    subidasRef.current = [];
+    setEditing(null);
+  }
+
   async function save() {
     if (!editing) return;
     setFormError("");
@@ -262,6 +278,9 @@ export default function ProductosPage() {
         ? await callAdmin({ op: "update", id: editing.id, fields: editing.fields })
         : await callAdmin({ op: "create", fields: editing.fields });
       avisar(d.mensaje || "Guardado.");
+      // Sube lo que ya no se usa: fotos nuevas que se quitaron y fotos guardadas que se quitaron.
+      descartarSubidas(token, [...subidasRef.current, ...editing.fotosOriginales]);
+      subidasRef.current = [];
       setEditing(null);
       await load();
     } catch (e) {
@@ -290,6 +309,34 @@ export default function ProductosPage() {
   const accion = (fn) => (e) => { e.stopPropagation(); setMenu(null); fn(); };
 
   // Abre el menú junto al botón: hacia abajo si cabe, si no hacia arriba.
+  // Productos con alguna foto que no está en Cloudinary (Drive u otro enlace).
+  const pendientesMig = useMemo(
+    () => rows.filter((r) => listaDe(f(r, "Foto")).some((u) => /^https?:\/\//i.test(u) && !u.startsWith("https://res.cloudinary.com/"))),
+    [rows],
+  );
+
+  // Migra en tandas: el servidor copia las fotos de unos pocos productos por petición.
+  async function migrarFotos() {
+    const ids = pendientesMig.map((r) => r._id);
+    if (!ids.length) return;
+    setMig({ total: ids.length, hechos: 0, migrados: 0, fallidos: [], corriendo: true, fin: false });
+    let migrados = 0;
+    const fallidos = [];
+    try {
+      for (let i = 0; i < ids.length; i += 3) {
+        const lote = ids.slice(i, i + 3);
+        const d = await callAdmin({ op: "migrar", ids: lote }, "/api/admin/cloudinary");
+        migrados += d.migrados || 0;
+        fallidos.push(...(d.fallidos || []));
+        setMig({ total: ids.length, hechos: Math.min(i + 3, ids.length), migrados, fallidos: [...fallidos], corriendo: true, fin: false });
+      }
+    } catch (e) {
+      fallidos.push({ codigo: "—", motivo: String(e?.message || e) });
+    }
+    setMig({ total: ids.length, hechos: ids.length, migrados, fallidos, corriendo: false, fin: true });
+    await load();
+  }
+
   function abrirMenu(e, r) {
     e.stopPropagation();
     if (menu?.id === r._id) { setMenu(null); return; }
@@ -312,6 +359,9 @@ export default function ProductosPage() {
         </button>
         <button type="button" role="tab" id="tab-csv" aria-controls="panel-csv" aria-selected={tab === "csv"} onClick={() => setTab("csv")}>
           Carga CSV
+        </button>
+        <button type="button" role="tab" id="tab-fotos" aria-controls="panel-fotos" aria-selected={tab === "fotos"} onClick={() => setTab("fotos")}>
+          Migrar fotos {pendientesMig.length > 0 && <span className="pr-n">{pendientesMig.length}</span>}
         </button>
       </div>
 
@@ -425,6 +475,32 @@ export default function ProductosPage() {
         </section>
       )}
 
+      {tab === "fotos" && (
+        <section className="pr-card" id="panel-fotos" role="tabpanel" aria-labelledby="tab-fotos">
+          <h2 className="pr-h">Migrar fotos de Drive a Cloudinary</h2>
+          <p className="pr-sub">
+            Copia a Cloudinary las fotos que hoy son enlaces de Google Drive u otro sitio y cambia el enlace en el producto.
+            Las fotos deben estar compartidas como «cualquiera con el enlace»; las que no se puedan leer se dejan como estaban
+            y aparecen en la lista de abajo. Se puede repetir sin problema: lo ya migrado se salta. Los videos no se tocan.
+          </p>
+          <p className="pr-sub"><b>{pendientesMig.length}</b> {pendientesMig.length === 1 ? "producto tiene" : "productos tienen"} fotos fuera de Cloudinary.</p>
+          <button type="button" className="btn pr-btn" onClick={migrarFotos} disabled={!pendientesMig.length || mig?.corriendo || demo}>
+            <Ico d={I.upload} />{mig?.corriendo ? "Migrando…" : "Migrar fotos"}
+          </button>
+          {mig && (
+            <div className="mig" role="status">
+              <progress value={mig.hechos} max={mig.total} aria-label="Avance de la migración" />
+              <p className="pr-sub">{mig.hechos} de {mig.total} productos revisados · {mig.migrados} migrados{mig.fallidos.length ? ` · ${mig.fallidos.length} con problemas` : ""}{mig.fin ? " · terminado" : ""}</p>
+              {mig.fallidos.length > 0 && (
+                <ul className="mig-fallos">
+                  {mig.fallidos.map((x, i) => <li key={i}><b>{x.codigo}</b>: {x.motivo}</li>)}
+                </ul>
+              )}
+            </div>
+          )}
+        </section>
+      )}
+
       {tab === "csv" && (
         <section className="pr-card" id="panel-csv" role="tabpanel" aria-labelledby="tab-csv">
           <h2 className="pr-h">Cargar productos por CSV</h2>
@@ -520,11 +596,11 @@ export default function ProductosPage() {
 
       {/* Modal crear/editar */}
       {editing && (
-        <div className="modal-overlay" onClick={() => !busy && setEditing(null)}>
+        <div className="modal-overlay" onClick={() => !busy && !subiendoFoto && cerrarForm()}>
           <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="editar-t" onClick={(e) => e.stopPropagation()}>
             <div className="modal-head">
               <h2 id="editar-t">{editing.id ? `Editar ${editing.fields["Código"] || "producto"}` : "Nuevo producto"}</h2>
-              <button type="button" className="close-btn" onClick={() => setEditing(null)} aria-label="Cerrar">✕</button>
+              <button type="button" className="close-btn" onClick={cerrarForm} aria-label="Cerrar">✕</button>
             </div>
             <div className="modal-body">
               <div className="estado-panel">
@@ -563,8 +639,17 @@ export default function ProductosPage() {
               <div className="form-grid">
                 {FIELDS.map((c) => (
                   <div key={c.key} className={`field${c.full ? " full" : ""}`}>
-                    <label htmlFor={`campo-${c.key}`}>{c.label}</label>
-                    {c.area ? (
+                    <label htmlFor={c.key === "Foto" ? "campo-Foto-subir" : `campo-${c.key}`}>{c.label}</label>
+                    {c.key === "Foto" ? (
+                      <FotosProducto
+                        value={editing.fields.Foto}
+                        codigo={editing.fields["Código"]}
+                        disabled={busy}
+                        onSubiendo={setSubiendoFoto}
+                        onSubida={(u) => { subidasRef.current = [...subidasRef.current, u]; }}
+                        onChange={(v) => setEditing((s) => ({ ...s, fields: { ...s.fields, Foto: v } }))}
+                      />
+                    ) : c.area ? (
                       <textarea
                         id={`campo-${c.key}`}
                         className="input"
@@ -588,8 +673,8 @@ export default function ProductosPage() {
               </div>
               {formError && <div className="form-error">{formError}</div>}
               <div className="modal-actions">
-                <button type="button" className="btn-ghost" onClick={() => setEditing(null)} disabled={busy}>Cancelar</button>
-                <button type="button" className="btn" onClick={save} disabled={busy}>{busy ? "Guardando…" : "Guardar"}</button>
+                <button type="button" className="btn-ghost" onClick={cerrarForm} disabled={busy || subiendoFoto}>Cancelar</button>
+                <button type="button" className="btn" onClick={save} disabled={busy || subiendoFoto}>{busy ? "Guardando…" : subiendoFoto ? "Subiendo fotos…" : "Guardar"}</button>
               </div>
             </div>
           </div>

@@ -37,7 +37,7 @@ Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 
 Después del despliegue:
 - Recuperación de contraseña por correo (tarea en Notion).
-- **Migrar fotos de productos de Baserow (Drive) a Cloudinary** (tarea en Notion).
+- **HU-17 Fotos de productos en Cloudinary**: construida el 21 oct (subir desde el formulario y pestaña Migrar fotos); falta probarla en el navegador y migrar las fotos reales cuando se cargue el CSV.
 - **HU-16 Mejoras de frontend y estilo**: el dueño entrega las mejoras y se documentan como
   HU-16, HU-17, HU-18... en el orden en que deban ejecutarse (historia y criterios antes del código).
 - Pruebas automáticas (Fase 4): hoy hay pruebas en navegador documentadas en `sdlc/4-pruebas.md`.

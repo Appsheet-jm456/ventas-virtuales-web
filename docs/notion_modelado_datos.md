@@ -85,7 +85,7 @@ Cloudinary en vez de enlaces de Drive (los de Drive siguen funcionando mientras 
 | `Categoría` | Texto | **Igual que hoy**: se agrupa con *Categorías* por la palabra de `Coincide con` |
 | `Marca`, `Modelo`, `Procesador`, `Generación`, `RAM`, `Almacenamiento`, `Estado`, `Descripción` | Texto | Sin cambios |
 | `Precio`, `Stock` | Número | Sin cambios |
-| `Foto` | Texto largo | URLs de Cloudinary separadas por coma. **La primera es la portada** |
+| `Foto` | Texto largo | URLs de Cloudinary separadas por coma, en `ventas-virtual/productos/<código>/` (HU-17). **La primera es la portada** |
 | `Video` | Texto largo | Sin cambios (YouTube, Drive o Cloudinary) |
 | `Oculto` | Texto | Sin cambios |
 | `Destacado` *(nueva, opcional)* | Booleano | Si está marcado, sale primero en las líneas del Inicio |
