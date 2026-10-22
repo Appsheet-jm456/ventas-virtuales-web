@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 21 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel de productos mejorado (HU-17 a HU-20: fotos en Cloudinary, edición en página completa, columna Código, filtros y paginación) en la rama `claude/determined-ramanujan-i61gup`. Próxima sesión: mejoras de la web pública (HU-21 en adelante)
+> **Última sesión:** 21 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel de productos mejorado (HU-17 a HU-20: fotos en Cloudinary, edición en página completa, columna Código, filtros y paginación) en la rama `claude/determined-ramanujan-i61gup`. Próxima sesión: mejoras de la web pública (HU-23 en adelante)
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -45,8 +45,14 @@ Después del despliegue:
 - **HU-18 Editar producto en pantalla completa**: hecha y aprobada por el dueño el 21 oct.
 - **HU-19 Columna Código y filtros del listado**: hecha y aprobada por el dueño el 21 oct.
 - **HU-20 Tamaño de la tabla y paginación**: hecha y aprobada por el dueño el 21 oct.
-- **HU-21 Mejoras de frontend y estilo** (el dueño la renombró en Notion; HU-16 a HU-20 ya se usaron): el dueño entrega las mejoras y se documentan como
-  HU-21, HU-22... en el orden en que deban ejecutarse (historia y criterios antes del código).
+- **HU-23 Mejoras de la web pública** (lista del dueño, 22 oct; se documentan una a una como HU-23, HU-24… antes del código):
+  1. **Filtro dinámico para el cliente** en Productos.
+  2. **Mejorar la búsqueda de productos.**
+  3. **Cinta en movimiento** «Ventas Virtual Colombia · Equipos portátiles corporativos…» que se desplaza.
+  4. **Políticas** de devolución y garantía, y **estudiar el tratamiento de datos** (Ley 1581) para publicar la página.
+  5. Al dar clic en **Productos**, mostrar abajo las **categorías**: Portátiles usados, Portátiles nuevos, Impresoras, Accesorios, Partes.
+  6. **Subir dos banners más** en `/admin/banners` (los JPG están en `docs/diseno/banners/`; Banner 2 con fecha «Hasta» 31 oct).
+  7. «Aún me faltan»: el dueño trae más mejoras.
 - Pruebas automáticas (Fase 4): hoy hay pruebas en navegador documentadas en `sdlc/4-pruebas.md`.
 - Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
