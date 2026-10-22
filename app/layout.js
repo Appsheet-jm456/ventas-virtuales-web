@@ -13,19 +13,20 @@ export async function generateMetadata() {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
     title: titulo,
     description: DESCRIPCION,
-    icons: { icon: site.logo },
+    icons: { icon: "/marca/icono.png", apple: "/marca/icono.png" },
     openGraph: {
       title: titulo,
       description: DESCRIPCION,
       siteName: site.nombre,
       locale: "es_CO",
       type: "website",
-      images: [{ url: site.logo }],
+      images: [{ url: "/marca/og.png", width: 1200, height: 630 }],
     },
   };
 }
 
-export const viewport = { themeColor: "#17348f" };
+// Color de la barra del navegador en celular: el azul pantalla de la guía visual (HU-21).
+export const viewport = { themeColor: "#060E27" };
 
 export default function RootLayout({ children }) {
   return (

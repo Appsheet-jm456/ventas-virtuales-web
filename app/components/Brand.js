@@ -14,7 +14,7 @@ export default function Brand({ variant = "header", site = SITE }) {
     if (showLogo) {
       return (
         <span className="footer-logo">
-          <img src={site.logo} alt={site.nombre} onError={() => setFailed(true)} />
+          <img src={site.logoPie || site.logo} alt={site.nombre} onError={() => setFailed(true)} />
         </span>
       );
     }

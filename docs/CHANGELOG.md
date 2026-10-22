@@ -5,6 +5,12 @@
 
 ---
 
+## 22 oct 2026 · La web pública en «modo pantalla» (HU-21)
+
+La web toma la identidad del logo: fondo azul noche como la pantalla del monitor, con su constelación de luces en la portada, el panel de portátiles y el pie de página; el amarillo del marco para botones y precios; la foto de cada equipo en un recuadro claro; letras Montserrat y Inter. Logos nuevos para fondo oscuro (horizontal, vertical, ícono de la pestaña e imagen para compartir en redes) y banners temporales rehechos con la misma línea. El panel de administración no cambia. Guía visual v1.0 en `docs/diseno/guia-visual.md`. Sin cambio de versión del brief.
+
+---
+
 ## 21 oct 2026 · Tabla de productos por páginas (HU-20)
 
 El listado muestra 20 productos por página, con páginas numeradas (1, 2, 3, 4…) y botones Anterior y Siguiente. El selector **Ver** permite 20, 25, 50, 100 o Todos. Debajo de la tabla se lee qué se está viendo («Mostrando 21–40 de 134 productos»). La página y el tamaño se conservan al ir a editar y volver. Sin cambio de versión del brief.

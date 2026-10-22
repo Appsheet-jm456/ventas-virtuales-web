@@ -67,8 +67,10 @@ redondeadas) en la parte de arriba de la tarjeta oscura, como una pantalla encen
 
 - La web oscura necesita una **versión del logo para fondo oscuro**: el logotipo «Ventas Virtual
   · COLOMBIA» en **blanco** y el monitor igual. El archivo actual es un JPG con fondo blanco.
-- Pendiente del dueño: el archivo original (PNG transparente o SVG). Si no existe, se prepara en
-  Canva quitando el fondo y pasando el texto a blanco.
+- Pendiente del dueño: el archivo original (PNG transparente o SVG). Mientras tanto (HU-21) se
+  generaron desde el logo vertical, quitando el fondo y pasando el texto a blanco: `public/marca/`
+  `logo-oscuro.png` (horizontal), `logo-vertical-oscuro.png` (pie), `icono.png` (pestaña),
+  `og.png` (imagen para compartir) y `logo-claro.png` (para fondos claros).
 - Versiones necesarias: horizontal (encabezado), vertical (pie de página, redes) y solo el
   monitor (ícono de la pestaña del navegador).
 

@@ -9,6 +9,7 @@ import HeroCarousel from "../components/HeroCarousel";
 import CategoryStrip from "../components/CategoryStrip";
 import ProductCard from "../components/ProductCard";
 import Rail from "../components/Rail";
+import Constelacion from "../components/Constelacion";
 
 // El Inicio se refresca cada 60 s (lee Baserow en el servidor).
 export const revalidate = 60;
@@ -71,6 +72,7 @@ export default async function Home() {
           </div>
           <div className="line">
             <Link className="line-promo" href={`/productos?categoria=${LINEA.filtro}`}>
+              <Constelacion semilla={4} puntos={14} ancho={300} alto={420} />
               <span className="lp-1">{LINEA.promo.linea1}</span>
               <span className="lp-2">{LINEA.promo.linea2}</span>
               <span className="lp-3">{LINEA.promo.linea3}</span>

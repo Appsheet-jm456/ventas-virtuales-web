@@ -35,7 +35,7 @@ Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 6. **Dominio y SSL**; `NEXT_PUBLIC_SITE_URL` con el dominio (falta saber cuál es) y redesplegar.
 7. **Apagar Vercel** y **revocar el token de Baserow** que quedó guardado allá.
 
-Guía visual: propuesta «modo pantalla» v0.1 en `docs/diseno/guia-visual.md` (22 oct), por aprobar.
+Guía visual «modo pantalla» v1.0 en `docs/diseno/guia-visual.md` (22 oct). **HU-21** la aplica a la web pública: construida y probada el 22 oct; falta el visto bueno del dueño.
 
 Operación (21 oct): consulta diaria y copia de seguridad de Supabase con cron en atlasjm, para evitar la pausa del plan gratuito (`scripts/supabase-diario.py`, decisión 0009).
 

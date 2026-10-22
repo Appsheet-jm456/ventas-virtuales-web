@@ -1,8 +1,16 @@
 import Link from "next/link";
+import { Inter, Montserrat } from "next/font/google";
 import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
 import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
+import Constelacion from "../components/Constelacion";
+import "./tema-pantalla.css";
+
+// Tipografía de la guía visual (HU-21): Montserrat en títulos, precios y botones; Inter en textos.
+// next/font las descarga al compilar y las sirve la propia web.
+const titulos = Montserrat({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--f-tit", display: "swap" });
+const textos = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--f-txt", display: "swap" });
 
 const SALUDO = "Hola 👋, quiero información sobre sus computadores.";
 
@@ -15,11 +23,12 @@ function WaIcon({ size = 24 }) {
 }
 
 // Marco de la web pública: encabezado, pie y botón de WhatsApp. /admin no lo usa.
+// La clase "tp" activa el «modo pantalla» de la guía visual solo aquí (tema-pantalla.css).
 export default async function WebLayout({ children }) {
   const site = await getSite();
   const wa = (texto) => waLink(texto, site.whatsapp);
   return (
-    <>
+    <div className={`tp ${titulos.variable} ${textos.variable}`}>
         <header className="site-header">
           <div className="wrap hd-top">
             <Link href="/" className="brand" aria-label={site.nombre}>
@@ -63,6 +72,7 @@ export default async function WebLayout({ children }) {
         {children}
 
         <footer className="site-footer" id="contacto">
+          <Constelacion semilla={21} puntos={30} ancho={1400} alto={420} />
           <div className="wrap footer-grid">
             <div>
               <Brand variant="footer" site={site} />
@@ -106,6 +116,6 @@ export default async function WebLayout({ children }) {
           <WaIcon size={26} />
           <span>Escríbenos</span>
         </a>
-    </>
+    </div>
   );
 }

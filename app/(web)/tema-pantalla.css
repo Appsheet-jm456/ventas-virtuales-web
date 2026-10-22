@@ -1,0 +1,196 @@
+/* «Modo pantalla» de la guía visual (docs/diseno/guia-visual.md, HU-21).
+   Solo para la web pública: todo cuelga de .tp, que pone app/(web)/layout.js. El panel /admin
+   sigue con los estilos claros de globals.css. */
+
+.tp {
+  /* Paleta de la guía */
+  --p-fondo: #060E27;       /* azul pantalla profundo */
+  --p-pantalla: #081A4E;    /* azul pantalla */
+  --p-superficie: #0D1B45;  /* tarjetas y paneles */
+  --p-red: #183FA5;         /* bordes y líneas */
+  --p-destello: #A0D8FF;
+  --p-amarillo: #F5C518;
+  --p-noche: #0B1F4D;       /* texto sobre amarillo */
+  --p-cian: #00A8E0;
+  --p-cian-claro: #4CC3F0;
+  --p-rojo: #D7192F;
+  --p-luna: #A9B8D9;
+  --p-claro: #F3F5F9;       /* recuadro de las fotos */
+
+  /* Variables de globals.css reinterpretadas para el fondo oscuro */
+  --bg: var(--p-fondo);
+  --bg-soft: var(--p-superficie);
+  --surface: var(--p-superficie);
+  --border: #1C3478;
+  --text: #EEF2FB;
+  --muted: var(--p-luna);
+  --blue: var(--p-cian-claro);
+  --blue-ink: #FFFFFF;
+  --price: var(--p-amarillo);
+  --ok: #5EE08F;
+  --ok-bg: rgba(37, 211, 102, .14);
+  --bad: var(--p-rojo);
+  --bad-bg: var(--p-rojo);
+  --sans: var(--f-txt), -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --tit: var(--f-tit), var(--f-txt), "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  min-height: 100vh;
+  background: var(--p-fondo);
+  color: var(--text);
+  font-family: var(--sans);
+}
+html:has(.tp), html:has(.tp) body { background: #060E27; }
+.tp a { color: var(--p-cian-claro); }
+.tp :focus-visible { outline-color: var(--p-amarillo); }
+.tp ::selection { background: var(--p-amarillo); color: var(--p-noche); }
+
+/* Títulos, precios y botones en Montserrat */
+.tp h1, .tp h2, .tp h3, .tp .section-title, .tp .card-title, .tp .card-price, .tp .pd-price,
+.tp .cat-name, .tp .lp-1, .tp .lp-2, .tp .lp-desde, .tp .btn-more, .tp .btn-hero, .tp .btn-wa,
+.tp .trust-item b, .tp .f-title, .tp .hd-nav a, .tp .wa-float, .tp .cat-chip { font-family: var(--tit); }
+
+/* Constelación */
+.tp .constelacion { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tp .cn-lineas line { stroke: var(--p-red); stroke-width: 1; opacity: .75; }
+.tp .cn-punto { fill: var(--p-destello); }
+.tp .cn-halo { fill: var(--p-cian-claro); opacity: .18; }
+
+/* ================= Encabezado ================= */
+.tp .site-header { background: rgba(6, 14, 39, .94); backdrop-filter: blur(8px); box-shadow: none; border-bottom: 3px solid var(--p-cian); }
+.tp .hd-search { background: var(--p-superficie); border-color: var(--p-red); }
+.tp .hd-search:focus-within { border-color: var(--p-amarillo); box-shadow: 0 0 0 4px rgba(245, 197, 24, .15); }
+.tp .hd-search input { color: #fff; }
+.tp .hd-search input::placeholder { color: var(--p-luna); }
+.tp .hd-search button { color: var(--p-amarillo); }
+.tp .hd-search button:hover { background: rgba(255, 255, 255, .06); }
+.tp .hd-info { color: #fff; }
+.tp .hd-info small { color: var(--p-luna); }
+.tp .hd-ico { background: var(--p-superficie); color: var(--p-amarillo); border: 1px solid var(--p-red); }
+.tp .hd-ico.wa { background: #25d366; color: #05391f; border: none; }
+.tp .hd-ico circle[fill="#fff"] { fill: var(--p-superficie); }
+.tp .hd-nav { background: var(--p-pantalla); border-top: 1px solid rgba(24, 63, 165, .6); }
+.tp .hd-nav a { color: #DCE4F5; }
+.tp .hd-nav a:hover { color: var(--p-amarillo); background: rgba(255, 255, 255, .05); }
+.tp .brand-logo { height: 48px; }
+@media (max-width: 640px) { .tp .hd-wa small { color: #fff; } }
+
+/* ================= Portada ================= */
+.tp .hc { background: var(--p-pantalla); border: 1px solid var(--p-red); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
+.tp .hc-nav { background: rgba(6, 14, 39, .85); color: #fff; border: 1px solid var(--p-red); }
+.tp .hc-dots button { background: rgba(160, 216, 255, .45); }
+.tp .hc-dots button.on { background: var(--p-amarillo); }
+
+.tp .section-title { color: #fff; }
+.tp .section-sub { color: var(--p-luna); }
+.tp .sec-more { color: var(--p-cian-claro); }
+
+/* Botones principales: amarillos con texto azul noche */
+.tp .btn-more { background: var(--p-amarillo); color: var(--p-noche); }
+.tp .btn-more:hover { background: #FFD43B; }
+.tp .btn-hero { background: var(--p-amarillo); color: var(--p-noche); }
+.tp .btn-hero:hover { background: #FFD43B; }
+.tp .btn-hero.wa { background: #25d366; color: #05391f; }
+
+/* Flechas de los carruseles */
+.tp .cs-nav, .tp .rail-nav { background: var(--p-superficie); color: #fff; border-color: var(--p-red); box-shadow: 0 4px 14px rgba(0, 0, 0, .4); }
+.tp .cs-nav:hover, .tp .rail-nav:hover { border-color: var(--p-amarillo); color: var(--p-amarillo); }
+
+/* ================= Categorías ================= */
+.tp .cat-tile { background: var(--p-superficie); border-color: var(--p-red); color: #fff; }
+.tp .cat-tile:hover { border-color: var(--p-amarillo); box-shadow: 0 12px 30px rgba(0, 0, 0, .45); }
+.tp .cat-img { background: var(--p-claro); }
+.tp .cat-count { color: var(--p-luna); }
+
+/* Panel «Portátiles corporativos» con la constelación */
+.tp .line-promo { background: var(--p-pantalla); border: 1px solid var(--p-red); isolation: isolate; }
+.tp .line-promo::after { content: none; }
+.tp .line-promo > span { position: relative; }
+.tp .lp-2 { color: var(--p-amarillo); }
+.tp .lp-3, .tp .lp-nota { color: var(--p-luna); }
+.tp .lp-desde { background: var(--p-amarillo); color: var(--p-noche); }
+
+/* ================= Tarjetas de producto ================= */
+.tp .card { background: var(--p-superficie); border-color: var(--p-red); }
+.tp .card:hover { border-color: var(--p-amarillo); box-shadow: 0 14px 32px rgba(0, 0, 0, .5); }
+/* La foto va en un recuadro claro, como una pantalla encendida */
+.tp .card-img { margin: 10px 10px 0; border-radius: 12px; background: var(--p-claro); }
+.tp .card-img .noimg { color: #8A97B0; }
+.tp .card-cat { color: var(--p-luna); }
+.tp .card-title { color: #fff; }
+.tp .card-specs { color: var(--p-luna); }
+.tp .card-price { color: var(--p-amarillo); }
+.tp .card-price.tbd { color: var(--p-luna); }
+.tp .card-code { color: #7F8FB5; }
+.tp .badge.ok { color: var(--ok); background: var(--ok-bg); }
+.tp .badge.bad { color: #fff; background: var(--p-rojo); }
+.tp .badge.off { color: var(--p-luna); background: rgba(169, 184, 217, .12); }
+.tp .ribbon, .tp .pp-ribbon { background: var(--p-rojo); color: #fff; }
+.tp .card.sold .card-img img { filter: grayscale(60%) opacity(.7); }
+
+/* ================= Franja de confianza y banda de contacto ================= */
+.tp .trust-in { background: var(--p-superficie); border-color: var(--p-red); box-shadow: 0 14px 36px rgba(0, 0, 0, .4); }
+.tp .trust-item { border-color: var(--p-red); }
+.tp .trust-ico { background: var(--p-pantalla); border: 1px solid var(--p-red); color: var(--p-amarillo); }
+.tp .trust-item b { color: #fff; }
+.tp .trust-item small { color: var(--p-luna); }
+.tp .cta-band { background: var(--p-pantalla); border-color: var(--p-red); }
+.tp .cta-in h2 { color: #fff; }
+.tp .cta-in p { color: var(--p-luna); }
+
+/* ================= Catálogo ================= */
+.tp .filter-search, .tp .filter-sel, .tp .filter-num, .tp .filter-check {
+  background: var(--p-superficie); border-color: var(--p-red); color: #fff;
+}
+.tp .filter-search::placeholder, .tp .filter-num::placeholder { color: var(--p-luna); }
+.tp .filter-search:focus, .tp .filter-sel:focus, .tp .filter-num:focus { border-color: var(--p-amarillo); }
+.tp .filter-sel option { background: var(--p-superficie); color: #fff; }
+.tp .filter-check input { accent-color: var(--p-amarillo); }
+.tp .filter-count { color: var(--p-luna); }
+.tp .filter-clear { border-color: var(--p-red); color: var(--p-luna); }
+.tp .filter-clear:hover { color: #fff; border-color: var(--p-luna); }
+.tp .cat-chip { background: var(--p-superficie); border-color: var(--p-red); color: #fff; }
+.tp .cat-chip:hover { border-color: var(--p-amarillo); }
+.tp .cat-chip.active { background: var(--p-amarillo); border-color: var(--p-amarillo); color: var(--p-noche); }
+.tp .empty-msg { color: var(--p-luna); }
+.tp .demo-note { background: rgba(245, 197, 24, .1); border-color: rgba(245, 197, 24, .4); color: #FBE6A2; }
+.tp .crumbs, .tp .crumbs a { color: var(--p-luna); }
+.tp .crumbs a:hover { color: #fff; }
+
+/* ================= Ficha de producto ================= */
+.tp .pd-info h1 { color: #fff; }
+.tp .pd-code { color: var(--p-luna); }
+.tp .pd-price { color: var(--p-amarillo); }
+.tp .pd-price.tbd { color: var(--p-luna); }
+.tp .pd-desc { background: var(--p-superficie); border: 1px solid var(--p-red); color: #DCE4F5; }
+.tp .specs th, .tp .specs td { border-color: var(--p-red); }
+.tp .specs th { color: var(--p-luna); }
+.tp .specs td { color: #fff; }
+.tp .btn-wa.off { background: #26365F; color: var(--p-luna); }
+.tp .pd-note { color: var(--p-luna); }
+
+/* Galería: la foto grande y las miniaturas también en recuadro claro */
+.tp .pp-main { background: var(--p-claro); border-color: var(--p-red); }
+.tp .pp-thumb { background: var(--p-claro); border-color: var(--p-red); }
+.tp .pp-thumb.active, .tp .pp-thumb:hover { border-color: var(--p-amarillo); }
+.tp .pp-empty { background: var(--p-superficie); border-color: var(--p-red); color: var(--p-luna); }
+.tp .pp-light { background: rgba(6, 14, 39, .94); }
+
+/* ================= Pie de página ================= */
+.tp .site-footer { position: relative; overflow: hidden; isolation: isolate; background: var(--p-pantalla); color: var(--p-luna); border-top: 3px solid var(--p-cian); }
+.tp .site-footer .constelacion { z-index: -1; opacity: .3; }
+.tp .footer-logo { background: none; padding: 0; }
+.tp .footer-logo img { height: 120px; }
+.tp .f-title { color: var(--p-amarillo); }
+.tp .site-footer a { color: #DCE4F5; }
+.tp .site-footer a:hover { color: var(--p-amarillo); }
+.tp .f-note { border-color: rgba(24, 63, 165, .7); color: #8FA3D6; }
+
+/* ================= WhatsApp flotante ================= */
+.tp .wa-float { box-shadow: 0 6px 22px rgba(0, 0, 0, .5); }
+
+/* Celular: constelación más liviana */
+@media (max-width: 640px) {
+  .tp .constelacion .extra { display: none; }
+  .tp .footer-logo img { height: 96px; }
+  .tp .card-img { margin: 8px 8px 0; }
+}

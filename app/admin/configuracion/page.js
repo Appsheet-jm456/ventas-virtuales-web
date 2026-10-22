@@ -170,10 +170,10 @@ export default function ConfiguracionPage() {
             <textarea id="cf-lema" className="input" rows={2} value={empresa.lema} onChange={setE("lema")} />
           </Campo>
           <div className="cf-logo">
-            <img className="cf-logo-img" src={empresa.logo ? cld(empresa.logo, "f_auto,q_auto,h_120") : "/logo.png"} alt="Logo actual" />
+            <img className="cf-logo-img" src={empresa.logo ? cld(empresa.logo, "f_auto,q_auto,h_120") : "/marca/logo-oscuro.png"} alt="Logo actual" />
             <div className="cf-logo-txt">
               <b>Logo</b>
-              <small className="ct-hint">{empresa.logo ? "Logo subido desde el panel." : <>Se usa el archivo <span className="mono">public/logo.png</span>.</>} Se guarda con <b>Guardar cambios</b>.</small>
+              <small className="ct-hint">{empresa.logo ? "Logo subido desde el panel." : <>Se usa el logo de la guía visual (<span className="mono">public/marca/</span>).</>} La web es oscura: sube una versión con el texto en blanco. Se guarda con <b>Guardar cambios</b>.</small>
               <SubirImagen id="cf-logo-subir" reglas={REGLAS.logo} texto={empresa.logo ? "Cambiar logo" : "Subir logo"} onSubiendo={setSubiendoLogo}
                 onSubida={(url) => { setLogosSubidos((l) => [...l, url]); setForm((s) => ({ ...s, empresa: { ...s.empresa, logo: url } })); }} />
               {empresa.logo && <button type="button" className="pr-link" onClick={() => setForm((s) => ({ ...s, empresa: { ...s.empresa, logo: "" } }))}>Volver al logo del archivo</button>}
