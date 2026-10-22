@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 21 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel de productos mejorado (HU-17 a HU-20: fotos en Cloudinary, edición en página completa, columna Código, filtros y paginación) en la rama `claude/determined-ramanujan-i61gup`. Próxima sesión: mejoras de la web pública (HU-16 en adelante)
+> **Última sesión:** 21 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel de productos mejorado (HU-17 a HU-20: fotos en Cloudinary, edición en página completa, columna Código, filtros y paginación) en la rama `claude/determined-ramanujan-i61gup`. Próxima sesión: mejoras de la web pública (HU-21 en adelante)
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -35,6 +35,8 @@ Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 6. **Dominio y SSL**; `NEXT_PUBLIC_SITE_URL` con el dominio (falta saber cuál es) y redesplegar.
 7. **Apagar Vercel** y **revocar el token de Baserow** que quedó guardado allá.
 
+Guía visual: propuesta «modo pantalla» v0.1 en `docs/diseno/guia-visual.md` (22 oct), por aprobar.
+
 Operación (21 oct): consulta diaria y copia de seguridad de Supabase con cron en atlasjm, para evitar la pausa del plan gratuito (`scripts/supabase-diario.py`, decisión 0009).
 
 Después del despliegue:
@@ -43,8 +45,8 @@ Después del despliegue:
 - **HU-18 Editar producto en pantalla completa**: hecha y aprobada por el dueño el 21 oct.
 - **HU-19 Columna Código y filtros del listado**: hecha y aprobada por el dueño el 21 oct.
 - **HU-20 Tamaño de la tabla y paginación**: hecha y aprobada por el dueño el 21 oct.
-- **HU-16 Mejoras de frontend y estilo**: el dueño entrega las mejoras y se documentan como
-  HU-16, HU-17, HU-18... en el orden en que deban ejecutarse (historia y criterios antes del código).
+- **HU-21 Mejoras de frontend y estilo** (el dueño la renombró en Notion; HU-16 a HU-20 ya se usaron): el dueño entrega las mejoras y se documentan como
+  HU-21, HU-22... en el orden en que deban ejecutarse (historia y criterios antes del código).
 - Pruebas automáticas (Fase 4): hoy hay pruebas en navegador documentadas en `sdlc/4-pruebas.md`.
 - Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
 
