@@ -1,6 +1,7 @@
 # Guía visual · Ventas Virtual Colombia
 
-> **Estado:** `v1.0` · aprobada por el dueño el 22 oct 2026 para implementarse en HU-21.
+> **Estado:** `v1.1` · 22 oct 2026. v1.0 aprobada por el dueño; v1.1 por su ajuste tras ver HU-21:
+> marco oscuro (encabezado y pie) y contenido en blanco.
 > Fuente: el logo (carpeta de Canva «Ventas Virtual Colombia Landig») y la fachada de la tienda.
 > Los colores se midieron sobre las imágenes, no a ojo.
 
@@ -15,6 +16,22 @@ que se debe tocar. Así la página «es» la pantalla del logo y se distingue de
 
 Se descartó el **negro puro** (`#000`): se ve frío y genérico, y no es un color del logo. El
 azul noche de la pantalla da la misma sensación oscura, pero es de la marca.
+
+## 1.1 Ajuste del dueño (v1.1): marco oscuro, contenido claro
+
+Al ver la web toda oscura, el dueño pidió que el **contenido del medio vuelva a blanco**. La
+«pantalla» queda como **marco**:
+
+| Zona | Fondo | Notas |
+|---|---|---|
+| **Encabezado** (logo, buscador, WhatsApp, envíos) y menú | Azul pantalla **con la constelación** | Logo para fondo oscuro, línea cian debajo |
+| **Contenido** (categorías, productos, ficha, filtros, franjas) | **Blanco** y gris niebla `#F3F5F9` | Títulos y precios en azul noche `#0B1F4D` |
+| **Piezas destacadas** (banners, panel «Portátiles corporativos») | Azul pantalla con constelación | Funcionan como pantallas sobre el blanco |
+| **Pie de página** | Azul pantalla con constelación | Logo vertical para fondo oscuro |
+
+Reglas sobre el blanco: el **amarillo solo como fondo** de botones (texto azul noche, 9,8); los
+**precios en azul noche** (15,9); los **enlaces en cian enlace `#0072A8`** (5,3); «Agotado» en
+rojo con texto blanco (5,2). Las secciones 2 a 5 siguen valiendo para las zonas oscuras.
 
 ## 2. Colores de marca
 

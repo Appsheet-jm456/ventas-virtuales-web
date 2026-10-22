@@ -30,6 +30,9 @@ export default async function WebLayout({ children }) {
   return (
     <div className={`tp ${titulos.variable} ${textos.variable}`}>
         <header className="site-header">
+          {/* Zona del logo, buscador, WhatsApp y envíos: la pantalla con su constelación (HU-21). */}
+          <div className="hd-zona">
+          <Constelacion semilla={12} puntos={28} ancho={1600} alto={120} />
           <div className="wrap hd-top">
             <Link href="/" className="brand" aria-label={site.nombre}>
               <Brand site={site} />
@@ -57,6 +60,7 @@ export default async function WebLayout({ children }) {
               </span>
               <span><b>Envíos</b><small>a todo el país</small></span>
             </div>
+          </div>
           </div>
           <nav className="hd-nav" aria-label="Principal">
             <div className="wrap hd-nav-in">

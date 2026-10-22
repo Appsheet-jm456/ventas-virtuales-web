@@ -373,11 +373,11 @@ Como dueño quiero que la web pública se vea con la identidad de Ventas Virtual
 
 **Alcance:** Inicio, Categorías, Productos, ficha de producto, encabezado, pie y botón flotante de WhatsApp. El panel `/admin` **no cambia** (se queda claro).
 
-- Dada cualquier página pública, entonces el fondo es **azul pantalla** (`#060E27`), los textos son blancos y gris luna, y los colores salen solo de la guía visual. No queda ningún fondo blanco de página.
-- Dado el encabezado, entonces es oscuro, con el **logo para fondo oscuro** (texto en blanco), el buscador en tono superficie, el menú y una **línea cian** debajo. El ícono de la pestaña es el monitor del logo.
+- Dada cualquier página pública, entonces el **encabezado y el pie** son azul pantalla con la constelación y el **contenido del medio es blanco** (ajuste del dueño del 22 oct, guía v1.1). Los colores salen solo de la guía visual.
+- Dado el encabezado (logo, buscador, WhatsApp y envíos), entonces es azul pantalla **con la constelación**, con el **logo para fondo oscuro** (texto en blanco), el buscador en tono superficie, el menú y una **línea cian** debajo. El ícono de la pestaña es el monitor del logo.
 - Dada la portada, entonces los banners temporales (mientras el dueño no suba los suyos) usan el fondo azul pantalla con la **constelación** y el amarillo para la cifra. La constelación también aparece en el panel de «Portátiles corporativos» y en el pie de página, dibujada con SVG ligero.
-- Dadas las tarjetas de producto, entonces son **azul superficie** con borde azul red, la **foto dentro de un recuadro claro**, el nombre en blanco, las especificaciones en gris luna y el **precio en amarillo**. «Agotado» va en **rojo con texto blanco**. El botón «Estoy interesado» sigue verde WhatsApp.
-- Dados los botones principales (Ver más, Más portátiles, Buscar), entonces son **amarillos con texto azul noche**; los enlaces son cian claro.
+- Dadas las tarjetas de producto, entonces son **blancas** con borde gris, nombre y **precio en azul noche** y especificaciones en gris. «Agotado» va en **rojo con texto blanco**. El botón «Estoy interesado» sigue verde WhatsApp.
+- Dados los botones principales (Ver más, Más portátiles, Buscar), entonces son **amarillos con texto azul noche**; los enlaces son cian enlace (`#0072A8`). El amarillo nunca va como letra sobre blanco.
 - Dadas las categorías, la franja de confianza, la banda de contacto, los filtros del catálogo y la ficha de producto con su galería, entonces siguen la misma paleta y se leen sin esfuerzo.
 - Dada la tipografía, entonces títulos, precios y botones usan **Montserrat** y los textos **Inter**, cargadas por la propia web (sin depender de que el visitante las tenga).
 - Dados los contrastes, entonces todo texto cumple **WCAG AA (4,5:1)** según la tabla de la guía; el rojo nunca va como letra sobre el fondo oscuro.

@@ -7,7 +7,7 @@
 
 ## 22 oct 2026 · La web pública en «modo pantalla» (HU-21)
 
-La web toma la identidad del logo: fondo azul noche como la pantalla del monitor, con su constelación de luces en la portada, el panel de portátiles y el pie de página; el amarillo del marco para botones y precios; la foto de cada equipo en un recuadro claro; letras Montserrat y Inter. Logos nuevos para fondo oscuro (horizontal, vertical, ícono de la pestaña e imagen para compartir en redes) y banners temporales rehechos con la misma línea. El panel de administración no cambia. Guía visual v1.0 en `docs/diseno/guia-visual.md`. Sin cambio de versión del brief.
+La web toma la identidad del logo: el encabezado y el pie son la pantalla del monitor, azul noche con su constelación de luces, y el contenido del medio queda en blanco (ajuste del dueño, guía v1.1); los banners y el panel de portátiles son piezas oscuras con la constelación; el amarillo del marco para los botones, precios en azul noche; letras Montserrat y Inter. Logos nuevos para fondo oscuro (horizontal, vertical, ícono de la pestaña e imagen para compartir en redes) y banners temporales rehechos con la misma línea. El panel de administración no cambia. Guía visual v1.0 en `docs/diseno/guia-visual.md`. Sin cambio de versión del brief.
 
 ---
 
