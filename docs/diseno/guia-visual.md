@@ -1,6 +1,6 @@
 # Guía visual · Ventas Virtual Colombia
 
-> **Estado:** propuesta `v0.1` · 22 oct 2026 · por aprobar del dueño.
+> **Estado:** `v1.0` · aprobada por el dueño el 22 oct 2026 para implementarse en HU-21.
 > Fuente: el logo (carpeta de Canva «Ventas Virtual Colombia Landig») y la fachada de la tienda.
 > Los colores se midieron sobre las imágenes, no a ojo.
 
