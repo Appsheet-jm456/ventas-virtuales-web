@@ -29,6 +29,8 @@ Al ver la web toda oscura, el dueño pidió que el **contenido del medio vuelva 
 | **Piezas destacadas** (banners, panel «Portátiles corporativos») | Azul pantalla con constelación | Funcionan como pantallas sobre el blanco |
 | **Pie de página** | Azul pantalla con constelación | Logo vertical para fondo oscuro |
 
+El dueño puede alternar entre este **modo claro** (v1.1, por defecto) y el **modo oscuro** (v1.0, toda la web en azul pantalla) desde `/admin/configuracion › Apariencia` (HU-22).
+
 Reglas sobre el blanco: el **amarillo solo como fondo** de botones (texto azul noche, 9,8); los
 **precios en azul noche** (15,9); los **enlaces en cian enlace `#0072A8`** (5,3); «Agotado» en
 rojo con texto blanco (5,2). Las secciones 2 a 5 siguen valiendo para las zonas oscuras.

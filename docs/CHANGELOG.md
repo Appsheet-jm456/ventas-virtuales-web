@@ -5,6 +5,12 @@
 
 ---
 
+## 22 oct 2026 · Interruptor de modo claro y oscuro (HU-22)
+
+En `/admin/configuracion` hay una sección nueva, **Apariencia**, con el interruptor **Modo oscuro**: apagado, la web se ve en modo claro (encabezado y pie azules con la constelación, contenido en blanco); encendido, toda la web en el azul de la pantalla del logo. Muestra una miniatura de cada modo y marca el que está en uso. El panel no cambia. Sin cambio de versión del brief.
+
+---
+
 ## 22 oct 2026 · La web pública en «modo pantalla» (HU-21)
 
 La web toma la identidad del logo: el encabezado y el pie son la pantalla del monitor, azul noche con su constelación de luces, y el contenido del medio queda en blanco (ajuste del dueño, guía v1.1); los banners y el panel de portátiles son piezas oscuras con la constelación; el amarillo del marco para los botones, precios en azul noche; letras Montserrat y Inter. Logos nuevos para fondo oscuro (horizontal, vertical, ícono de la pestaña e imagen para compartir en redes) y banners temporales rehechos con la misma línea. El panel de administración no cambia. Guía visual v1.0 en `docs/diseno/guia-visual.md`. Sin cambio de versión del brief.

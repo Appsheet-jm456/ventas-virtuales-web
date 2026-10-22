@@ -386,6 +386,24 @@ Como dueño quiero que la web pública se vea con la identidad de Ventas Virtual
 
 ---
 
+## HU-22 · Interruptor de modo claro y modo oscuro de la web
+
+Como dueño quiero elegir desde el panel si la web pública se ve en modo claro o en modo oscuro, para cambiar la apariencia según la temporada o la campaña sin tocar código.
+
+| Modo | Interruptor «Modo oscuro» | Cómo se ve (guía visual) |
+|---|---|---|
+| **Claro** (por defecto) | Apagado | v1.1: encabezado y pie azul pantalla con la constelación; contenido en blanco |
+| **Oscuro** | Encendido | v1.0: toda la web en azul pantalla; tarjetas azul superficie con la foto en recuadro claro y precios en amarillo |
+
+- Dado `/admin/configuracion`, entonces hay una sección **Apariencia** con el interruptor **Modo oscuro** (encendido o apagado, como «Mostrar precios»), con una explicación y una muestra pequeña de cada modo.
+- Dado que lo cambio y pulso **Guardar cambios**, entonces la web pública pasa a ese modo en todas sus páginas (Inicio, Categorías, Productos y ficha). El cambio se ve al recargar, a más tardar en un minuto (las páginas se refrescan cada 60 s).
+- Dado que nunca se tocó el interruptor, entonces la web está en **modo claro**.
+- Dados los dos modos, entonces ambos cumplen la guía visual y los contrastes WCAG AA; el encabezado con la constelación, los banners, el panel de portátiles y el pie se ven igual en los dos.
+- Dado el panel `/admin`, entonces **no cambia** con el interruptor: siempre es claro.
+- Se guarda junto con la configuración del catálogo (sin tablas nuevas) y lo puede cambiar solo quien entra al panel.
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |

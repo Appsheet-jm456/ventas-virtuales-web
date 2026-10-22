@@ -1,0 +1,196 @@
+/* Modo oscuro de la web (guía visual v1.0, HU-22). Se activa con el interruptor «Modo oscuro»
+   de /admin/configuracion › Apariencia, que agrega la clase .tp-oscuro junto a .tp en
+   app/(web)/layout.js. Sin esa clase la web queda en modo claro (tema-pantalla.css, guía v1.1).
+   Generado a partir de la versión oscura de HU-21 (commit 8bcd477). */
+
+.tp.tp-oscuro {
+  /* Paleta de la guía */
+  --p-fondo: #060E27;       /* azul pantalla profundo */
+  --p-pantalla: #081A4E;    /* azul pantalla */
+  --p-superficie: #0D1B45;  /* tarjetas y paneles */
+  --p-red: #183FA5;         /* bordes y líneas */
+  --p-destello: #A0D8FF;
+  --p-amarillo: #F5C518;
+  --p-noche: #0B1F4D;       /* texto sobre amarillo */
+  --p-cian: #00A8E0;
+  --p-cian-claro: #4CC3F0;
+  --p-rojo: #D7192F;
+  --p-luna: #A9B8D9;
+  --p-claro: #F3F5F9;       /* recuadro de las fotos */
+
+  /* Variables de globals.css reinterpretadas para el fondo oscuro */
+  --bg: var(--p-fondo);
+  --bg-soft: var(--p-superficie);
+  --surface: var(--p-superficie);
+  --border: #1C3478;
+  --text: #EEF2FB;
+  --muted: var(--p-luna);
+  --blue: var(--p-cian-claro);
+  --blue-ink: #FFFFFF;
+  --price: var(--p-amarillo);
+  --ok: #5EE08F;
+  --ok-bg: rgba(37, 211, 102, .14);
+  --bad: var(--p-rojo);
+  --bad-bg: var(--p-rojo);
+  --sans: var(--f-txt), -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --tit: var(--f-tit), var(--f-txt), "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  min-height: 100vh;
+  background: var(--p-fondo);
+  color: var(--text);
+  font-family: var(--sans);
+}
+html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #060E27; }
+.tp-oscuro :focus-visible { outline-color: var(--p-amarillo); }
+.tp-oscuro ::selection { background: var(--p-amarillo); color: var(--p-noche); }
+
+/* Títulos, precios y botones en Montserrat */
+.tp-oscuro h1, .tp-oscuro h2, .tp-oscuro h3, .tp-oscuro .section-title, .tp-oscuro .card-title, .tp-oscuro .card-price, .tp-oscuro .pd-price,
+.tp-oscuro .cat-name, .tp-oscuro .lp-1, .tp-oscuro .lp-2, .tp-oscuro .lp-desde, .tp-oscuro .btn-more, .tp-oscuro .btn-hero, .tp-oscuro .btn-wa,
+.tp-oscuro .trust-item b, .tp-oscuro .f-title, .tp-oscuro .hd-nav a, .tp-oscuro .wa-float, .tp-oscuro .cat-chip { font-family: var(--tit); }
+
+/* Constelación */
+.tp-oscuro .constelacion { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tp-oscuro .cn-lineas line { stroke: var(--p-red); stroke-width: 1; opacity: .75; }
+.tp-oscuro .cn-punto { fill: var(--p-destello); }
+.tp-oscuro .cn-halo { fill: var(--p-cian-claro); opacity: .18; }
+
+/* ================= Encabezado ================= */
+.tp-oscuro .site-header { background: rgba(6, 14, 39, .94); backdrop-filter: blur(8px); box-shadow: none; border-bottom: 3px solid var(--p-cian); }
+.tp-oscuro .hd-search { background: var(--p-superficie); border-color: var(--p-red); }
+.tp-oscuro .hd-search:focus-within { border-color: var(--p-amarillo); box-shadow: 0 0 0 4px rgba(245, 197, 24, .15); }
+.tp-oscuro .hd-search input { color: #fff; }
+.tp-oscuro .hd-search input::placeholder { color: var(--p-luna); }
+.tp-oscuro .hd-search button { color: var(--p-amarillo); }
+.tp-oscuro .hd-search button:hover { background: rgba(255, 255, 255, .06); }
+.tp-oscuro .hd-info { color: #fff; }
+.tp-oscuro .hd-info small { color: var(--p-luna); }
+.tp-oscuro .hd-ico { background: var(--p-superficie); color: var(--p-amarillo); border: 1px solid var(--p-red); }
+.tp-oscuro .hd-ico.wa { background: #25d366; color: #05391f; border: none; }
+.tp-oscuro .hd-ico circle[fill="#fff"] { fill: var(--p-superficie); }
+.tp-oscuro .hd-nav { background: var(--p-pantalla); border-top: 1px solid rgba(24, 63, 165, .6); }
+.tp-oscuro .hd-nav a { color: #DCE4F5; }
+.tp-oscuro .hd-nav a:hover { color: var(--p-amarillo); background: rgba(255, 255, 255, .05); }
+.tp-oscuro .brand-logo { height: 48px; }
+@media (max-width: 640px) { .tp-oscuro .hd-wa small { color: #fff; } }
+
+/* ================= Portada ================= */
+.tp-oscuro .hc { background: var(--p-pantalla); border: 1px solid var(--p-red); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
+.tp-oscuro .hc-nav { background: rgba(6, 14, 39, .85); color: #fff; border: 1px solid var(--p-red); }
+.tp-oscuro .hc-dots button { background: rgba(160, 216, 255, .45); }
+.tp-oscuro .hc-dots button.on { background: var(--p-amarillo); }
+
+.tp-oscuro .section-title { color: #fff; }
+.tp-oscuro .section-sub { color: var(--p-luna); }
+.tp-oscuro .sec-more { color: var(--p-cian-claro); }
+
+/* Botones principales: amarillos con texto azul noche */
+.tp-oscuro .btn-more { background: var(--p-amarillo); color: var(--p-noche); }
+.tp-oscuro .btn-more:hover { background: #FFD43B; }
+.tp-oscuro .btn-hero { background: var(--p-amarillo); color: var(--p-noche); }
+.tp-oscuro .btn-hero:hover { background: #FFD43B; }
+.tp-oscuro .btn-hero.wa { background: #25d366; color: #05391f; }
+
+/* Flechas de los carruseles */
+.tp-oscuro .cs-nav, .tp-oscuro .rail-nav { background: var(--p-superficie); color: #fff; border-color: var(--p-red); box-shadow: 0 4px 14px rgba(0, 0, 0, .4); }
+.tp-oscuro .cs-nav:hover, .tp-oscuro .rail-nav:hover { border-color: var(--p-amarillo); color: var(--p-amarillo); }
+
+/* ================= Categorías ================= */
+.tp-oscuro .cat-tile { background: var(--p-superficie); border-color: var(--p-red); color: #fff; }
+.tp-oscuro .cat-tile:hover { border-color: var(--p-amarillo); box-shadow: 0 12px 30px rgba(0, 0, 0, .45); }
+.tp-oscuro .cat-img { background: var(--p-claro); }
+.tp-oscuro .cat-count { color: var(--p-luna); }
+
+/* Panel «Portátiles corporativos» con la constelación */
+.tp-oscuro .line-promo { background: var(--p-pantalla); border: 1px solid var(--p-red); isolation: isolate; }
+.tp-oscuro .line-promo::after { content: none; }
+.tp-oscuro .line-promo > span { position: relative; }
+.tp-oscuro .lp-2 { color: var(--p-amarillo); }
+.tp-oscuro .lp-3, .tp-oscuro .lp-nota { color: var(--p-luna); }
+.tp-oscuro .lp-desde { background: var(--p-amarillo); color: var(--p-noche); }
+
+/* ================= Tarjetas de producto ================= */
+.tp-oscuro .card { background: var(--p-superficie); border-color: var(--p-red); }
+.tp-oscuro .card:hover { border-color: var(--p-amarillo); box-shadow: 0 14px 32px rgba(0, 0, 0, .5); }
+/* La foto va en un recuadro claro, como una pantalla encendida */
+.tp-oscuro .card-img { margin: 10px 10px 0; border-radius: 12px; background: var(--p-claro); }
+.tp-oscuro .card-img .noimg { color: #8A97B0; }
+.tp-oscuro .card-cat { color: var(--p-luna); }
+.tp-oscuro .card-title { color: #fff; }
+.tp-oscuro .card-specs { color: var(--p-luna); }
+.tp-oscuro .card-price { color: var(--p-amarillo); }
+.tp-oscuro .card-price.tbd { color: var(--p-luna); }
+.tp-oscuro .card-code { color: #7F8FB5; }
+.tp-oscuro .badge.ok { color: var(--ok); background: var(--ok-bg); }
+.tp-oscuro .badge.bad { color: #fff; background: var(--p-rojo); }
+.tp-oscuro .badge.off { color: var(--p-luna); background: rgba(169, 184, 217, .12); }
+.tp-oscuro .ribbon, .tp-oscuro .pp-ribbon { background: var(--p-rojo); color: #fff; }
+.tp-oscuro .card.sold .card-img img { filter: grayscale(60%) opacity(.7); }
+
+/* ================= Franja de confianza y banda de contacto ================= */
+.tp-oscuro .trust-in { background: var(--p-superficie); border-color: var(--p-red); box-shadow: 0 14px 36px rgba(0, 0, 0, .4); }
+.tp-oscuro .trust-item { border-color: var(--p-red); }
+.tp-oscuro .trust-ico { background: var(--p-pantalla); border: 1px solid var(--p-red); color: var(--p-amarillo); }
+.tp-oscuro .trust-item b { color: #fff; }
+.tp-oscuro .trust-item small { color: var(--p-luna); }
+.tp-oscuro .cta-band { background: var(--p-pantalla); border-color: var(--p-red); }
+.tp-oscuro .cta-in h2 { color: #fff; }
+.tp-oscuro .cta-in p { color: var(--p-luna); }
+
+/* ================= Catálogo ================= */
+.tp-oscuro .filter-search, .tp-oscuro .filter-sel, .tp-oscuro .filter-num, .tp-oscuro .filter-check {
+  background: var(--p-superficie); border-color: var(--p-red); color: #fff;
+}
+.tp-oscuro .filter-search::placeholder, .tp-oscuro .filter-num::placeholder { color: var(--p-luna); }
+.tp-oscuro .filter-search:focus, .tp-oscuro .filter-sel:focus, .tp-oscuro .filter-num:focus { border-color: var(--p-amarillo); }
+.tp-oscuro .filter-sel option { background: var(--p-superficie); color: #fff; }
+.tp-oscuro .filter-check input { accent-color: var(--p-amarillo); }
+.tp-oscuro .filter-count { color: var(--p-luna); }
+.tp-oscuro .filter-clear { border-color: var(--p-red); color: var(--p-luna); }
+.tp-oscuro .filter-clear:hover { color: #fff; border-color: var(--p-luna); }
+.tp-oscuro .cat-chip { background: var(--p-superficie); border-color: var(--p-red); color: #fff; }
+.tp-oscuro .cat-chip:hover { border-color: var(--p-amarillo); }
+.tp-oscuro .cat-chip.active { background: var(--p-amarillo); border-color: var(--p-amarillo); color: var(--p-noche); }
+.tp-oscuro .empty-msg { color: var(--p-luna); }
+.tp-oscuro .demo-note { background: rgba(245, 197, 24, .1); border-color: rgba(245, 197, 24, .4); color: #FBE6A2; }
+.tp-oscuro .crumbs, .tp-oscuro .crumbs a { color: var(--p-luna); }
+.tp-oscuro .crumbs a:hover { color: #fff; }
+
+/* ================= Ficha de producto ================= */
+.tp-oscuro .pd-info h1 { color: #fff; }
+.tp-oscuro .pd-code { color: var(--p-luna); }
+.tp-oscuro .pd-price { color: var(--p-amarillo); }
+.tp-oscuro .pd-price.tbd { color: var(--p-luna); }
+.tp-oscuro .pd-desc { background: var(--p-superficie); border: 1px solid var(--p-red); color: #DCE4F5; }
+.tp-oscuro .specs th, .tp-oscuro .specs td { border-color: var(--p-red); }
+.tp-oscuro .specs th { color: var(--p-luna); }
+.tp-oscuro .specs td { color: #fff; }
+.tp-oscuro .btn-wa.off { background: #26365F; color: var(--p-luna); }
+.tp-oscuro .pd-note { color: var(--p-luna); }
+
+/* Galería: la foto grande y las miniaturas también en recuadro claro */
+.tp-oscuro .pp-main { background: var(--p-claro); border-color: var(--p-red); }
+.tp-oscuro .pp-thumb { background: var(--p-claro); border-color: var(--p-red); }
+.tp-oscuro .pp-thumb.active, .tp-oscuro .pp-thumb:hover { border-color: var(--p-amarillo); }
+.tp-oscuro .pp-empty { background: var(--p-superficie); border-color: var(--p-red); color: var(--p-luna); }
+.tp-oscuro .pp-light { background: rgba(6, 14, 39, .94); }
+
+/* ================= Pie de página ================= */
+.tp-oscuro .site-footer { position: relative; overflow: hidden; isolation: isolate; background: var(--p-pantalla); color: var(--p-luna); border-top: 3px solid var(--p-cian); }
+.tp-oscuro .site-footer .constelacion { z-index: -1; opacity: .3; }
+.tp-oscuro .footer-logo { background: none; padding: 0; }
+.tp-oscuro .footer-logo img { height: 120px; }
+.tp-oscuro .f-title { color: var(--p-amarillo); }
+.tp-oscuro .site-footer a { color: #DCE4F5; }
+.tp-oscuro .site-footer a:hover { color: var(--p-amarillo); }
+.tp-oscuro .f-note { border-color: rgba(24, 63, 165, .7); color: #8FA3D6; }
+
+/* ================= WhatsApp flotante ================= */
+.tp-oscuro .wa-float { box-shadow: 0 6px 22px rgba(0, 0, 0, .5); }
+
+/* Celular: constelación más liviana */
+@media (max-width: 640px) {
+  .tp-oscuro .constelacion .extra { display: none; }
+  .tp-oscuro .footer-logo img { height: 96px; }
+  .tp-oscuro .card-img { margin: 8px 8px 0; }
+}

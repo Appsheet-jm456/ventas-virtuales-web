@@ -16,6 +16,7 @@ const SECCIONES = [
   ["cf-redes", "Redes sociales"],
   ["cf-horario", "Horario"],
   ["cf-catalogo", "Catálogo"],
+  ["cf-apariencia", "Apariencia"],
   ["cf-cuenta", "Cuenta"],
 ];
 
@@ -230,6 +231,23 @@ export default function ConfiguracionPage() {
             valor={catalogo.mostrar_agotados} onChange={setC("mostrar_agotados")} />
           <Interruptor id="cf-precios" titulo="Mostrar precios" texto="Apagado: los productos dicen «Precio: consultar» y el cliente pregunta por WhatsApp."
             valor={catalogo.mostrar_precios} onChange={setC("mostrar_precios")} />
+        </section>
+
+        <section className="pr-card" id="cf-apariencia">
+          <h2 className="pr-h">Apariencia</h2>
+          <p className="pr-sub">Cómo se ve la web pública (guía visual). El panel no cambia.</p>
+          <Interruptor id="cf-oscuro" titulo="Modo oscuro" texto="Encendido: toda la web en el azul de la pantalla del logo. Apagado: modo claro, con el encabezado y el pie azules y el contenido en blanco. Se ve al recargar la web, a más tardar en un minuto."
+            valor={catalogo.modo_oscuro === true} onChange={setC("modo_oscuro")} />
+          <div className="cf-modos" aria-hidden="true">
+            <div className={`cf-modo${catalogo.modo_oscuro ? "" : " activo"}`}>
+              <div className="cf-mini claro"><span className="cf-mini-hd" /><span className="cf-mini-card" /><span className="cf-mini-card" /><span className="cf-mini-ft" /></div>
+              <small>Modo claro{catalogo.modo_oscuro ? "" : " · en uso"}</small>
+            </div>
+            <div className={`cf-modo${catalogo.modo_oscuro ? " activo" : ""}`}>
+              <div className="cf-mini oscuro"><span className="cf-mini-hd" /><span className="cf-mini-card" /><span className="cf-mini-card" /><span className="cf-mini-ft" /></div>
+              <small>Modo oscuro{catalogo.modo_oscuro ? " · en uso" : ""}</small>
+            </div>
+          </div>
         </section>
 
         <div className="cf-savebar">

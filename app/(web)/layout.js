@@ -6,6 +6,7 @@ import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
 import Constelacion from "../components/Constelacion";
 import "./tema-pantalla.css";
+import "./tema-oscuro.css";
 
 // Tipografía de la guía visual (HU-21): Montserrat en títulos, precios y botones; Inter en textos.
 // next/font las descarga al compilar y las sirve la propia web.
@@ -23,12 +24,13 @@ function WaIcon({ size = 24 }) {
 }
 
 // Marco de la web pública: encabezado, pie y botón de WhatsApp. /admin no lo usa.
-// La clase "tp" activa el «modo pantalla» de la guía visual solo aquí (tema-pantalla.css).
+// La clase "tp" activa el «modo pantalla» de la guía visual solo aquí (tema-pantalla.css) y
+// "tp-oscuro" el modo oscuro que el dueño enciende en /admin/configuracion (HU-22).
 export default async function WebLayout({ children }) {
   const site = await getSite();
   const wa = (texto) => waLink(texto, site.whatsapp);
   return (
-    <div className={`tp ${titulos.variable} ${textos.variable}`}>
+    <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
         <header className="site-header">
           {/* Zona del logo, buscador, WhatsApp y envíos: la pantalla con su constelación (HU-21). */}
           <div className="hd-zona">

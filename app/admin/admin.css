@@ -349,3 +349,18 @@
 .pr-paginas span { color: var(--muted); padding: 0 2px; }
 @media (max-width: 900px) { .pr-paginas { margin-left: 0; } }
 .pr-tabla { scroll-margin-top: 12px; }
+
+/* Apariencia: muestras de modo claro y oscuro (HU-22) */
+.cf-modos { display: flex; gap: 14px; flex-wrap: wrap; }
+.cf-modo { display: flex; flex-direction: column; gap: 6px; align-items: center; padding: 8px; border: 2px solid transparent; border-radius: 12px; }
+.cf-modo.activo { border-color: #F5C518; }
+.cf-modo small { color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.cf-mini { width: 150px; height: 96px; border-radius: 8px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 18px 1fr 14px; gap: 6px; border: 1px solid var(--border); }
+.cf-mini-hd, .cf-mini-ft { grid-column: 1 / -1; background: #081A4E; border-bottom: 2px solid #00A8E0; }
+.cf-mini-ft { border-bottom: 0; border-top: 2px solid #00A8E0; }
+.cf-mini-card { margin: 0 6px; border-radius: 4px; }
+.cf-mini-card + .cf-mini-card { margin-left: 0; }
+.cf-mini.claro { background: #fff; }
+.cf-mini.claro .cf-mini-card { background: #fff; border: 1px solid #DFE5EE; box-shadow: inset 0 -10px 0 #F3F5F9; }
+.cf-mini.oscuro { background: #060E27; }
+.cf-mini.oscuro .cf-mini-card { background: #0D1B45; border: 1px solid #183FA5; box-shadow: inset 0 -10px 0 #F5C518; }
