@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Guía visual · Ventas Virtual Colombia</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #14171C; font-size: 10.5pt; line-height: 1.5; margin: 0; }
+  h1 { font-size: 24pt; margin: 0; color: #FFFFFF; letter-spacing: -.01em; }
+  h2 { font-size: 14pt; color: #0B1F4D; margin: 22px 0 8px; padding-bottom: 4px; border-bottom: 2px solid #F5C518; break-after: avoid; }
+  p { margin: 0 0 8px; }
+  .portada { background: #081A4E; border-radius: 12px; padding: 26px 26px 22px; position: relative; overflow: hidden; }
+  .portada svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .portada .txt { position: relative; }
+  .portada .kicker { color: #4CC3F0; font-size: 9pt; letter-spacing: .12em; text-transform: uppercase; }
+  .portada .sub { color: #A9B8D9; margin-top: 6px; }
+  .portada .estado { display: inline-block; margin-top: 12px; background: #F5C518; color: #0B1F4D; font-weight: 700; font-size: 9pt; padding: 4px 10px; border-radius: 6px; }
+  .cables { height: 5px; display: flex; margin: 0 0 6px; }
+  .cables span { flex: 1; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .sw { border: 1px solid #DFE5EE; border-radius: 9px; overflow: hidden; break-inside: avoid; }
+  .sw .c { height: 54px; display: flex; align-items: flex-end; padding: 6px 8px; font: 700 9pt ui-monospace, Menlo, Consolas, monospace; }
+  .sw .m { padding: 6px 8px; font-size: 8.5pt; color: #5C6B80; line-height: 1.35; }
+  .sw .m b { display: block; color: #0B1F4D; font-size: 9.5pt; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin: 4px 0 6px; break-inside: avoid; }
+  th { text-align: left; background: #0B1F4D; color: #fff; font-weight: 600; padding: 6px 8px; }
+  td { padding: 6px 8px; border-bottom: 1px solid #DFE5EE; vertical-align: top; }
+  .ok { color: #148A3C; font-weight: 700; } .no { color: #C62828; font-weight: 700; }
+  .muestra { display: inline-block; padding: 1px 8px; border-radius: 4px; font-weight: 700; }
+  .barra { display: flex; height: 22px; border-radius: 6px; overflow: hidden; margin: 6px 0 4px; font-size: 8.5pt; font-weight: 700; }
+  .barra div { display: flex; align-items: center; justify-content: center; }
+  ul { margin: 4px 0 8px; padding-left: 18px; } li { margin-bottom: 3px; }
+  .maq { background: #060E27; border-radius: 10px; overflow: hidden; break-inside: avoid; margin-top: 6px; }
+  .maq .nav { display: flex; gap: 14px; align-items: center; padding: 9px 14px; font-size: 9pt; color: #A9B8D9; border-bottom: 1px solid #183FA5; }
+  .maq .nav b { color: #fff; font-size: 10.5pt; }
+  .maq .hero { position: relative; background: #081A4E; padding: 18px 16px; overflow: hidden; }
+  .maq .hero svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .maq .hero .t { position: relative; color: #fff; font-size: 15pt; font-weight: 700; max-width: 300px; line-height: 1.2; }
+  .btn-y { display: inline-block; background: #F5C518; color: #0B1F4D; padding: 6px 12px; border-radius: 7px; font-weight: 700; font-size: 9pt; }
+  .btn-wa { display: inline-block; background: #25D366; color: #05391F; padding: 5px 10px; border-radius: 7px; font-weight: 700; font-size: 8.5pt; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 9px; padding: 12px; }
+  .card { background: #0D1B45; border: 1px solid #183FA5; border-radius: 9px; padding: 8px; }
+  .card .foto { background: #F3F5F9; border-radius: 7px; height: 52px; display: flex; align-items: center; justify-content: center; color: #5C6B80; font-size: 8pt; position: relative; }
+  .card .cat { color: #A9B8D9; font-size: 7.5pt; margin-top: 6px; }
+  .card .nom { color: #fff; font-weight: 700; font-size: 9.5pt; }
+  .card .pre { color: #F5C518; font-weight: 700; font-size: 11pt; margin: 2px 0 6px; }
+  .tag { position: absolute; top: 5px; left: 5px; background: #D7192F; color: #fff; font-size: 7.5pt; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
+  .pie { margin-top: 18px; color: #5C6B80; font-size: 8.5pt; border-top: 1px solid #DFE5EE; padding-top: 6px; }
+  .salto { break-before: page; }
+</style>
+</head>
+<body>
+
+<div class="cables"><span style="background:#F5C518"></span><span style="background:#00A8E0"></span><span style="background:#D7192F"></span></div>
+<div class="portada">
+  <svg viewBox="0 0 640 170" preserveAspectRatio="none" aria-hidden="true">
+    <g stroke="#183FA5" stroke-width="0.8"><line x1="380" y1="30" x2="450" y2="80"/><line x1="450" y1="80" x2="540" y2="40"/><line x1="540" y1="40" x2="610" y2="110"/><line x1="450" y1="80" x2="500" y2="150"/><line x1="540" y1="40" x2="500" y2="150"/><line x1="610" y1="110" x2="560" y2="160"/></g>
+    <g fill="#A0D8FF"><circle cx="380" cy="30" r="2.5"/><circle cx="450" cy="80" r="3.5"/><circle cx="540" cy="40" r="2.5"/><circle cx="610" cy="110" r="3.5"/><circle cx="500" cy="150" r="2"/><circle cx="560" cy="160" r="2"/></g>
+    <g fill="#4CC3F0" opacity="0.35"><circle cx="450" cy="80" r="9"/><circle cx="610" cy="110" r="10"/></g>
+  </svg>
+  <div class="txt">
+    <div class="kicker">Ventas Virtual Colombia · Tienda web landing</div>
+    <h1>Guía visual</h1>
+    <div class="sub">Paleta de colores, tipografía y reglas de uso, sacadas del logo y de la tienda.</div>
+    <span class="estado">Propuesta v0.1 · 22 oct 2026 · por aprobar</span>
+  </div>
+</div>
+
+<h2>1. La idea: «modo pantalla»</h2>
+<p>El logo es un <b>monitor amarillo</b> cuya pantalla muestra una <b>red de luces azules</b> sobre azul noche, abrazado por <b>dos cables, uno cian y uno rojo</b>. La web pública toma esa pantalla como fondo: <b>oscura, azul noche, con la constelación de luces</b>, y usa el amarillo del marco para lo que se debe tocar. Así la página «es» la pantalla del logo y se distingue de las tiendas blancas.</p>
+<p>Se descartó el <b>negro puro</b>: se ve frío y genérico, y no es un color del logo. El azul noche de la pantalla da la misma sensación oscura, pero es de la marca. Los colores se midieron sobre las imágenes, no a ojo.</p>
+
+<h2>2. Colores de marca</h2>
+<div class="grid">
+  <div class="sw"><div class="c" style="background:#060E27;color:#fff">#060E27</div><div class="m"><b>Azul pantalla profundo</b>Fondo general de la web</div></div>
+  <div class="sw"><div class="c" style="background:#081A4E;color:#fff">#081A4E</div><div class="m"><b>Azul pantalla</b>Portada, banners y franjas</div></div>
+  <div class="sw"><div class="c" style="background:#0D1B45;color:#fff">#0D1B45</div><div class="m"><b>Azul superficie</b>Tarjetas y paneles</div></div>
+  <div class="sw"><div class="c" style="background:#183FA5;color:#fff">#183FA5</div><div class="m"><b>Azul red</b>Bordes y líneas de la red</div></div>
+  <div class="sw"><div class="c" style="background:#F5C518;color:#0B1F4D">#F5C518</div><div class="m"><b>Amarillo marco</b>Botón principal y precios</div></div>
+  <div class="sw"><div class="c" style="background:#00A8E0;color:#0B1F4D">#00A8E0</div><div class="m"><b>Cian cable</b>Línea de acento e iconos</div></div>
+  <div class="sw"><div class="c" style="background:#4CC3F0;color:#0B1F4D">#4CC3F0</div><div class="m"><b>Cian claro</b>Enlaces sobre fondo oscuro</div></div>
+  <div class="sw"><div class="c" style="background:#D7192F;color:#fff">#D7192F</div><div class="m"><b>Rojo cable</b>Solo descuentos y agotado</div></div>
+  <div class="sw"><div class="c" style="background:#A0D8FF;color:#0B1F4D">#A0D8FF</div><div class="m"><b>Destello</b>Puntos de la constelación</div></div>
+  <div class="sw"><div class="c" style="background:#FFFFFF;color:#14171C;border-bottom:1px solid #DFE5EE">#FFFFFF</div><div class="m"><b>Blanco</b>Títulos y textos</div></div>
+  <div class="sw"><div class="c" style="background:#A9B8D9;color:#0B1F4D">#A9B8D9</div><div class="m"><b>Gris luna</b>Textos secundarios</div></div>
+  <div class="sw"><div class="c" style="background:#25D366;color:#05391F">#25D366</div><div class="m"><b>Verde WhatsApp</b>Solo botones de WhatsApp</div></div>
+</div>
+<p style="margin-top:10px"><b>Proporción de uso</b></p>
+<div class="barra">
+  <div style="flex:60;background:#081A4E;color:#fff">60 % azules de pantalla (fondos)</div>
+  <div style="flex:30;background:#F3F5F9;color:#0B1F4D">30 % blanco y gris luna (textos)</div>
+  <div style="flex:10;background:#F5C518;color:#0B1F4D">10 %</div>
+</div>
+<p style="font-size:9pt;color:#5C6B80">El 10 % es amarillo (acción). Cian y rojo, solo en puntos concretos.</p>
+
+<h2>3. Reglas de contraste (WCAG, mínimo 4,5 para texto)</h2>
+<table>
+  <tr><th>Combinación</th><th>Muestra</th><th>Contraste</th><th>¿Se usa?</th></tr>
+  <tr><td>Blanco sobre azul pantalla profundo</td><td><span class="muestra" style="background:#060E27;color:#fff">Texto</span></td><td>19,1</td><td class="ok">Sí: textos</td></tr>
+  <tr><td>Gris luna sobre azul superficie</td><td><span class="muestra" style="background:#0D1B45;color:#A9B8D9">Texto</span></td><td>8,4</td><td class="ok">Sí: secundarios</td></tr>
+  <tr><td>Amarillo sobre azul pantalla profundo</td><td><span class="muestra" style="background:#060E27;color:#F5C518">$1.150.000</span></td><td>11,7</td><td class="ok">Sí: precios</td></tr>
+  <tr><td>Azul noche sobre amarillo</td><td><span class="muestra" style="background:#F5C518;color:#0B1F4D">Ver portátiles</span></td><td>9,8</td><td class="ok">Sí: botón principal</td></tr>
+  <tr><td>Cian claro sobre azul pantalla profundo</td><td><span class="muestra" style="background:#060E27;color:#4CC3F0">Enlace</span></td><td>9,4</td><td class="ok">Sí: enlaces</td></tr>
+  <tr><td>Blanco sobre rojo cable</td><td><span class="muestra" style="background:#D7192F;color:#fff">-15%</span></td><td>5,2</td><td class="ok">Sí: descuento</td></tr>
+  <tr><td>Rojo como letra sobre azul superficie</td><td><span class="muestra" style="background:#0D1B45;color:#D7192F">Texto</span></td><td>3,2</td><td class="no">No: el rojo va de fondo</td></tr>
+  <tr><td>Amarillo como letra sobre blanco</td><td><span class="muestra" style="background:#fff;color:#F5C518;border:1px solid #DFE5EE">Texto</span></td><td>1,6</td><td class="no">No</td></tr>
+</table>
+
+<h2>4. Así se ve aplicada</h2>
+<div class="maq">
+  <div class="nav"><b>Ventas Virtual</b><span>Inicio</span><span>Categorías</span><span>Productos</span><span style="margin-left:auto" class="btn-wa">WhatsApp</span></div>
+  <div class="hero">
+    <svg viewBox="0 0 640 130" preserveAspectRatio="none" aria-hidden="true">
+      <g stroke="#183FA5" stroke-width="0.8"><line x1="330" y1="25" x2="410" y2="70"/><line x1="410" y1="70" x2="510" y2="30"/><line x1="510" y1="30" x2="600" y2="95"/><line x1="410" y1="70" x2="470" y2="120"/></g>
+      <g fill="#A0D8FF"><circle cx="330" cy="25" r="2.5"/><circle cx="410" cy="70" r="3.5"/><circle cx="510" cy="30" r="2.5"/><circle cx="600" cy="95" r="3.5"/><circle cx="470" cy="120" r="2"/></g>
+    </svg>
+    <div class="t">Portátiles corporativos desde <span style="color:#F5C518">$1.000.000</span></div>
+    <div style="position:relative;margin-top:10px"><span class="btn-y">Ver portátiles</span></div>
+  </div>
+  <div style="height:3px;background:#00A8E0"></div>
+  <div class="cards">
+    <div class="card"><div class="foto">foto del equipo<span class="tag">-15%</span></div><div class="cat">PORTÁTIL USADO · GRADO A</div><div class="nom">Lenovo ThinkPad T480</div><div class="pre">$1.150.000</div><span class="btn-wa">Estoy interesado</span></div>
+    <div class="card"><div class="foto">foto del equipo</div><div class="cat">PORTÁTIL USADO · GRADO B</div><div class="nom">HP EliteBook 840 G5</div><div class="pre">$1.000.000</div><span style="color:#4CC3F0;font-size:8.5pt;text-decoration:underline">Ver ficha técnica</span></div>
+    <div class="card"><div class="foto">foto del equipo</div><div class="cat">TORRE TINY · GRADO A</div><div class="nom">Lenovo M720q</div><div class="pre">$890.000</div><span class="btn-wa">Estoy interesado</span></div>
+  </div>
+</div>
+
+<h2>5. Fotos de producto</h2>
+<p>Las fotos de los equipos tienen <b>fondo blanco</b>. Sobre fondo oscuro quedarían como recortes sueltos, así que la foto va dentro de un <b>recuadro claro</b> (<code>#F3F5F9</code>, esquinas redondeadas) arriba de la tarjeta oscura, como una pantalla encendida.</p>
+
+<h2>6. La constelación</h2>
+<ul>
+  <li>Fondo de la portada, los banners y el pie de página: puntos <b>#A0D8FF</b> unidos por líneas <b>#183FA5</b>, algunos con halo suave <b>#4CC3F0</b>.</li>
+  <li>Se dibuja con SVG ligero, no con una foto pesada. Es <b>decorativa</b>: no lleva texto encima sin un fondo que asegure el contraste.</li>
+  <li>En celular se reducen los puntos para no cargar la pantalla.</li>
+</ul>
+
+<h2>7. Logo</h2>
+<ul>
+  <li>La web oscura necesita una <b>versión para fondo oscuro</b>: «Ventas Virtual · COLOMBIA» en <b>blanco</b> y el monitor igual. El archivo actual es un JPG con fondo blanco.</li>
+  <li>Pendiente del dueño: el archivo original (PNG transparente o SVG). Si no existe, se prepara en Canva quitando el fondo y pasando el texto a blanco.</li>
+  <li>Versiones: <b>horizontal</b> (encabezado), <b>vertical</b> (pie de página y redes) y <b>solo el monitor</b> (ícono de la pestaña).</li>
+</ul>
+
+<h2>8. Tipografía (propuesta)</h2>
+<table>
+  <tr><th>Uso</th><th>Letra</th><th>Por qué</th></tr>
+  <tr><td>Títulos, precios y botones</td><td><b>Montserrat</b> (600–700)</td><td>Geométrica y gruesa, como el logotipo</td></tr>
+  <tr><td>Textos y especificaciones</td><td><b>Inter</b> (400–500)</td><td>Muy legible en pantalla y en celular</td></tr>
+  <tr><td>Códigos de producto</td><td>Monoespaciada del sistema</td><td>Ya se usa en la web</td></tr>
+</table>
+<p style="font-size:9pt;color:#5C6B80">Las dos son gratuitas (Google Fonts) y están en Canva.</p>
+
+<h2>9. Dónde aplica</h2>
+<ul>
+  <li><b>Web pública</b> (Inicio, Categorías, Productos y ficha de producto): modo pantalla.</li>
+  <li><b>Banners</b> de la portada (Canva, 1600×500 y 800×800): fondo azul pantalla con la constelación y el amarillo para la cifra o la llamada a la acción.</li>
+  <li><b>Panel /admin</b>: se queda <b>claro</b>, porque es una herramienta de trabajo con tablas. Solo toma el azul y el amarillo en el menú y los botones.</li>
+  <li><b>Redes y catálogo PDF</b>: misma paleta. Las campañas de temporada pueden cambiar colores, pero conservan el logo y el amarillo.</li>
+</ul>
+
+<h2>10. Próximos pasos</h2>
+<ul>
+  <li>Visto bueno del dueño a esta guía (pasa a v1.0).</li>
+  <li>Logo para fondo oscuro (sección 7).</li>
+  <li>Aplicarla a la web pública como historia de usuario propia.</li>
+  <li>Banners en Canva con esta paleta.</li>
+</ul>
+
+<div class="pie">Ventas Virtual Colombia · Guía visual v0.1 · Fuente en el repositorio: docs/diseno/guia-visual.md</div>
+</body>
+</html>
