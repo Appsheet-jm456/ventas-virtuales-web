@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Páginas de políticas editables (HU-26)
+
+Nuevo módulo **Políticas** en el panel para crear, editar, ordenar, ocultar y quitar páginas como Garantía, Devolución, Envíos, Términos y condiciones y Privacidad, cada una con sus secciones. En la web se ven en `/politicas/<nombre>` con un índice numerado a la izquierda, un buscador dentro de la página y las secciones en acordeón «+» o en texto corrido (se elige por página); en el celular el índice es un desplegable «Contenido». Las páginas visibles aparecen en una columna **Soporte** del pie. Se cargaron cinco **borradores ocultos** para revisar con un asesor antes de publicarlos. Tabla nueva `paginas` (decisión 0011). Sin cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Filtro dinámico en Productos (HU-28)
 
 El catálogo tiene un panel de filtros a la izquierda: Tipo (categoría), Marca, Modelo, Procesador, Precio mínimo y máximo, Táctil y Solo disponibles. Las opciones salen de los productos publicados y muestran cuántos hay; al elegir una, las demás solo ofrecen lo que todavía tiene resultados. Nada cambia hasta pulsar **Aplicar**, que anticipa cuántos equipos coinciden; los filtros quedan en la dirección para compartirlos. En el celular se abren con el botón «Filtros». Si nada coincide, ofrece limpiar o escribir por WhatsApp. Nuevo dato del producto **Pantalla táctil** (casilla en el panel y columna en el CSV; migración del 26 oct). El Tipo del panel reemplaza los botones de categoría del listado. Sin cambio de versión del brief.

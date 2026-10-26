@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 21 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · panel de productos mejorado (HU-17 a HU-20: fotos en Cloudinary, edición en página completa, columna Código, filtros y paginación) en la rama `claude/determined-ramanujan-i61gup`. Próxima sesión: mejoras de la web pública (HU-23 en adelante)
+> **Última sesión:** 26 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · mejoras de la web pública HU-24 a HU-29 construidas y probadas en la rama `claude/determined-ramanujan-i61gup` (commits locales, **push solo cuando el dueño lo indique**). HU-28 y HU-29 aprobadas; HU-24, HU-25, HU-27 y HU-26 esperan su revisión. Los 5 borradores de políticas están **ocultos** en `/admin/politicas` hasta que el dueño o su asesor los revisen.
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -45,6 +45,7 @@ Después del despliegue:
 - **HU-18 Editar producto en pantalla completa**: hecha y aprobada por el dueño el 21 oct.
 - **HU-19 Columna Código y filtros del listado**: hecha y aprobada por el dueño el 21 oct.
 - **HU-20 Tamaño de la tabla y paginación**: hecha y aprobada por el dueño el 21 oct.
+- **Hecho el 26 oct (sin push):** HU-24 cinta en movimiento · HU-25 desplegable de categorías · HU-26 políticas editables (tabla `paginas`, decisión 0011) · HU-27 ficha técnica · HU-28 filtro dinámico (campo `tactil`) · HU-29 descripción ampliada. Migraciones aplicadas en Supabase con OK del dueño. Siguiente: revisión del dueño, push, «Preguntas frecuentes» (HU nueva) y «Pegar ficha» en el formulario (ajuste de HU-27).
 - **HU-23 Mejoras de la web pública** (lista del dueño, 22 oct; se documentan una a una como HU-23, HU-24… antes del código):
   1. **Filtro dinámico para el cliente** en Productos.
   2. **Mejorar la búsqueda de productos.**

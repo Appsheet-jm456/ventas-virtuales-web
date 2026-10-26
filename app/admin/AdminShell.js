@@ -18,6 +18,7 @@ const ICONOS = {
   image: <><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="1.8" /><path d="M21 16l-5-5-8 8" /></>,
   tag: <><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z" /><circle cx="7.5" cy="7.5" r="1.3" /></>,
   gear: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" /></>,
+  doc: <><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></>,
   menu: <path d="M4 6h16M4 12h16M4 18h16" />,
   ext: <><path d="M14 4h6v6M20 4l-9 9" /><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></>,
   out: <><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5M21 12H9" /></>,
@@ -29,12 +30,13 @@ function Ico({ n }) {
   );
 }
 
-// Los cinco módulos del panel. `ruta` es la dirección; Bandeja es la portada del panel.
+// Los módulos del panel. `ruta` es la dirección; Bandeja es la portada del panel.
 export const MODULOS = [
   { ruta: "/admin", nombre: "Bandeja de entrada", icono: "inbox" },
   { ruta: "/admin/productos", nombre: "Productos", icono: "box" },
   { ruta: "/admin/banners", nombre: "Banners e imágenes", icono: "image" },
   { ruta: "/admin/categorias", nombre: "Categorías", icono: "tag" },
+  { ruta: "/admin/politicas", nombre: "Políticas", icono: "doc" },
   { ruta: "/admin/configuracion", nombre: "Configuración", icono: "gear" },
 ];
 
@@ -50,6 +52,8 @@ function moduloActivo(pathname) {
 function tituloDe(pathname, modulo) {
   if (pathname === "/admin/productos/nuevo") return "Nuevo producto";
   if (/^\/admin\/productos\/[^/]+$/.test(pathname)) return "Editar producto";
+  if (pathname === "/admin/politicas/nueva") return "Nueva página";
+  if (/^\/admin\/politicas\/[^/]+$/.test(pathname)) return "Editar página";
   return modulo.nombre;
 }
 

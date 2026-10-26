@@ -340,6 +340,8 @@
 .tp .footer-logo { background: none; padding: 0; }
 .tp .footer-logo img { height: 120px; }
 .tp .f-title { color: var(--p-amarillo); }
+/* Con la columna Soporte (HU-26) el pie tiene cinco columnas en pantallas anchas. */
+@media (min-width: 1081px) { .tp .footer-grid:has(> nav) { grid-template-columns: 1.3fr 1.2fr 1fr 1fr .8fr; } }
 .tp .site-footer a { color: #DCE4F5; }
 .tp .site-footer a:hover { color: var(--p-amarillo); }
 .tp .f-note { border-color: rgba(24, 63, 165, .7); color: #8FA3D6; }

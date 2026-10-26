@@ -417,3 +417,24 @@
 .da-titulo { margin: 6px 0 0; font-size: 18px; }
 .da-cuerpo p, .da-cuerpo ul { margin: 0 0 10px; line-height: 1.6; }
 .da-cuerpo h3 { font-size: 15px; margin: 12px 0 6px; }
+
+/* Políticas (HU-26) */
+.pg-cabeza { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+.pg-slug { display: flex; align-items: center; gap: 6px; }
+.pg-slug .mono { font-family: var(--mono); color: var(--muted); font-size: 13px; white-space: nowrap; }
+.pg-secs-head { display: flex; justify-content: space-between; align-items: baseline; }
+.pg-secs { list-style: none; margin: 10px 0 12px; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.pg-sec { border: 1px solid var(--border); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.pg-sec-head { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.pg-num { font-weight: 800; color: #B4530C; font-size: 13px; text-align: center; }
+.pg-texto { min-height: 120px; line-height: 1.5; }
+.pg-cuenta { align-self: flex-end; font-variant-numeric: tabular-nums; }
+.pg-estilo { border: 0; padding: 0; margin: 0 0 12px; display: flex; flex-direction: column; gap: 8px; }
+.pg-estilo label { display: grid; grid-template-columns: 20px 1fr; column-gap: 8px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; }
+.pg-estilo label.on { border-color: var(--blue); background: #F2F7FF; }
+.pg-estilo input { grid-row: span 2; margin-top: 3px; }
+.pg-estilo small { color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+.pg-previa-btn { width: 100%; margin-top: 8px; }
+.pg-previa { margin-top: 16px; }
+.pg-previa .pv-indice { position: static; max-height: none; }
+@media (max-width: 640px) { .pg-sec-head { grid-template-columns: 1fr auto; } .pg-num { display: none; } }

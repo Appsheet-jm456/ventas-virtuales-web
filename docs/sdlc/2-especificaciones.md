@@ -507,7 +507,7 @@ Tabla nueva `paginas` (única tabla nueva de esta mejora, con RLS: lectura públ
 | 6 | Módulo `/admin/politicas`: lista, crear, editar secciones, ocultar, ordenar, quitar, vista previa | `app/admin/politicas/`, `AdminShell.js` |
 | 7 | Prueba en navegador (Playwright) con datos `QA-*`: crear, editar, ocultar, quitar, buscar, celular, teclado, claro/oscuro; borrar al final | `docs/sdlc/4-pruebas.md` |
 
-**Preguntas abiertas:** ¿los borradores iniciales los redacto yo como base para que los revise un asesor, o el dueño trae el texto? ¿La página «Preguntas frecuentes» (también en la imagen) entra aquí o es otra HU?
+**Decisiones (26 oct):** Claude redacta los cinco **borradores base** (marcados «por revisar», con los datos a confirmar entre corchetes) y se cargan **ocultos**: el dueño o su asesor los revisa y los publica desde el panel. «Preguntas frecuentes» queda para una **HU aparte** (puede reutilizar la tabla `paginas`). Una página de **una sola sección** se muestra sin buscador y con el texto abierto; no se puede **publicar** una página sin secciones.
 
 ---
 

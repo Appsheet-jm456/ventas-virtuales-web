@@ -4,6 +4,7 @@ import { Inter, Montserrat } from "next/font/google";
 import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
 import { getCategoriasMenu } from "../../lib/categorias";
+import { getPaginasSoporte } from "../../lib/paginas";
 import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
 import Constelacion from "../components/Constelacion";
@@ -31,7 +32,7 @@ function WaIcon({ size = 24 }) {
 // La clase "tp" activa el «modo pantalla» de la guía visual solo aquí (tema-pantalla.css) y
 // "tp-oscuro" el modo oscuro que el dueño enciende en /admin/configuracion (HU-22).
 export default async function WebLayout({ children }) {
-  const [site, categoriasMenu] = await Promise.all([getSite(), getCategoriasMenu()]);
+  const [site, categoriasMenu, soporte] = await Promise.all([getSite(), getCategoriasMenu(), getPaginasSoporte()]);
   const wa = (texto) => waLink(texto, site.whatsapp);
   return (
     <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
@@ -107,6 +108,13 @@ export default async function WebLayout({ children }) {
               <p>Asesoría y cierre de venta por WhatsApp.</p>
               <p>🚚 Envíos a todo el país.</p>
             </div>
+            {/* Políticas visibles de /admin/politicas (HU-26); sin ninguna, la columna no aparece. */}
+            {soporte.length > 0 && (
+              <nav aria-label="Soporte">
+                <div className="f-title">Soporte</div>
+                {soporte.map((p) => <p key={p.slug}><Link href={`/politicas/${p.slug}`}>{p.titulo}</Link></p>)}
+              </nav>
+            )}
             <div>
               <div className="f-title">Síguenos</div>
               {site.instagram && <p><a href={site.instagram} target="_blank" rel="noopener noreferrer">📸 Instagram</a></p>}
