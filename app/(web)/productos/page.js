@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { getPublicInventory } from "../../../lib/inventory";
 import { getSite } from "../../../lib/configuracion";
+import { getCategoriasMenu } from "../../../lib/categorias";
 import Catalog from "../../components/Catalog";
 
 export const revalidate = 60;
@@ -17,6 +18,7 @@ export async function generateMetadata() {
 export default async function ProductosPage() {
   let rows = [];
   let demo = false;
+  const categorias = await getCategoriasMenu();
   try {
     const inv = await getPublicInventory();
     rows = inv.rows;
@@ -29,7 +31,7 @@ export default async function ProductosPage() {
       <div className="wrap crumbs crumbs-top"><Link href="/">Inicio</Link> / Productos</div>
       {/* Catalog lee ?q= y ?categoria= de la URL: necesita Suspense para que la página siga siendo estática. */}
       <Suspense fallback={<div className="wrap empty-msg">Cargando productos…</div>}>
-        <Catalog rows={rows} demo={demo} />
+        <Catalog rows={rows} demo={demo} categoriasAdmin={categorias} />
       </Suspense>
     </main>
   );

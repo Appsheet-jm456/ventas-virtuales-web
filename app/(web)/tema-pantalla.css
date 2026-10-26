@@ -93,6 +93,41 @@
 .tp .hd-nav { background: var(--p-fondo); border-top: 1px solid rgba(24, 63, 165, .7); }
 .tp .hd-nav a { color: #DCE4F5; }
 .tp .hd-nav a:hover { color: var(--p-amarillo); background: rgba(255, 255, 255, .05); }
+
+/* Desplegable de categorías en «Productos» (HU-25). En computador cuelga bajo «Productos»; en
+   celular el menú se desliza de lado, así que la lista se abre a todo el ancho bajo el menú. */
+.tp .hd-nav { position: relative; }
+.tp .hd-drop { display: flex; align-items: stretch; }
+.tp .hd-drop .hd-drop-txt { padding-right: 4px; }
+.tp .hd-drop-btn {
+  display: inline-flex; align-items: center; padding: 0 10px 0 4px; border: 0; background: none;
+  color: #DCE4F5; cursor: pointer; min-height: 40px; -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 640px) { .tp .hd-drop-btn { min-width: 44px; min-height: 44px; justify-content: center; padding: 0 8px; } }
+.tp .hd-drop-btn svg { transition: transform .15s; }
+.tp .hd-drop.abierto .hd-drop-btn svg { transform: rotate(180deg); }
+.tp .hd-drop-btn:hover, .tp .hd-drop.abierto .hd-drop-btn, .tp .hd-drop.abierto .hd-drop-txt { color: var(--p-amarillo); }
+.tp .hd-drop.en-productos .hd-drop-txt { color: var(--p-amarillo); }
+.tp .hd-drop-list {
+  position: absolute; z-index: 60; top: 100%; left: 0; right: 0; margin: 0; padding: 8px;
+  list-style: none; background: var(--p-superficie); border: 1px solid var(--p-red); border-top: 2px solid var(--p-cian);
+  border-radius: 0 0 12px 12px; box-shadow: 0 14px 30px rgba(6, 14, 39, .45);
+}
+.tp .hd-drop-list[hidden] { display: none; }
+.tp .hd-drop-list a {
+  display: block; padding: 12px 14px; min-height: 46px; border-radius: 8px; color: #DCE4F5; font-size: 15px; white-space: normal;
+}
+.tp .hd-nav .hd-drop-list a:first-child { padding-left: 14px; }
+.tp .hd-drop-list a:hover, .tp .hd-drop-list a:focus-visible { background: rgba(255, 255, 255, .07); color: var(--p-amarillo); }
+.tp .hd-drop-list a.activa { color: var(--p-amarillo); background: rgba(245, 197, 24, .10); }
+.tp .hd-drop-list a.activa::before { content: "✓ "; }
+.tp .hd-drop-list li:first-child a { font-weight: 700; }
+@media (min-width: 641px) {
+  .tp .hd-nav-in { overflow: visible; }
+  .tp .hd-drop { position: relative; }
+  .tp .hd-drop-list { right: auto; min-width: 250px; top: calc(100% + 0px); }
+  .tp .hd-drop-list a { font-size: 14px; padding: 10px 12px; min-height: 0; }
+}
 .tp .brand-logo { height: 48px; }
 @media (max-width: 640px) { .tp .hd-wa small { color: #fff; } }
 

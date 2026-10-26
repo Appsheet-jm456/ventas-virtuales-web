@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Categorías en el menú «Productos» (HU-25)
+
+Al pasar el puntero sobre «Productos» en el menú (o tocar su flecha en el celular) se despliegan «Todos los productos» y las categorías que el dueño maneja en `/admin/categorias`; al elegir una, el catálogo muestra solo esos equipos, con el nombre de la categoría como título y una dirección que se puede compartir por WhatsApp. Los botones de categoría del listado usan ahora esas mismas categorías. Se maneja también con el teclado. Sin cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Cinta en movimiento (HU-24)
 
 Encima del encabezado hay una franja delgada con un mensaje amarillo que se desplaza de derecha a izquierda («Ventas Virtual Colombia · Equipos portátiles corporativos» por defecto). Se detiene al pasar el puntero y queda quieta para quien pidió reducir el movimiento en su equipo. El dueño cambia el mensaje o la apaga en `/admin/configuracion › Cinta`, con vista previa. Sin cambio de versión del brief.

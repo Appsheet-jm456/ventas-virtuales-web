@@ -1,11 +1,14 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Inter, Montserrat } from "next/font/google";
 import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
+import { getCategoriasMenu } from "../../lib/categorias";
 import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
 import Constelacion from "../components/Constelacion";
 import Cinta from "../components/Cinta";
+import MenuProductos from "../components/MenuProductos";
 import "./tema-pantalla.css";
 import "./tema-oscuro.css";
 
@@ -28,7 +31,7 @@ function WaIcon({ size = 24 }) {
 // La clase "tp" activa el «modo pantalla» de la guía visual solo aquí (tema-pantalla.css) y
 // "tp-oscuro" el modo oscuro que el dueño enciende en /admin/configuracion (HU-22).
 export default async function WebLayout({ children }) {
-  const site = await getSite();
+  const [site, categoriasMenu] = await Promise.all([getSite(), getCategoriasMenu()]);
   const wa = (texto) => waLink(texto, site.whatsapp);
   return (
     <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
@@ -70,7 +73,10 @@ export default async function WebLayout({ children }) {
             <div className="wrap hd-nav-in">
               <Link href="/">Inicio</Link>
               <Link href="/categorias">Categorías</Link>
-              <Link href="/productos">Productos</Link>
+              {/* Lee la dirección (categoría activa): Suspense para no frenar el resto de la página. */}
+              <Suspense fallback={<Link href="/productos">Productos</Link>}>
+                <MenuProductos categorias={categoriasMenu} />
+              </Suspense>
               <Link href="#contacto">Contacto</Link>
             </div>
           </nav>

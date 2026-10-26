@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "./ProductCard";
 import { f, stockNum, precioNum, norm, enCategoria } from "../../lib/productos";
 
 // Catálogo con buscador y filtros (HU-06). La búsqueda y la categoría pueden venir en la URL:
 // /productos?q=thinkpad o /productos?categoria=portatil (la categoría se compara "contiene").
-export default function Catalog({ rows = [], demo = false }) {
+// `categoriasAdmin` son las de /admin/categorias (HU-25): los botones usan su palabra, igual que el
+// menú desplegable, y al elegir una la dirección cambia para poder compartirla.
+export default function Catalog({ rows = [], demo = false, categoriasAdmin = [] }) {
   const sp = useSearchParams();
+  const router = useRouter();
   const [q, setQ] = useState(sp.get("q") || "");
   const [cat, setCat] = useState(sp.get("categoria") || "");
 
@@ -23,9 +26,19 @@ export default function Catalog({ rows = [], demo = false }) {
   const [soloDisp, setSoloDisp] = useState(false);
 
   const categorias = useMemo(() => {
+    if (categoriasAdmin.length) return categoriasAdmin;
     const set = new Set(rows.map((r) => f(r, "Categoría")).filter(Boolean));
-    return [...set].sort((a, b) => a.localeCompare(b, "es"));
-  }, [rows]);
+    return [...set].sort((a, b) => a.localeCompare(b, "es")).map((c) => ({ nombre: c, filtro: c }));
+  }, [rows, categoriasAdmin]);
+
+  function elegirCategoria(valor) {
+    setCat(valor);
+    const p = new URLSearchParams(sp.toString());
+    if (valor) p.set("categoria", valor); else p.delete("categoria");
+    const qs = p.toString();
+    router.replace(`/productos${qs ? `?${qs}` : ""}`, { scroll: false });
+  }
+  const catActiva = categorias.find((c) => norm(c.filtro) === norm(cat));
 
   const marcas = useMemo(() => {
     const base = rows.filter((r) => enCategoria(r, cat));
@@ -66,7 +79,7 @@ export default function Catalog({ rows = [], demo = false }) {
 
   return (
     <section className="catalog wrap" id="catalogo">
-      <h1 className="section-title">Productos</h1>
+      <h1 className="section-title">{catActiva ? catActiva.nombre : "Productos"}</h1>
       <p className="section-sub">Equipos corporativos con garantía. Precios e inventario sujetos a cambios.</p>
 
       {demo && (
@@ -77,12 +90,15 @@ export default function Catalog({ rows = [], demo = false }) {
 
       {categorias.length > 1 && (
         <div className="cat-chips">
-          <button className={`cat-chip${cat === "" ? " active" : ""}`} onClick={() => setCat("")}>Todos</button>
-          {categorias.map((c) => (
-            <button key={c} className={`cat-chip${cat === c ? " active" : ""}`} onClick={() => setCat(cat === c ? "" : c)}>
-              {c}
-            </button>
-          ))}
+          <button className={`cat-chip${cat === "" ? " active" : ""}`} aria-pressed={cat === ""} onClick={() => elegirCategoria("")}>Todos</button>
+          {categorias.map((c) => {
+            const on = norm(cat) === norm(c.filtro);
+            return (
+              <button key={c.filtro} className={`cat-chip${on ? " active" : ""}`} aria-pressed={on} onClick={() => elegirCategoria(on ? "" : c.filtro)}>
+                {c.nombre}
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -107,7 +123,7 @@ export default function Catalog({ rows = [], demo = false }) {
         </label>
         <span className="filter-count">{filtered.length} de {rows.length}</span>
         {hayFiltros && (
-          <button className="filter-clear" onClick={() => { setQ(""); setCat(""); setMarca(""); setPrecioMin(""); setPrecioMax(""); setSoloDisp(false); }}>
+          <button className="filter-clear" onClick={() => { setQ(""); elegirCategoria(""); setMarca(""); setPrecioMin(""); setPrecioMax(""); setSoloDisp(false); }}>
             Limpiar
           </button>
         )}
