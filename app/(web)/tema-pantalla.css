@@ -334,6 +334,19 @@
   .tp .filters .filter-search { min-width: 0; flex-basis: 100%; }
 }
 
+/* ================= Sugeridos y vistos recientemente (HU-30) ================= */
+.tp .pd-fila { margin-top: 56px; }
+.tp .pd-fila + .pd-fila { margin-top: 44px; }
+.tp .pd-fila-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.tp .pd-fila h2 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 800; color: var(--p-noche); margin: 0; }
+.tp .pd-fila-borrar {
+  border: 0; background: none; padding: 4px 2px; font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;
+  color: var(--p-enlace); text-decoration: underline; text-underline-offset: 3px;
+}
+.tp .pd-fila-borrar:hover { color: var(--p-noche); }
+.tp .pd-rail .card { height: 100%; }
+@media (max-width: 640px) { .tp .pd-fila { margin-top: 40px; } .tp .pd-rail .rail-track { grid-auto-columns: 68%; } }
+
 /* ================= Pie de página: pantalla con constelación ================= */
 .tp .site-footer { position: relative; overflow: hidden; isolation: isolate; background: var(--p-pantalla); color: var(--p-luna); border-top: 3px solid var(--p-cian); }
 .tp .site-footer .constelacion { opacity: .3; }

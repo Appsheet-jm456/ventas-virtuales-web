@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Productos sugeridos y vistos recientemente (HU-30)
+
+Al final de la página de cada equipo, antes del pie, aparece la fila **«Te pueden interesar»** con hasta 12 equipos parecidos (misma categoría, marca, precio y generación cercanos; los disponibles primero) y, si el visitante ya revisó otros, la fila **«Vistos recientemente»**. Se ven 4 tarjetas con flechas para ver más (en el celular se deslizan con el dedo). El historial de vistos se guarda solo en el navegador del visitante, sin cookies ni datos personales, y se puede borrar. Las flechas de las filas de la web ahora solo aparecen cuando hay algo que ver. Sin migraciones ni cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Páginas de políticas editables (HU-26)
 
 Nuevo módulo **Políticas** en el panel para crear, editar, ordenar, ocultar y quitar páginas como Garantía, Devolución, Envíos, Términos y condiciones y Privacidad, cada una con sus secciones. En la web se ven en `/politicas/<nombre>` con un índice numerado a la izquierda, un buscador dentro de la página y las secciones en acordeón «+» o en texto corrido (se elige por página); en el celular el índice es un desplegable «Contenido». Las páginas visibles aparecen en una columna **Soporte** del pie. Se cargaron cinco **borradores ocultos** para revisar con un asesor antes de publicarlos. Tabla nueva `paginas` (decisión 0011). Sin cambio de versión del brief.

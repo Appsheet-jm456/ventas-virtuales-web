@@ -12,6 +12,14 @@ export async function GET(request) {
     if (token && !admin) return Response.json({ error: "Sesión no válida.", rows: [] }, { status: 401 });
 
     const { rows, demo } = admin ? await getInventory(token) : await getPublicInventory();
+    // ?codigos=a,b,c devuelve solo esos productos públicos (HU-30: «Vistos recientemente»).
+    // Solo para el público: el panel sigue recibiendo todo.
+    const pedidos = admin ? null : new URL(request.url).searchParams.get("codigos");
+    if (pedidos !== null) {
+      const quiero = new Set(pedidos.split(",").map((c) => c.trim()).filter(Boolean).slice(0, 20));
+      const algunos = rows.filter((r) => quiero.has(String(r["Código"] ?? "").trim()));
+      return Response.json({ rows: algunos, demo, total: algunos.length });
+    }
     return Response.json({ rows, demo, total: rows.length });
   } catch (err) {
     return Response.json({ error: "No pude leer el catálogo: " + String(err?.message || err), rows: [] }, { status: 200 });

@@ -5,6 +5,10 @@ import { waLink } from "../../../../lib/site";
 import { getSite, mensajeProducto } from "../../../../lib/configuracion";
 import Gallery from "../../../components/Gallery";
 import { fichaDe } from "../../../../lib/ficha";
+import { sugeridosDe } from "../../../../lib/sugeridos";
+import ProductCard from "../../../components/ProductCard";
+import Rail from "../../../components/Rail";
+import VistosRecientemente from "../../../components/VistosRecientemente";
 import { textoPlano } from "../../../../lib/texto-seguro";
 import TextoSeguro, { LineaSegura } from "../../../components/TextoSeguro";
 
@@ -21,11 +25,11 @@ function fmtPrecio(r) {
 async function findProduct(codigo) {
   const target = decodeURIComponent(codigo).trim().toLowerCase();
   const { rows } = await getPublicInventory();
-  return rows.find((r) => f(r, "Código").toLowerCase() === target) || null;
+  return { r: rows.find((r) => f(r, "Código").toLowerCase() === target) || null, rows };
 }
 
 export async function generateMetadata({ params }) {
-  const [r, site] = await Promise.all([findProduct(params.codigo), getSite()]);
+  const [{ r }, site] = await Promise.all([findProduct(params.codigo), getSite()]);
   if (!r) return { title: `Producto no encontrado — ${site.nombre}` };
   const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Código");
   return {
@@ -79,7 +83,7 @@ const SPECS = [
 ];
 
 export default async function ProductPage({ params }) {
-  const [r, site] = await Promise.all([findProduct(params.codigo), getSite()]);
+  const [{ r, rows }, site] = await Promise.all([findProduct(params.codigo), getSite()]);
   const wa = (texto) => waLink(texto, site.whatsapp);
 
   if (!r) {
@@ -103,6 +107,7 @@ export default async function ProductPage({ params }) {
   const precio = fmtPrecio(r);
   const msg = mensajeProducto(site.mensajeProducto, nombre, f(r, "Código"));
   const ficha = fichaDe(r.Ficha);
+  const sugeridos = sugeridosDe(rows, r);
   const valorFicha = (palabra) => ficha.find((x) => sinTilde(x.campo).includes(palabra))?.valor || "";
   const generacion = f(r, "Generación");
   const datos = [
@@ -231,6 +236,17 @@ export default async function ProductPage({ params }) {
           </table>
         </section>
       )}
+
+      {/* Productos sugeridos y vistos recientemente (HU-30): al final, antes del pie. */}
+      {sugeridos.length > 0 && (
+        <section className="pd-fila" id="pd-sugeridos" aria-labelledby="pd-sug-t">
+          <div className="pd-fila-cab"><h2 id="pd-sug-t">Te pueden interesar</h2></div>
+          <Rail className="pd-rail" label="productos sugeridos">
+            {sugeridos.map((s) => <ProductCard key={f(s, "Código")} r={s} />)}
+          </Rail>
+        </section>
+      )}
+      <VistosRecientemente codigo={f(r, "Código")} />
     </main>
   );
 }
