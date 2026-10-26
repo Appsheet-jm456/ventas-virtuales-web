@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 26 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · mejoras de la web pública HU-24 a HU-29 construidas y probadas en la rama `claude/determined-ramanujan-i61gup` (commits locales, **push solo cuando el dueño lo indique**). HU-28 y HU-29 aprobadas; HU-24, HU-25, HU-27 y HU-26 esperan su revisión. Los 5 borradores de políticas están **ocultos** en `/admin/politicas` hasta que el dueño o su asesor los revisen.
+> **Última sesión:** 26 de octubre de 2026 · Brief `v1.3` · **Camino 1 (landing)** · mejoras de la web pública HU-24 a HU-29 construidas y probadas en la rama `claude/determined-ramanujan-i61gup` (commits locales, **push solo cuando el dueño lo indique**). HU-24 a HU-29 aprobadas por el dueño el 26 oct. Los 5 borradores de políticas están **ocultos** en `/admin/politicas` hasta que el dueño o su asesor los revisen.
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
