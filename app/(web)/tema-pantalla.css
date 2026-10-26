@@ -52,6 +52,29 @@
 .tp .cn-punto { fill: var(--p-destello); }
 .tp .cn-halo { fill: var(--p-cian-claro); opacity: .18; }
 
+/* ================= Cinta en movimiento (HU-24) ================= */
+/* Franja delgada sobre el encabezado; se va con el scroll y el encabezado queda pegado arriba.
+   Amarillo sobre azul superficie: contraste 10:1 (WCAG AA y AAA), igual en claro y oscuro. */
+.tp .cinta {
+  position: relative; overflow: hidden; background: var(--p-superficie);
+  border-bottom: 1px solid var(--p-red); color: var(--p-amarillo);
+  font-family: var(--tit); font-weight: 600; font-size: 13px; letter-spacing: .04em;
+  line-height: 34px; height: 34px; white-space: nowrap; outline-offset: -3px;
+}
+.tp .cinta-pista { display: flex; width: max-content; animation: cinta-correr var(--cinta-dur, 30s) linear infinite; }
+.tp .cinta:hover .cinta-pista, .tp .cinta:focus-visible .cinta-pista { animation-play-state: paused; }
+.tp .cinta-mitad { display: flex; flex-shrink: 0; }
+.tp .cinta-item { display: inline-flex; align-items: center; }
+.tp .cinta-item::after { content: "✦"; color: var(--p-cian-claro); margin: 0 28px; font-size: 11px; }
+@keyframes cinta-correr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .tp .cinta-pista { animation: none; width: auto; justify-content: center; }
+  .tp .cinta-mitad + .cinta-mitad, .tp .cinta-item + .cinta-item { display: none; }
+  .tp .cinta-item { padding: 0 16px; overflow: hidden; text-overflow: ellipsis; max-width: 100vw; }
+  .tp .cinta-item::after { display: none; }
+}
+@media (max-width: 640px) { .tp .cinta { font-size: 12px; height: 30px; line-height: 30px; } }
+
 /* ================= Encabezado: pantalla con constelación ================= */
 .tp .site-header { background: var(--p-fondo); box-shadow: 0 4px 18px rgba(6, 14, 39, .35); border-bottom: 3px solid var(--p-cian); }
 .tp .hd-zona { position: relative; overflow: hidden; isolation: isolate; background: var(--p-pantalla); }

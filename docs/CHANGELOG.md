@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Cinta en movimiento (HU-24)
+
+Encima del encabezado hay una franja delgada con un mensaje amarillo que se desplaza de derecha a izquierda («Ventas Virtual Colombia · Equipos portátiles corporativos» por defecto). Se detiene al pasar el puntero y queda quieta para quien pidió reducir el movimiento en su equipo. El dueño cambia el mensaje o la apaga en `/admin/configuracion › Cinta`, con vista previa. Sin cambio de versión del brief.
+
+---
+
 ## 22 oct 2026 · Interruptor de modo claro y oscuro (HU-22)
 
 En `/admin/configuracion` hay una sección nueva, **Apariencia**, con el interruptor **Modo oscuro**: apagado, la web se ve en modo claro (encabezado y pie azules con la constelación, contenido en blanco); encendido, toda la web en el azul de la pantalla del logo. Muestra una miniatura de cada modo y marca el que está en uso. El panel no cambia. Sin cambio de versión del brief.

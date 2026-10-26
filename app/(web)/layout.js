@@ -5,6 +5,7 @@ import { getSite } from "../../lib/configuracion";
 import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
 import Constelacion from "../components/Constelacion";
+import Cinta from "../components/Cinta";
 import "./tema-pantalla.css";
 import "./tema-oscuro.css";
 
@@ -31,6 +32,7 @@ export default async function WebLayout({ children }) {
   const wa = (texto) => waLink(texto, site.whatsapp);
   return (
     <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
+        {site.catalogo?.cinta_visible !== false && <Cinta texto={site.catalogo?.cinta_texto} />}
         <header className="site-header">
           {/* Zona del logo, buscador, WhatsApp y envíos: la pantalla con su constelación (HU-21). */}
           <div className="hd-zona">

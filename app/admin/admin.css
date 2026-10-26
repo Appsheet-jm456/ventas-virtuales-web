@@ -364,3 +364,10 @@
 .cf-mini.claro .cf-mini-card { background: #fff; border: 1px solid #DFE5EE; box-shadow: inset 0 -10px 0 #F3F5F9; }
 .cf-mini.oscuro { background: #060E27; }
 .cf-mini.oscuro .cf-mini-card { background: #0D1B45; border: 1px solid #183FA5; box-shadow: inset 0 -10px 0 #F5C518; }
+
+/* Vista previa de la cinta en movimiento (HU-24): mismos colores que la web pública. */
+.cf-cinta-prev { display: flex; flex-direction: column; gap: 6px; }
+.cf-cinta-demo { overflow: hidden; white-space: nowrap; border-radius: 8px; background: #0D1B45; color: #F5C518; font-weight: 600; font-size: 13px; letter-spacing: .04em; line-height: 34px; display: flex; }
+.cf-cinta-demo span { flex-shrink: 0; padding-right: 48px; animation: cf-cinta 14s linear infinite; }
+@keyframes cf-cinta { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+@media (prefers-reduced-motion: reduce) { .cf-cinta-demo span { animation: none; } .cf-cinta-demo span + span { display: none; } .cf-cinta-demo { padding-left: 14px; } }

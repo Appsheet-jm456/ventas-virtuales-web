@@ -17,10 +17,12 @@ const SECCIONES = [
   ["cf-horario", "Horario"],
   ["cf-catalogo", "Catálogo"],
   ["cf-apariencia", "Apariencia"],
+  ["cf-cinta", "Cinta"],
   ["cf-cuenta", "Cuenta"],
 ];
 
 const EJEMPLO = { producto: "Lenovo ThinkPad T14 Gen 2", codigo: "100-101-1234" };
+const CINTA_MAX = 200; // igual que lib/configuracion.js (HU-24)
 
 function Ico({ d }) {
   return <svg className="adm-i" viewBox="0 0 24 24" aria-hidden="true">{d}</svg>;
@@ -247,6 +249,24 @@ export default function ConfiguracionPage() {
               <div className="cf-mini oscuro"><span className="cf-mini-hd" /><span className="cf-mini-card" /><span className="cf-mini-card" /><span className="cf-mini-ft" /></div>
               <small>Modo oscuro{catalogo.modo_oscuro ? " · en uso" : ""}</small>
             </div>
+          </div>
+        </section>
+
+        <section className="pr-card" id="cf-cinta">
+          <h2 className="pr-h">Cinta en movimiento</h2>
+          <p className="pr-sub">Franja delgada encima del encabezado, con un mensaje que se desplaza de derecha a izquierda en toda la web. Se detiene al pasar el puntero.</p>
+          <Interruptor id="cf-cinta-on" titulo="Mostrar cinta" texto="Apagado: la cinta desaparece de la web sin dejar espacio. También se oculta si el mensaje queda vacío."
+            valor={catalogo.cinta_visible !== false} onChange={setC("cinta_visible")} />
+          <Campo id="cf-cinta-txt" label="Mensaje"
+            ayuda={<>Usa « · » para separar ideas. <span className={String(catalogo.cinta_texto || "").length > CINTA_MAX ? "cf-dirty" : ""}>{String(catalogo.cinta_texto || "").length} / {CINTA_MAX} caracteres</span></>}>
+            <textarea id="cf-cinta-txt" className="input" rows={2} maxLength={CINTA_MAX} value={catalogo.cinta_texto || ""}
+              onChange={(e) => setC("cinta_texto")(e.target.value)} placeholder="Ventas Virtual Colombia · Equipos portátiles corporativos" />
+          </Campo>
+          <div className="cf-cinta-prev" aria-hidden="true">
+            <b>Vista previa</b>
+            {catalogo.cinta_visible !== false && String(catalogo.cinta_texto || "").trim()
+              ? <div className="cf-cinta-demo"><span>{catalogo.cinta_texto}</span><span>{catalogo.cinta_texto}</span></div>
+              : <small className="ct-hint">La cinta no se mostrará en la web.</small>}
           </div>
         </section>
 
