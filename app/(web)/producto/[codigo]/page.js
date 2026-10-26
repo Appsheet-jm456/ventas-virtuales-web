@@ -41,6 +41,29 @@ const ICONOS = {
   disco: <><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="15.5" cy="12" r="3" /><path d="M7 9h2M7 15h2" /></>,
   pantalla: <><rect x="2" y="4" width="20" height="13" rx="1.5" /><path d="M8 21h8M12 17v4" /></>,
 };
+// Íconos de la tarjeta Especificaciones según la característica (HU-29, ajuste del 26 oct).
+const ICONOS_FICHA = {
+  ...ICONOS,
+  info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></>,
+  gpu: <><rect x="2" y="7" width="20" height="10" rx="1.5" /><circle cx="9" cy="12" r="2.5" /><path d="M15 10h3M15 14h3M5 17v3" /></>,
+  wifi: <><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0" /><path d="M12 19.5h.01" /></>,
+  red: <><rect x="6" y="3" width="12" height="12" rx="1.5" /><path d="M9 15v3h6v-3M9 7v3M12 7v3M15 7v3M12 18v3" /></>,
+  puertos: <><path d="M12 2v14M8 6l4-4 4 4M7 11v2a5 5 0 0 0 10 0v-2" /><circle cx="12" cy="19" r="2" /></>,
+  bateria: <><rect x="2" y="7" width="17" height="10" rx="2" /><path d="M22 11v2M6 10v4M9.5 10v4" /></>,
+  sistema: <><rect x="3" y="3" width="8" height="8" /><rect x="13" y="3" width="8" height="8" /><rect x="3" y="13" width="8" height="8" /><rect x="13" y="13" width="8" height="8" /></>,
+  teclado: <><rect x="2" y="6" width="20" height="12" rx="2" /><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10" /></>,
+  camara: <><path d="M3 8h4l2-3h6l2 3h4v11H3z" /><circle cx="12" cy="13" r="3.5" /></>,
+  peso: <><path d="M6 8h12l3 12H3z" /><circle cx="12" cy="5" r="2" /></>,
+  escudo: <><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" /><path d="m9 12 2 2 4-4" /></>,
+};
+const PALABRAS_ICONO = [
+  ["procesador", "cpu"], ["cpu", "cpu"], ["memoria", "ram"], ["ram", "ram"], ["almacenamiento", "disco"], ["ssd", "disco"],
+  ["disco", "disco"], ["pantalla", "pantalla"], ["grafic", "gpu"], ["video", "gpu"], ["conectividad", "wifi"], ["wi-fi", "wifi"],
+  ["wifi", "wifi"], ["bluetooth", "wifi"], ["ethernet", "red"], ["red", "red"], ["puerto", "puertos"], ["usb", "puertos"],
+  ["bateria", "bateria"], ["cargador", "bateria"], ["sistema", "sistema"], ["windows", "sistema"], ["teclado", "teclado"],
+  ["camara", "camara"], ["peso", "peso"], ["dimension", "peso"], ["garantia", "escudo"], ["estado", "escudo"],
+];
+const iconoDe = (campo) => PALABRAS_ICONO.find(([p]) => sinTilde(campo).includes(p))?.[1] || "info";
 const Ico = ({ d }) => <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{d}</svg>;
 const sinTilde = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
@@ -91,6 +114,14 @@ export default async function ProductPage({ params }) {
   const resumen = f(r, "Resumen");
   const detalleTitulo = f(r, "Título descripción");
   const detalle = f(r, "Descripción larga");
+  const hayDetalle = Boolean(detalleTitulo || detalle);
+  const bloqueDetalle = hayDetalle && (
+    <section className="pd-detalle" aria-labelledby={detalleTitulo ? "pd-detalle-t" : undefined} aria-label={detalleTitulo ? undefined : "Descripción"}>
+      <span className="pd-chip">Descripción</span>
+      {detalleTitulo && <h2 id="pd-detalle-t">{detalleTitulo}</h2>}
+      <TextoSeguro texto={detalle} className="pd-detalle-txt" />
+    </section>
+  );
 
   return (
     <main className="pd wrap">
@@ -159,18 +190,25 @@ export default async function ProductPage({ params }) {
         </div>
       </div>
 
-      {/* Descripción ampliada (HU-29): texto seguro dibujado con React, sin HTML del dueño. */}
-      {(detalleTitulo || detalle) && (
-        <section className="pd-detalle" aria-labelledby={detalleTitulo ? "pd-detalle-t" : undefined} aria-label={detalleTitulo ? undefined : "Descripción"}>
-          <span className="pd-chip">Descripción</span>
-          {detalleTitulo && <h2 id="pd-detalle-t">{detalleTitulo}</h2>}
-          <TextoSeguro texto={detalle} className="pd-detalle-txt" />
-        </section>
-      )}
-
-      {/* Ficha técnica completa (HU-27): la carga el dueño en /admin/productos. Texto plano: React
-          escapa todo, no se interpreta HTML. Sin filas, el bloque no existe. */}
-      {ficha.length > 0 && (
+      {/* Descripción ampliada (HU-29) a la izquierda y Especificaciones (ficha técnica, HU-27) a la
+          derecha. Con uno solo de los dos, ocupa todo el ancho. Texto seguro y texto plano: React
+          escapa todo, no se interpreta HTML del dueño. */}
+      {hayDetalle && ficha.length > 0 ? (
+        <div className="pd-bloques">
+          {bloqueDetalle}
+          <aside className="pd-specs" aria-labelledby="pd-specs-t">
+            <h2 id="pd-specs-t">Especificaciones</h2>
+            <dl className="pd-specs-lista">
+              {ficha.map((x, i) => (
+                <div key={i} className="pd-spec">
+                  <dt><Ico d={ICONOS_FICHA[iconoDe(x.campo)]} />{x.campo}</dt>
+                  <dd>{x.valor}</dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
+        </div>
+      ) : hayDetalle ? bloqueDetalle : ficha.length > 0 && (
         <section className="pd-ficha" aria-labelledby="pd-ficha-t">
           <h2 id="pd-ficha-t">Ficha técnica completa</h2>
           <table className="pd-ficha-tabla">

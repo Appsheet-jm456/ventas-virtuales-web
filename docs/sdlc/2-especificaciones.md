@@ -595,6 +595,14 @@ Como cliente quiero leer, en la ficha del equipo, un resumen destacado y una des
 - Dada la carga CSV, entonces las columnas opcionales **Resumen**, **Título descripción** y **Descripción larga** se leen; sin ellas **no se borra** lo existente.
 - Modo claro y oscuro con contraste WCAG AA; celular en una columna.
 
+**Ajuste de diseño (26 oct, pedido del dueño con referencia):**
+
+- Dada la ficha con descripción y ficha técnica, entonces debajo de la galería la página se divide en **dos columnas proporcionales**: a la **izquierda la Descripción ampliada** (≈ 60 %) y a la **derecha las Especificaciones** (≈ 40 %), en una tarjeta que acompaña el scroll (sticky) mientras se lee la descripción.
+- Dado el **Título de la descripción**, entonces se ve **grande, en mayúsculas**, en Montserrat con buen espaciado entre letras y una línea de acento, debajo de la etiqueta «Descripción».
+- Dada la tarjeta **Especificaciones** (los datos de la Ficha técnica, HU-27), entonces cada fila muestra un ícono según la característica (procesador, memoria, almacenamiento, pantalla, gráficos, conectividad, puertos, batería, sistema…; uno genérico para las demás), la característica en negrita a la izquierda y el valor a la derecha.
+- Dado que el producto solo tiene uno de los dos, entonces ese bloque ocupa el ancho completo (la ficha técnica como tabla «Ficha técnica completa», igual que antes).
+- Dado el celular o una pantalla angosta (< 960 px), entonces las columnas se apilan: primero Descripción y luego Especificaciones, sin sticky ni scroll horizontal.
+
 **Datos:** columnas nuevas `resumen text`, `detalle_titulo text` y `detalle text` (vacías por defecto) en `productos`, con migración y lista blanca pública.
 
 **Plan de tareas:**

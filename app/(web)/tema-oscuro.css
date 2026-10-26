@@ -173,6 +173,11 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #060E27; }
 .tp-oscuro .pd-datos { color: var(--p-luna); }
 .tp-oscuro .pd-chip { color: var(--p-cian-claro); background: rgba(0, 168, 224, .12); border-color: rgba(76, 195, 240, .4); }
 .tp-oscuro .pd-ficha h2 { color: #fff; }
+.tp-oscuro .pd-bloques { border-color: var(--p-red); }
+.tp-oscuro .pd-specs { background: var(--p-superficie); border-color: var(--p-red); border-top-color: var(--p-amarillo); box-shadow: none; }
+.tp-oscuro .pd-specs h2, .tp-oscuro .pd-spec dt { color: #fff; }
+.tp-oscuro .pd-spec { border-color: var(--p-red); }
+.tp-oscuro .pd-spec dd { color: #DCE4F5; }
 .tp-oscuro .pd-ficha-tabla { background: var(--p-superficie); border-color: var(--p-red); box-shadow: none; }
 .tp-oscuro .pd-ficha-tabla th, .tp-oscuro .pd-ficha-tabla td, .tp-oscuro .pd-ficha-tabla tr { border-color: var(--p-red); }
 .tp-oscuro .pd-ficha-tabla tr:nth-child(even) { background: rgba(255, 255, 255, .04); }

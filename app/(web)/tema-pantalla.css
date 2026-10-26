@@ -184,7 +184,15 @@
   display: inline-block; padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: 700; letter-spacing: .04em;
   color: var(--p-enlace); background: #E6F4FB; border: 1px solid #B9E0F2;
 }
-.tp .pd-detalle h2 { font-size: clamp(22px, 3vw, 30px); color: var(--p-noche); margin: 14px 0 12px; line-height: 1.3; }
+/* Título de la descripción: grande, en mayúsculas, con línea de acento (ajuste del 26 oct). */
+.tp .pd-detalle h2 {
+  font-size: clamp(26px, 3.1vw, 40px); font-weight: 800; text-transform: uppercase; letter-spacing: .015em;
+  line-height: 1.12; color: var(--p-noche); margin: 18px 0 22px; text-wrap: balance;
+}
+.tp .pd-detalle h2::after {
+  content: ""; display: block; width: 72px; height: 4px; margin-top: 16px; border-radius: 4px;
+  background: linear-gradient(90deg, var(--p-cian), var(--p-amarillo));
+}
 .tp .pd-detalle-txt { color: #33415C; font-size: 16px; line-height: 1.75; }
 .tp .pd-detalle-txt p { margin: 0 0 16px; }
 .tp .pd-detalle-txt strong { color: var(--p-noche); }
@@ -192,6 +200,37 @@
 .tp .pd-detalle-txt ul { margin: 0 0 16px; padding-left: 22px; }
 .tp .pd-detalle-txt li { margin-bottom: 6px; }
 .tp .pd-detalle-txt li::marker { color: var(--p-cian); }
+
+/* Descripción (izquierda) + Especificaciones (derecha), proporcional 60/40 (ajuste del 26 oct). */
+.tp .pd-bloques {
+  display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr); gap: 56px;
+  align-items: start; margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--border);
+}
+.tp .pd-bloques .pd-detalle { margin-top: 0; max-width: none; }
+.tp .pd-specs {
+  position: sticky; top: 140px; background: #fff; border: 1px solid var(--border); border-top: 4px solid var(--p-noche);
+  border-radius: 16px; padding: 26px 28px 12px; box-shadow: 0 10px 30px rgba(11, 31, 77, .08);
+}
+.tp .pd-specs h2 { font-size: 24px; font-weight: 800; color: var(--p-noche); margin: 0 0 8px; }
+.tp .pd-specs-lista { margin: 0; }
+.tp .pd-spec {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 14px; align-items: baseline;
+  padding: 11px 0; border-bottom: 1px solid var(--border);
+}
+.tp .pd-spec:last-child { border-bottom: 0; }
+.tp .pd-spec dt { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--p-noche); font-size: 14px; }
+.tp .pd-spec dt svg { color: var(--p-cian); flex-shrink: 0; transform: translateY(1px); }
+.tp .pd-spec dd { margin: 0; text-align: right; color: #33415C; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+@media (max-width: 960px) {
+  .tp .pd-bloques { grid-template-columns: 1fr; gap: 36px; }
+  .tp .pd-specs { position: static; }
+}
+@media (max-width: 640px) {
+  .tp .pd-bloques { margin-top: 32px; padding-top: 28px; }
+  .tp .pd-specs { padding: 20px 18px 6px; }
+  .tp .pd-spec { grid-template-columns: 1fr; gap: 2px; }
+  .tp .pd-spec dd { text-align: left; padding-left: 28px; }
+}
 
 /* ================= Ficha técnica completa (HU-27) ================= */
 .tp .pd-ficha { margin-top: 36px; }
