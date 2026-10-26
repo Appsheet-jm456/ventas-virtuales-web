@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Barra de categorías en el menú (HU-31)
+
+El menú oscuro ahora muestra directamente las categorías: «☰ Todas las categorías» (abre la lista completa con foto y cuántos productos tiene cada una), cada categoría visible de `/admin/categorias` en mayúsculas, «Más ▾» con las que no caben y «Todos». Reemplaza el desplegable de «Productos» (HU-25); «Inicio» se alcanza con el logo y «Contacto» quedó en la barra superior. En el celular las categorías se deslizan y «☰ Categorías» abre la lista a pantalla completa. Sin migraciones ni cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Barra superior con redes, ubicación y Contacto (HU-32)
 
 Debajo de la cinta en movimiento aparece una franja delgada en el azul de la guía: a la izquierda los íconos de Facebook, Instagram y TikTok; a la derecha «📍 ubicación de la tienda» (abre Google Maps), «Nosotros» (cuando exista esa página) y «Contacto» (lleva al pie). Se maneja en `/admin/configuracion › Barra superior` con vista previa; las redes, en «Redes sociales». En el celular cabe en una línea. Sin migraciones ni cambio de versión del brief.

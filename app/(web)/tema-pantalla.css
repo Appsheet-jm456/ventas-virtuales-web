@@ -121,40 +121,80 @@
 .tp .hd-nav a { color: #DCE4F5; }
 .tp .hd-nav a:hover { color: var(--p-amarillo); background: rgba(255, 255, 255, .05); }
 
-/* Desplegable de categorías en «Productos» (HU-25). En computador cuelga bajo «Productos»; en
-   celular el menú se desliza de lado, así que la lista se abre a todo el ancho bajo el menú. */
+/* ================= Barra de categorías (HU-31) ================= */
 .tp .hd-nav { position: relative; }
-.tp .hd-drop { display: flex; align-items: stretch; }
-.tp .hd-drop .hd-drop-txt { padding-right: 4px; }
-.tp .hd-drop-btn {
-  display: inline-flex; align-items: center; padding: 0 10px 0 4px; border: 0; background: none;
-  color: #DCE4F5; cursor: pointer; min-height: 40px; -webkit-tap-highlight-color: transparent;
+.tp .hd-nav-in.bc { display: flex; align-items: center; gap: 4px; overflow: visible; min-height: 50px; position: relative; }
+.tp .bc a, .tp .bc button { font-family: var(--tit); }
+.tp .bc-todas { position: relative; flex-shrink: 0; margin-right: 6px; }
+.tp .bc-pildora {
+  display: inline-flex; align-items: center; gap: 10px; padding: 5px 16px 5px 5px; border: 0; border-radius: 999px;
+  background: #fff; color: var(--p-noche); font-weight: 700; font-size: 12.5px; letter-spacing: .05em; text-transform: uppercase;
+  cursor: pointer; white-space: nowrap; -webkit-tap-highlight-color: transparent;
 }
-@media (max-width: 640px) { .tp .hd-drop-btn { min-width: 44px; min-height: 44px; justify-content: center; padding: 0 8px; } }
-.tp .hd-drop-btn svg { transition: transform .15s; }
-.tp .hd-drop.abierto .hd-drop-btn svg { transform: rotate(180deg); }
-.tp .hd-drop-btn:hover, .tp .hd-drop.abierto .hd-drop-btn, .tp .hd-drop.abierto .hd-drop-txt { color: var(--p-amarillo); }
-.tp .hd-drop.en-productos .hd-drop-txt { color: var(--p-amarillo); }
-.tp .hd-drop-list {
-  position: absolute; z-index: 60; top: 100%; left: 0; right: 0; margin: 0; padding: 8px;
-  list-style: none; background: var(--p-superficie); border: 1px solid var(--p-red); border-top: 2px solid var(--p-cian);
-  border-radius: 0 0 12px 12px; box-shadow: 0 14px 30px rgba(6, 14, 39, .45);
+.tp .bc-ham { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--p-noche); color: #fff; }
+.tp .bc-pildora:hover, .tp .bc-todas.abierto .bc-pildora { background: var(--p-amarillo); }
+.tp .bc-pildora-corta { display: none; }
+.tp .bc-fila { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; min-width: 0; flex: 1; overflow: hidden; }
+.tp .hd-nav .bc-fila a, .tp .bc-medidor span, .tp .hd-nav .bc-todos {
+  display: block; padding: 14px 13px; font-size: 12.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  white-space: nowrap; color: #DCE4F5; text-decoration: none;
 }
-.tp .hd-drop-list[hidden] { display: none; }
-.tp .hd-drop-list a {
-  display: block; padding: 12px 14px; min-height: 46px; border-radius: 8px; color: #DCE4F5; font-size: 15px; white-space: normal;
+.tp .hd-nav a:first-child { padding-left: 13px; }
+.tp .hd-nav .bc-fila a:hover, .tp .hd-nav .bc-todos:hover { color: var(--p-amarillo); background: none; }
+.tp .hd-nav .bc a.activa, .tp .bc-mas > button.activa { color: var(--p-amarillo); box-shadow: inset 0 -3px 0 var(--p-amarillo); }
+.tp .bc-medidor { position: absolute; visibility: hidden; pointer-events: none; height: 0; overflow: hidden; left: 0; top: 0; flex: none; }
+.tp .bc-der { display: flex; align-items: center; flex-shrink: 0; margin-left: auto; }
+.tp .bc-mas { position: relative; }
+.tp .bc-mas > button {
+  display: inline-flex; align-items: center; gap: 4px; padding: 14px 13px; border: 0; background: none; color: #DCE4F5; cursor: pointer;
+  font-size: 12.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
 }
-.tp .hd-nav .hd-drop-list a:first-child { padding-left: 14px; }
-.tp .hd-drop-list a:hover, .tp .hd-drop-list a:focus-visible { background: rgba(255, 255, 255, .07); color: var(--p-amarillo); }
-.tp .hd-drop-list a.activa { color: var(--p-amarillo); background: rgba(245, 197, 24, .10); }
-.tp .hd-drop-list a.activa::before { content: "✓ "; }
-.tp .hd-drop-list li:first-child a { font-weight: 700; }
-@media (min-width: 641px) {
-  .tp .hd-nav-in { overflow: visible; }
-  .tp .hd-drop { position: relative; }
-  .tp .hd-drop-list { right: auto; min-width: 250px; top: calc(100% + 0px); }
-  .tp .hd-drop-list a { font-size: 14px; padding: 10px 12px; min-height: 0; }
+.tp .bc-mas > button:hover, .tp .bc-mas.abierto > button { color: var(--p-amarillo); }
+.tp .bc-mas-lista, .tp .bc-panel {
+  position: absolute; top: 100%; z-index: 60; margin: 0; list-style: none; background: var(--p-superficie);
+  border: 1px solid var(--p-red); border-top: 2px solid var(--p-cian); border-radius: 0 0 14px 14px; box-shadow: 0 16px 34px rgba(6, 14, 39, .5);
 }
+.tp .bc-mas-lista { right: 0; min-width: 230px; padding: 8px; }
+.tp .bc-mas-lista[hidden], .tp .bc-panel[hidden] { display: none; }
+.tp .hd-nav .bc-mas-lista a { display: block; padding: 11px 12px; border-radius: 8px; color: #DCE4F5; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.tp .bc-panel { left: 0; width: 340px; padding: 10px; }
+.tp .bc-panel-cab { display: none; }
+.tp .bc-panel-lista { list-style: none; margin: 0; padding: 0; max-height: min(60vh, 460px); overflow: auto; }
+.tp .hd-nav .bc-panel-lista a {
+  display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 8px 10px; border-radius: 10px;
+  color: #fff; font-size: 14px; font-weight: 600; text-decoration: none;
+}
+.tp .bc-nombre { min-width: 0; white-space: normal; overflow-wrap: anywhere; line-height: 1.3; }
+.tp .bc-img { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: var(--p-claro, #F3F5F9); overflow: hidden; font-size: 18px; }
+.tp .bc-img img { width: 100%; height: 100%; object-fit: cover; }
+.tp .bc-n { min-width: 26px; padding: 2px 8px; border-radius: 999px; background: rgba(255, 255, 255, .1); color: var(--p-luna); font-size: 12px; text-align: center; font-variant-numeric: tabular-nums; }
+.tp .hd-nav .bc-panel-lista a:hover, .tp .hd-nav .bc-panel-lista a:focus-visible, .tp .hd-nav .bc-mas-lista a:hover, .tp .hd-nav .bc-mas-lista a:focus-visible { background: rgba(255, 255, 255, .07); color: var(--p-amarillo); box-shadow: none; }
+.tp .hd-nav .bc-panel-lista a.activa, .tp .hd-nav .bc-mas-lista a.activa { background: rgba(245, 197, 24, .12); color: var(--p-amarillo); box-shadow: none; }
+.tp .bc-panel-pie { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--p-red); }
+.tp .hd-nav .bc-panel-pie a { padding: 10px; border-radius: 8px; color: var(--p-cian-claro); font-size: 13.5px; font-weight: 700; }
+.tp .hd-nav .bc-panel-pie a:hover { color: var(--p-amarillo); background: rgba(255, 255, 255, .05); }
+.tp .bc-fondo { display: none; }
+.tp .bc-cerrar { border: 0; background: none; color: #fff; font-size: 22px; width: 44px; height: 44px; cursor: pointer; }
+@media (max-width: 860px) {
+  .tp .hd-nav-in.bc { gap: 2px; min-height: 48px; }
+  .tp .bc-pildora { padding: 4px 12px 4px 4px; font-size: 12px; }
+  .tp .bc-pildora-larga { display: none; }
+  .tp .bc-pildora-corta { display: inline; }
+  .tp .bc-fila { overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; }
+  .tp .bc-fila::-webkit-scrollbar { display: none; }
+  .tp .bc-mas { display: none; }
+  .tp .bc-panel {
+    position: fixed; inset: 0 auto 0 0; z-index: 1001; width: min(88vw, 380px); border-radius: 0; border: 0;
+    padding: 12px 14px 24px; overflow: auto; box-shadow: 0 0 40px rgba(0, 0, 0, .5);
+  }
+  .tp .bc-panel-cab { display: flex; align-items: center; justify-content: space-between; padding: 0 2px 8px; color: #fff; font-family: var(--tit); font-size: 18px; }
+  .tp .bc-panel-lista { max-height: none; }
+  .tp .hd-nav .bc-panel-lista a { min-height: 52px; }
+  .tp .bc-fondo { display: block; position: fixed; inset: 0; z-index: 1000; background: rgba(6, 14, 39, .6); }
+  /* La hoja vive dentro del encabezado fijo: el botón flotante de WhatsApp no debe quedar encima. */
+  .tp:has(.bc-todas.abierto) .wa-float { display: none; }
+}
+
 .tp .brand-logo { height: 48px; }
 @media (max-width: 640px) { .tp .hd-wa small { color: #fff; } }
 

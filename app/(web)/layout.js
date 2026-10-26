@@ -3,14 +3,14 @@ import Link from "next/link";
 import { Inter, Montserrat } from "next/font/google";
 import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
-import { getCategoriasMenu } from "../../lib/categorias";
+import { getCategoriasBarra } from "../../lib/categorias";
 import { getPaginasSoporte } from "../../lib/paginas";
 import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
 import Constelacion from "../components/Constelacion";
 import Cinta from "../components/Cinta";
 import BarraSuperior from "../components/BarraSuperior";
-import MenuProductos from "../components/MenuProductos";
+import BarraCategoriasActiva, { BarraCategorias } from "../components/BarraCategorias";
 import "./tema-pantalla.css";
 import "./tema-oscuro.css";
 
@@ -33,7 +33,11 @@ function WaIcon({ size = 24 }) {
 // La clase "tp" activa el «modo pantalla» de la guía visual solo aquí (tema-pantalla.css) y
 // "tp-oscuro" el modo oscuro que el dueño enciende en /admin/configuracion (HU-22).
 export default async function WebLayout({ children }) {
-  const [site, categoriasMenu, soporte] = await Promise.all([getSite(), getCategoriasMenu(), getPaginasSoporte()]);
+  const site = await getSite();
+  const [categoriasBarra, soporte] = await Promise.all([
+    getCategoriasBarra({ mostrarAgotados: site.catalogo?.mostrar_agotados !== false }),
+    getPaginasSoporte(),
+  ]);
   const wa = (texto) => waLink(texto, site.whatsapp);
   return (
     <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
@@ -73,15 +77,12 @@ export default async function WebLayout({ children }) {
           </div>
           </div>
           <nav className="hd-nav" aria-label="Principal">
-            <div className="wrap hd-nav-in">
-              <Link href="/">Inicio</Link>
-              <Link href="/categorias">Categorías</Link>
-              {/* Lee la dirección (categoría activa): Suspense para no frenar el resto de la página. */}
-              <Suspense fallback={<Link href="/productos">Productos</Link>}>
-                <MenuProductos categorias={categoriasMenu} />
-              </Suspense>
-              <Link href="#contacto">Contacto</Link>
-            </div>
+            {/* Barra de categorías (HU-31): lee la categoría activa de la dirección; mientras
+                carga se dibuja igual, sin marcar ninguna. Inicio se alcanza con el logo y
+                Contacto está en la barra superior (HU-32). */}
+            <Suspense fallback={<BarraCategorias categorias={categoriasBarra} />}>
+              <BarraCategoriasActiva categorias={categoriasBarra} />
+            </Suspense>
           </nav>
         </header>
 

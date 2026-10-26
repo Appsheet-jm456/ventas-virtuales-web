@@ -436,6 +436,8 @@ Como dueño quiero una cinta con un mensaje que se desplaza en la parte superior
 
 ## HU-25 · Categorías en un menú desplegable de «Productos»
 
+> **Reemplazada por HU-31 (26 oct):** el desplegable se retiró; las categorías van directamente en la barra del menú.
+
 Como cliente quiero que al elegir «Productos» se despliegue la lista de categorías, para llegar rápido al tipo de equipo que busco sin recorrer todo el catálogo.
 
 **Decisiones (26 oct):** las categorías van en un **menú desplegable** del ítem «Productos» del menú superior (no en una fila fija). Las categorías salen de `/admin/categorias`. *Sin número de productos por categoría* por ahora (el dueño no lo pidió; se puede agregar después).
