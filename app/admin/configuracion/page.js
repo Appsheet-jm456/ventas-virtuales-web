@@ -19,6 +19,7 @@ const SECCIONES = [
   ["cf-apariencia", "Apariencia"],
   ["cf-cinta", "Cinta"],
   ["cf-barra", "Barra superior"],
+  ["cf-nosotros", "Nosotros"],
   ["cf-cuenta", "Cuenta"],
 ];
 
@@ -304,6 +305,12 @@ export default function ConfiguracionPage() {
                 </div>
               : <small className="ct-hint">La barra superior no se mostrará en la web.</small>}
           </div>
+        </section>
+
+        <section className="pr-card" id="cf-nosotros">
+          <h2 className="pr-h">Página Nosotros</h2>
+          <p className="pr-sub">Biografía de la empresa, años en el mercado, por qué elegirnos y el equipo, con fotos a la izquierda o a la derecha y cifras destacadas. Se publica en <span className="mono">/nosotros</span> y aparece en la barra superior y en el pie.</p>
+          <a className="btn pr-btn" href="/admin/configuracion/nosotros">Editar página Nosotros →</a>
         </section>
 
         <div className="cf-savebar">

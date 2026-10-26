@@ -756,22 +756,13 @@ Como dueño quiero crear y mantener desde `/admin` la página **«Nosotros»** (
 
 ### Panel y datos (backend)
 
-- **Reutiliza las páginas de HU-26** (tabla `paginas`, decisión 0011) para no crear otro sistema: «Nosotros» es una página más con el estilo nuevo **«Bloques con foto»**, editable en `/admin/politicas` (el módulo pasa a llamarse **«Páginas»**) o con un acceso directo **«Nosotros»** en el menú del panel.
-- En el editor, cada bloque permite: **título**, **texto**, **subir foto** (Cloudinary, como banners), **texto alternativo** de la foto y **posición** (izquierda/derecha); **agregar, editar, reordenar y quitar** bloques; **vista previa** igual a la web.
-- **Cifras:** lista editable de pares *número + texto* (hasta 6) que se muestra como franja.
-- Al quitar o cambiar una foto, la anterior se borra de Cloudinary (como el logo y los banners).
-- **Datos:** migración pequeña para permitir el estilo `bloques` en `paginas.estilo`; las fotos, posiciones y cifras viven en el JSON de `secciones` (sin tablas nuevas). Se crea un **borrador oculto** de «Nosotros» con la estructura sugerida (Quiénes somos · Años en el mercado · Por qué elegirnos · Nuestro equipo) para que el dueño lo complete.
+**Decisión del dueño (26 oct, al construir):** el editor va en **`/admin/configuracion › Nosotros`** (página propia `/admin/configuracion/nosotros`, con acceso desde la sección «Nosotros» de Configuración). Por eso se guarda en la tabla **`configuracion`** (clave `nosotros`), **sin tablas nuevas ni migraciones**, en lugar de reutilizar las páginas de políticas.
 
-**Plan de tareas:**
-
-| # | Tarea | Dónde |
-|---|---|---|
-| 1 | Migración: estilo `bloques` en `paginas` y borrador oculto de «Nosotros» | `supabase/migrations/` |
-| 2 | Validación de bloques con foto, alt, posición y cifras | `lib/paginas-base.js`, `lib/paginas.js` |
-| 3 | Editor del panel: subir foto por bloque, posición, cifras; módulo «Páginas» | `app/admin/politicas/` (renombrado), `SubirImagen.js` |
-| 4 | Página pública `/nosotros` con bloques alternados y cifras | `app/(web)/nosotros/`, `app/components/` |
-| 5 | Enlace «Nosotros» en barra superior (HU-32) y pie, solo si está publicada | `app/(web)/layout.js` |
-| 6 | Pruebas en navegador (crear, foto, reordenar, ocultar, celular, claro/oscuro) y borrar fotos QA de Cloudinary | `docs/sdlc/4-pruebas.md` |
+- En el editor: **título** de la página, interruptor **«Publicar en la web»**, y la lista de **bloques**: cada uno con **título**, **texto**, **foto** (subida a Cloudinary, carpeta `ventas-virtual/nosotros`), **texto alternativo** de la foto (obligatorio si hay foto) y **posición** (izquierda/derecha); **agregar, editar, subir, bajar y quitar** bloques (hasta 12); **vista previa** igual a la web; aviso de cambios sin guardar.
+- **Cifras:** lista editable de pares *número + texto* (hasta 6), p. ej. «+10 años · en el mercado».
+- Si no hay nada guardado, el editor arranca con una **plantilla sugerida** (Quiénes somos · Historia y años en el mercado · Por qué elegirnos · Nuestro equipo) **sin publicar**; nada sale a la web hasta que el dueño la publique.
+- Al quitar o cambiar una foto y guardar, la anterior se **borra de Cloudinary**; las fotos subidas y no guardadas se borran al salir. La limpieza automática **no borra** fotos que use la página Nosotros.
+- Límites: título 120, título de bloque 150, texto 5.000, texto alternativo 150, cifra 20 y su texto 60 caracteres. Las fotos deben ser del panel (no enlaces externos). Solo el usuario autenticado guarda (RLS).
 
 **Decisiones del dueño (26 oct):** **solo «Nosotros»** (sin Blog); cada bloque puede llevar **foto a la izquierda o a la derecha**, elegida por el dueño, para la biografía de la empresa y el tiempo en el mercado.
 

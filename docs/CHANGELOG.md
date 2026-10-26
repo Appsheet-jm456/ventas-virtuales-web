@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Página «Nosotros» editable (HU-33)
+
+Nueva página `/nosotros` con la biografía de la empresa, los años en el mercado y lo que la diferencia: bloques de texto con foto a la izquierda o a la derecha y una franja de cifras destacadas. Se edita en `/admin/configuracion › Nosotros` (agregar, editar, reordenar y quitar bloques, subir fotos, cifras y vista previa) y arranca con una estructura sugerida sin publicar. Al publicarla aparece «Nosotros» en la barra superior y en el pie. Se guarda en la configuración existente: sin tablas nuevas ni migraciones. Sin cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Barra de categorías en el menú (HU-31)
 
 El menú oscuro ahora muestra directamente las categorías: «☰ Todas las categorías» (abre la lista completa con foto y cuántos productos tiene cada una), cada categoría visible de `/admin/categorias` en mayúsculas, «Más ▾» con las que no caben y «Todos». Reemplaza el desplegable de «Productos» (HU-25); «Inicio» se alcanza con el logo y «Contacto» quedó en la barra superior. En el celular las categorías se deslizan y «☰ Categorías» abre la lista a pantalla completa. Sin migraciones ni cambio de versión del brief.

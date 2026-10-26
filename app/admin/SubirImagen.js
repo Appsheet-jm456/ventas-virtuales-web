@@ -25,6 +25,10 @@ export const REGLAS = {
     destino: "producto", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 2, minAncho: 400,
     ayuda: "JPG, PNG o WebP · al menos 400 px de ancho (mejor 800 o más) · hasta 2 MB cada una",
   },
+  nosotros: {
+    destino: "nosotros", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 3, minAncho: 600,
+    ayuda: "Horizontal o cuadrada, 1200 px de ancho o más · JPG, PNG o WebP · hasta 3 MB",
+  },
   logo: {
     destino: "logo", formatos: ["image/png", "image/svg+xml", "image/webp", "image/jpeg"], maxMB: 1,
     ayuda: "PNG o SVG con fondo transparente · hasta 1 MB",

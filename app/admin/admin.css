@@ -444,3 +444,17 @@
 .cf-barra-demo span { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 .cf-barra-demo i { font-style: normal; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.7); font-size: 10px; }
 .cf-barra-demo em { font-style: normal; }
+
+/* Editor de la página Nosotros (HU-33) */
+.nb-foto { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 12px; align-items: start; }
+.nb-foto-img, .nb-foto-vacia { width: 120px; height: 80px; border-radius: 10px; object-fit: cover; }
+.nb-foto-vacia { display: grid; place-items: center; background: var(--bg-soft, #F3F5F9); color: var(--muted); font-size: 12px; border: 1px dashed var(--border); }
+.nb-foto-campos { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.nb-foto-campos .input { width: 100%; }
+.nb-lbl { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.nb-pos { border: 0; padding: 0; margin: 0; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.nb-pos label { display: inline-flex; gap: 6px; align-items: center; padding: 6px 12px; border: 1.5px solid var(--border); border-radius: 999px; cursor: pointer; font-size: 13px; }
+.nb-pos label.on { border-color: var(--blue); background: #F2F7FF; }
+.nb-cifras { list-style: none; margin: 8px 0 12px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.nb-cifras li { display: grid; grid-template-columns: 140px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+@media (max-width: 640px) { .nb-foto { grid-template-columns: 1fr; } .nb-cifras li { grid-template-columns: 1fr 1fr auto; } }

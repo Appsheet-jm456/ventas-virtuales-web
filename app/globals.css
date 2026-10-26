@@ -563,3 +563,33 @@ textarea.input { resize: vertical; min-height: 54px; line-height: 1.4; }
 .tp-oscuro .pv-lista a.activa { background: rgba(0, 168, 224, .16); }
 .tp-oscuro .pv-mas { background: #F5C518; color: #0B1F4D; }
 .tp-oscuro .pv mark { background: #F5C518; color: #0B1F4D; }
+
+/* ================= Página Nosotros (HU-33) =================
+   En globals.css para que la vista previa del panel se vea igual que la web. */
+.nv { --nv-noche: #0B1F4D; --nv-cian: #00A8E0; --nv-amarillo: #F5C518; --nv-borde: #DFE5EE; --nv-texto: #33415C; color: var(--nv-texto); }
+.nv-pagina { padding-bottom: 96px; }
+.nv-cabeza { text-align: center; padding: 18px 0 30px; margin-bottom: 34px; border-bottom: 1px solid var(--nv-borde); }
+.nv-cabeza h1 { font-family: var(--tit, inherit); font-size: clamp(30px, 4.4vw, 48px); font-weight: 800; color: var(--nv-noche); margin: 0; line-height: 1.1; text-wrap: balance; }
+.nv-bloque { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; padding: 26px 0 44px; }
+.nv-bloque.con-foto { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
+.nv-bloque.foto-izquierda .nv-foto { order: -1; }
+.nv-texto h2 { font-family: var(--tit, inherit); font-size: clamp(22px, 2.6vw, 30px); font-weight: 800; color: var(--nv-noche); margin: 0 0 14px; line-height: 1.2; }
+.nv-texto h2::after { content: ""; display: block; width: 56px; height: 4px; margin-top: 12px; border-radius: 4px; background: linear-gradient(90deg, var(--nv-cian), var(--nv-amarillo)); }
+.nv-texto .texto-seguro { font-size: 16px; line-height: 1.75; }
+.nv-texto p, .nv-texto ul { margin: 0 0 14px; }
+.nv-texto ul { padding-left: 22px; }
+.nv-texto li::marker { color: var(--nv-cian); }
+.nv-texto strong { color: var(--nv-noche); }
+.nv-texto h3 { font-size: 18px; color: var(--nv-noche); margin: 18px 0 8px; }
+.nv-foto { margin: 0; border-radius: 18px; overflow: hidden; box-shadow: 0 16px 38px rgba(11, 31, 77, .14); background: #F3F5F9; }
+.nv-foto img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+.nv-cifras { list-style: none; margin: 4px 0 40px; padding: 26px; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; border-radius: 18px; background: #081A4E; }
+.nv-cifras li { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; padding: 10px; }
+.nv-cifras b { font-family: var(--tit, inherit); font-size: clamp(28px, 3.4vw, 40px); font-weight: 800; color: var(--nv-amarillo); line-height: 1.1; }
+.nv-cifras span { color: #DCE4F5; font-size: 14.5px; }
+@media (max-width: 860px) {
+  .nv-bloque, .nv-bloque.con-foto { grid-template-columns: 1fr; gap: 22px; padding: 16px 0 32px; }
+  .nv-bloque.con-foto .nv-foto { order: -1; }
+}
+.tp-oscuro .nv { --nv-noche: #fff; --nv-borde: #183FA5; --nv-texto: #DCE4F5; }
+.tp-oscuro .nv-cifras { background: #0D1B45; border: 1px solid #183FA5; }

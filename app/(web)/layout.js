@@ -5,6 +5,7 @@ import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
 import { getCategoriasBarra } from "../../lib/categorias";
 import { getPaginasSoporte } from "../../lib/paginas";
+import { getNosotrosPublico } from "../../lib/nosotros";
 import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
 import Constelacion from "../components/Constelacion";
@@ -34,15 +35,16 @@ function WaIcon({ size = 24 }) {
 // "tp-oscuro" el modo oscuro que el dueño enciende en /admin/configuracion (HU-22).
 export default async function WebLayout({ children }) {
   const site = await getSite();
-  const [categoriasBarra, soporte] = await Promise.all([
+  const [categoriasBarra, soporte, nosotros] = await Promise.all([
     getCategoriasBarra({ mostrarAgotados: site.catalogo?.mostrar_agotados !== false }),
     getPaginasSoporte(),
+    getNosotrosPublico(),
   ]);
   const wa = (texto) => waLink(texto, site.whatsapp);
   return (
     <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
         {site.catalogo?.cinta_visible !== false && <Cinta texto={site.catalogo?.cinta_texto} />}
-        <BarraSuperior site={site} hayNosotros={soporte.some((p) => p.slug === "nosotros")} />
+        <BarraSuperior site={site} hayNosotros={Boolean(nosotros)} />
         <header className="site-header">
           {/* Zona del logo, buscador, WhatsApp y envíos: la pantalla con su constelación (HU-21). */}
           <div className="hd-zona">
@@ -111,10 +113,12 @@ export default async function WebLayout({ children }) {
               <p>Asesoría y cierre de venta por WhatsApp.</p>
               <p>🚚 Envíos a todo el país.</p>
             </div>
-            {/* Políticas visibles de /admin/politicas (HU-26); sin ninguna, la columna no aparece. */}
-            {soporte.length > 0 && (
+            {/* «Nosotros» (HU-33) y políticas visibles de /admin/politicas (HU-26); sin ninguna, la
+                columna no aparece. */}
+            {(soporte.length > 0 || nosotros) && (
               <nav aria-label="Soporte">
                 <div className="f-title">Soporte</div>
+                {nosotros && <p><Link href="/nosotros">Nosotros</Link></p>}
                 {soporte.map((p) => <p key={p.slug}><Link href={`/politicas/${p.slug}`}>{p.titulo}</Link></p>)}
               </nav>
             )}

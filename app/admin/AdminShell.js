@@ -53,6 +53,7 @@ function tituloDe(pathname, modulo) {
   if (pathname === "/admin/productos/nuevo") return "Nuevo producto";
   if (/^\/admin\/productos\/[^/]+$/.test(pathname)) return "Editar producto";
   if (pathname === "/admin/politicas/nueva") return "Nueva página";
+  if (pathname === "/admin/configuracion/nosotros") return "Página Nosotros";
   if (/^\/admin\/politicas\/[^/]+$/.test(pathname)) return "Editar página";
   return modulo.nombre;
 }
