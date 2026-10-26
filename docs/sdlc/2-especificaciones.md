@@ -434,19 +434,30 @@ Como dueño quiero una cinta con un mensaje que se desplaza en la parte superior
 
 ---
 
-## HU-25 · Categorías al dar clic en «Productos»
+## HU-25 · Categorías en un menú desplegable de «Productos»
 
-Como cliente quiero ver las categorías al elegir «Productos», para llegar rápido al tipo de equipo que busco.
+Como cliente quiero que al elegir «Productos» se despliegue la lista de categorías, para llegar rápido al tipo de equipo que busco sin recorrer todo el catálogo.
 
-**Supuestos por confirmar con el dueño:** al pulsar **Productos** en el menú se muestra una fila de **categorías** (Portátiles usados, Portátiles nuevos, Impresoras, Accesorios, Partes) **debajo del encabezado**, que luego filtra el listado; las categorías salen de `/admin/categorias` (no están fijas en el código).
+**Decisiones (26 oct):** las categorías van en un **menú desplegable** del ítem «Productos» del menú superior (no en una fila fija). Las categorías salen de `/admin/categorias`. *Sin número de productos por categoría* por ahora (el dueño no lo pidió; se puede agregar después).
 
-- Dado el menú, cuando el cliente pulsa **Productos**, entonces ve el listado con una fila de categorías encima, con «Todos» marcado.
-- Dada una categoría, cuando la pulsa, entonces el listado muestra solo esos productos y la categoría queda marcada; el enlace se puede compartir (`/productos?categoria=...`).
-- Dado que el dueño crea, renombra o quita una categoría en `/admin/categorias`, entonces la fila se actualiza sola (en un minuto).
-- Dado el celular, entonces la fila se desliza horizontalmente sin partir el texto.
-- Dado teclado y lector de pantalla, entonces cada categoría es un enlace con foco visible y la activa se anuncia.
+- Dado el menú superior en computador, cuando el cliente pasa el puntero o pulsa **Productos**, entonces se despliega una lista: **Todos los productos** y cada categoría (Portátiles usados, Portátiles nuevos, Impresoras, Accesorios, Partes).
+- Dado que pulsa **Productos** (el texto, no una opción), entonces va a `/productos` con todo el catálogo; el desplegable no impide entrar.
+- Dada una categoría de la lista, cuando la pulsa, entonces va a `/productos?categoria=<categoría>` y el listado muestra solo esos productos; el enlace se puede compartir.
+- Dada la página `/productos`, entonces la categoría activa se ve marcada también en el desplegable.
+- Dado el celular, entonces «Productos» abre sus categorías como una lista que se expande dentro del menú móvil (sin pasar el puntero), con botones grandes.
+- Dado el teclado y el lector de pantalla, entonces el desplegable se abre con Enter o Espacio, se recorre con las flechas, se cierra con Escape y al hacer clic fuera, y anuncia si está abierto o cerrado.
+- Dado que el dueño crea, renombra, quita u oculta una categoría en `/admin/categorias`, entonces el desplegable se actualiza al recargar, a más tardar en un minuto.
+- Dado que no hay categorías, entonces «Productos» es un enlace simple sin desplegable.
+- Dados modo claro y modo oscuro, entonces el desplegable cumple la guía visual y el contraste WCAG AA.
 
-**Preguntas abiertas:** ¿fila fija arriba o menú desplegable al pasar sobre «Productos»?; ¿se muestra el número de productos por categoría?
+**Plan de tareas:**
+
+| # | Tarea | Dónde |
+|---|---|---|
+| 1 | Leer las categorías en el encabezado de la web | `app/(web)/layout.js`, `lib/categorias.js` |
+| 2 | Componente del desplegable accesible (hover/clic, teclado, Escape, móvil) | `app/components/` y `app/(web)/tema-pantalla.css` |
+| 3 | Que `/productos` filtre por `?categoria=` y marque la activa | `app/(web)/productos/`, `app/components/Catalog.js` |
+| 4 | Prueba en navegador (Playwright): abrir, elegir, enlace compartido, teclado, celular, categoría nueva/oculta; restaurar datos reales | `docs/sdlc/4-pruebas.md` |
 
 ---
 
