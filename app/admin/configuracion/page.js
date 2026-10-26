@@ -18,11 +18,13 @@ const SECCIONES = [
   ["cf-catalogo", "Catálogo"],
   ["cf-apariencia", "Apariencia"],
   ["cf-cinta", "Cinta"],
+  ["cf-barra", "Barra superior"],
   ["cf-cuenta", "Cuenta"],
 ];
 
 const EJEMPLO = { producto: "Lenovo ThinkPad T14 Gen 2", codigo: "100-101-1234" };
 const CINTA_MAX = 200; // igual que lib/configuracion.js (HU-24)
+const UBICACION_MAX = 80; // igual que lib/configuracion.js (HU-32)
 
 function Ico({ d }) {
   return <svg className="adm-i" viewBox="0 0 24 24" aria-hidden="true">{d}</svg>;
@@ -267,6 +269,40 @@ export default function ConfiguracionPage() {
             {catalogo.cinta_visible !== false && String(catalogo.cinta_texto || "").trim()
               ? <div className="cf-cinta-demo"><span>{catalogo.cinta_texto}</span><span>{catalogo.cinta_texto}</span></div>
               : <small className="ct-hint">La cinta no se mostrará en la web.</small>}
+          </div>
+        </section>
+
+        <section className="pr-card" id="cf-barra">
+          <h2 className="pr-h">Barra superior</h2>
+          <p className="pr-sub">Franja delgada arriba del logo, debajo de la cinta: redes sociales a la izquierda; ubicación de la tienda, Nosotros y Contacto a la derecha. Las redes se cambian en <a href="#cf-redes" onClick={(e) => ir(e, "cf-redes")}>Redes sociales</a>.</p>
+          <Interruptor id="cf-barra-on" titulo="Mostrar barra superior" texto="Apagado: la franja desaparece de la web sin dejar espacio."
+            valor={catalogo.barra_visible !== false} onChange={setC("barra_visible")} />
+          <Interruptor id="cf-barra-ubi" titulo="Mostrar ubicación de la tienda" texto="Abre Google Maps con la tienda."
+            valor={catalogo.barra_ubicacion !== false} onChange={setC("barra_ubicacion")} />
+          <div className="cf-grid">
+            <Campo id="cf-ubi-txt" label="Texto de la ubicación" ayuda={<>Corto. Vacío: «{empresa.ciudad || "Nuestra tienda"}». {String(catalogo.ubicacion_texto || "").length} / {UBICACION_MAX}</>}>
+              <input id="cf-ubi-txt" className="input" maxLength={UBICACION_MAX} value={catalogo.ubicacion_texto || ""} onChange={(e) => setC("ubicacion_texto")(e.target.value)} placeholder="Cali · CC Pasarela, local 2-107" />
+            </Campo>
+            <Campo id="cf-ubi-mapa" label="Enlace de Google Maps (opcional)" ayuda="Vacío: se busca la dirección del local en Google Maps.">
+              <input id="cf-ubi-mapa" className="input" value={catalogo.ubicacion_mapa || ""} onChange={(e) => setC("ubicacion_mapa")(e.target.value)} placeholder="https://maps.app.goo.gl/…" />
+            </Campo>
+          </div>
+          <Interruptor id="cf-barra-nos" titulo="Mostrar «Nosotros»" texto="Solo aparece cuando la página Nosotros está publicada."
+            valor={catalogo.barra_nosotros !== false} onChange={setC("barra_nosotros")} />
+          <Interruptor id="cf-barra-con" titulo="Mostrar «Contacto»" texto="Lleva a la sección de contacto del pie de página."
+            valor={catalogo.barra_contacto !== false} onChange={setC("barra_contacto")} />
+          <div className="cf-cinta-prev" aria-hidden="true">
+            <b>Vista previa</b>
+            {catalogo.barra_visible !== false
+              ? <div className="cf-barra-demo">
+                  <span>{[empresa.facebook && "f", empresa.instagram && "ig", empresa.tiktok && "tt"].filter(Boolean).map((r) => <i key={r}>{r}</i>)}</span>
+                  <span>
+                    {catalogo.barra_ubicacion !== false && <em>📍 {catalogo.ubicacion_texto || empresa.ciudad || "Nuestra tienda"}</em>}
+                    {catalogo.barra_nosotros !== false && <em>Nosotros</em>}
+                    {catalogo.barra_contacto !== false && <em>Contacto</em>}
+                  </span>
+                </div>
+              : <small className="ct-hint">La barra superior no se mostrará en la web.</small>}
           </div>
         </section>
 

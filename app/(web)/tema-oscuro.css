@@ -185,6 +185,7 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #060E27; }
 .tp-oscuro .pd-resumen-caja .pd-datos { border-color: var(--p-red); }
 .tp-oscuro .pd-chip { color: var(--p-cian-claro); background: rgba(0, 168, 224, .12); border-color: rgba(76, 195, 240, .4); }
 .tp-oscuro .pd-ficha h2 { color: #fff; }
+.tp-oscuro .bs { background: #0D1B45; border-bottom: 1px solid var(--p-red); }
 .tp-oscuro .pd-fila h2 { color: #fff; }
 .tp-oscuro .pd-fila-borrar { color: var(--p-cian-claro); }
 .tp-oscuro .pd-fila-borrar:hover { color: var(--p-amarillo); }

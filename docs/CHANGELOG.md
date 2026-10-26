@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Barra superior con redes, ubicación y Contacto (HU-32)
+
+Debajo de la cinta en movimiento aparece una franja delgada en el azul de la guía: a la izquierda los íconos de Facebook, Instagram y TikTok; a la derecha «📍 ubicación de la tienda» (abre Google Maps), «Nosotros» (cuando exista esa página) y «Contacto» (lleva al pie). Se maneja en `/admin/configuracion › Barra superior` con vista previa; las redes, en «Redes sociales». En el celular cabe en una línea. Sin migraciones ni cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Productos sugeridos y vistos recientemente (HU-30)
 
 Al final de la página de cada equipo, antes del pie, aparece la fila **«Te pueden interesar»** con hasta 12 equipos parecidos (misma categoría, marca, precio y generación cercanos; los disponibles primero) y, si el visitante ya revisó otros, la fila **«Vistos recientemente»**. Se ven 4 tarjetas con flechas para ver más (en el celular se deslizan con el dedo). El historial de vistos se guarda solo en el navegador del visitante, sin cookies ni datos personales, y se puede borrar. Las flechas de las filas de la web ahora solo aparecen cuando hay algo que ver. Sin migraciones ni cambio de versión del brief.

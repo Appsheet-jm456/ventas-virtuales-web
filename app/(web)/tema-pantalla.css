@@ -75,6 +75,33 @@
 }
 @media (max-width: 640px) { .tp .cinta { font-size: 12px; height: 30px; line-height: 30px; } }
 
+/* ================= Barra superior (HU-32) ================= */
+/* Azul de la guía con texto blanco (contraste 8,6:1) y resaltado amarillo; se va con el scroll. */
+.tp .bs { background: var(--p-red); color: #fff; font-size: 13px; }
+.tp .bs-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 38px; }
+.tp .bs-redes { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.tp .bs-redes a {
+  display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, .55); color: #fff; transition: background .15s, color .15s, border-color .15s;
+}
+.tp .bs-redes a:hover, .tp .bs-redes a:focus-visible { background: var(--p-amarillo); border-color: var(--p-amarillo); color: var(--p-noche); }
+.tp .bs-enlaces { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.tp .bs-enlaces a {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; color: #fff; font-family: var(--tit);
+  font-weight: 700; font-size: 12.5px; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; white-space: nowrap;
+}
+.tp .bs-enlaces a:hover, .tp .bs-enlaces a:focus-visible { color: var(--p-amarillo); }
+.tp .bs-ubi span { text-transform: none; letter-spacing: 0; font-weight: 600; max-width: 320px; overflow: hidden; text-overflow: ellipsis; }
+.tp .bs :focus-visible { outline: 2px solid var(--p-amarillo); outline-offset: 2px; }
+@media (max-width: 640px) {
+  .tp .bs-in { gap: 8px; min-height: 36px; }
+  .tp .bs-redes { gap: 6px; }
+  .tp .bs-redes a { width: 26px; height: 26px; }
+  .tp .bs-nosotros { display: none !important; }
+  .tp .bs-enlaces a { padding: 8px 6px; font-size: 11.5px; }
+  .tp .bs-ubi span { max-width: 110px; }
+}
+
 /* ================= Encabezado: pantalla con constelación ================= */
 .tp .site-header { background: var(--p-fondo); box-shadow: 0 4px 18px rgba(6, 14, 39, .35); border-bottom: 3px solid var(--p-cian); }
 .tp .hd-zona { position: relative; overflow: hidden; isolation: isolate; background: var(--p-pantalla); }

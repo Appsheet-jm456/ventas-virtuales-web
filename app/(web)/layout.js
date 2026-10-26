@@ -9,6 +9,7 @@ import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
 import Constelacion from "../components/Constelacion";
 import Cinta from "../components/Cinta";
+import BarraSuperior from "../components/BarraSuperior";
 import MenuProductos from "../components/MenuProductos";
 import "./tema-pantalla.css";
 import "./tema-oscuro.css";
@@ -37,6 +38,7 @@ export default async function WebLayout({ children }) {
   return (
     <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
         {site.catalogo?.cinta_visible !== false && <Cinta texto={site.catalogo?.cinta_texto} />}
+        <BarraSuperior site={site} hayNosotros={soporte.some((p) => p.slug === "nosotros")} />
         <header className="site-header">
           {/* Zona del logo, buscador, WhatsApp y envíos: la pantalla con su constelación (HU-21). */}
           <div className="hd-zona">
