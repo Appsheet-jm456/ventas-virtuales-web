@@ -3,27 +3,29 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "./ProductCard";
-import { f, stockNum, precioNum, norm, enCategoria } from "../../lib/productos";
+import FiltrosCatalogo from "./FiltrosCatalogo";
+import { f, norm } from "../../lib/productos";
+import { desdeDireccion, aDireccion, cumple, activos, VACIOS } from "../../lib/filtros-catalogo";
 
-// Catálogo con buscador y filtros (HU-06). La búsqueda y la categoría pueden venir en la URL:
-// /productos?q=thinkpad o /productos?categoria=portatil (la categoría se compara "contiene").
-// `categoriasAdmin` son las de /admin/categorias (HU-25): los botones usan su palabra, igual que el
-// menú desplegable, y al elegir una la dirección cambia para poder compartirla.
-export default function Catalog({ rows = [], demo = false, categoriasAdmin = [] }) {
+// Catálogo con buscador y filtros (HU-06, HU-28). Los filtros del panel izquierdo se eligen en un
+// borrador y se aplican con el botón «Aplicar»; quedan en la dirección para compartirlos
+// (/productos?categoria=portatil&marca=hp&tactil=si…). La búsqueda (?q=) filtra al escribir.
+// `categoriasAdmin` son las de /admin/categorias (HU-25): el Tipo del panel y el menú desplegable
+// usan la misma palabra.
+export default function Catalog({ rows = [], demo = false, categoriasAdmin = [], mostrarPrecios = true, waHref = "" }) {
   const sp = useSearchParams();
   const router = useRouter();
   const [q, setQ] = useState(sp.get("q") || "");
-  const [cat, setCat] = useState(sp.get("categoria") || "");
+  const aplicado = useMemo(() => {
+    const fl = desdeDireccion(sp);
+    if (!mostrarPrecios) { fl.min = ""; fl.max = ""; }
+    return fl;
+  }, [sp, mostrarPrecios]);
+  const [borrador, setBorrador] = useState(aplicado);
+  const [abierto, setAbierto] = useState(false);
 
-  // El buscador del encabezado navega a /productos?q=…; si ya estamos aquí, se aplica igual.
-  useEffect(() => {
-    setQ(sp.get("q") || "");
-    setCat(sp.get("categoria") || "");
-  }, [sp]);
-  const [marca, setMarca] = useState("");
-  const [precioMin, setPrecioMin] = useState("");
-  const [precioMax, setPrecioMax] = useState("");
-  const [soloDisp, setSoloDisp] = useState(false);
+  // El buscador del encabezado y el menú de categorías navegan aquí: se toman de la dirección.
+  useEffect(() => { setQ(sp.get("q") || ""); setBorrador(aplicado); }, [sp, aplicado]);
 
   const categorias = useMemo(() => {
     if (categoriasAdmin.length) return categoriasAdmin;
@@ -31,51 +33,22 @@ export default function Catalog({ rows = [], demo = false, categoriasAdmin = [] 
     return [...set].sort((a, b) => a.localeCompare(b, "es")).map((c) => ({ nombre: c, filtro: c }));
   }, [rows, categoriasAdmin]);
 
-  function elegirCategoria(valor) {
-    setCat(valor);
-    const p = new URLSearchParams(sp.toString());
-    if (valor) p.set("categoria", valor); else p.delete("categoria");
-    const qs = p.toString();
-    router.replace(`/productos${qs ? `?${qs}` : ""}`, { scroll: false });
-  }
-  const catActiva = categorias.find((c) => norm(c.filtro) === norm(cat));
+  // La búsqueda acota la base sobre la que se calculan opciones y conteos.
+  const base = useMemo(() => {
+    const nq = norm(q.trim());
+    if (!nq) return rows;
+    return rows.filter((r) => norm([f(r, "Código"), f(r, "Marca"), f(r, "Modelo"), f(r, "Procesador"), f(r, "Categoría"), f(r, "Descripción")].join(" ")).includes(nq));
+  }, [rows, q]);
+  const filtrados = useMemo(() => base.filter((r) => cumple(r, aplicado)), [base, aplicado]);
+  const coinciden = useMemo(() => base.filter((r) => cumple(r, borrador)).length, [base, borrador]);
 
-  const marcas = useMemo(() => {
-    const base = rows.filter((r) => enCategoria(r, cat));
-    const set = new Set(base.map((r) => f(r, "Marca")).filter(Boolean));
-    return [...set].sort((a, b) => a.localeCompare(b, "es"));
-  }, [rows, cat]);
+  const ir = (fl) => router.replace(`/productos${aDireccion(fl, sp)}`, { scroll: false });
+  function aplicar() { ir(borrador); setAbierto(false); }
+  function limpiar() { ir(VACIOS); setAbierto(false); }
+  function cerrar() { setAbierto(false); setBorrador(aplicado); }
 
-  useEffect(() => {
-    if (marca && !marcas.includes(marca)) setMarca("");
-  }, [marcas, marca]);
-
-  const filtered = useMemo(() => {
-    const nq = norm(q);
-    const min = precioMin ? Number(precioMin) : null;
-    const max = precioMax ? Number(precioMax) : null;
-    return rows.filter((r) => {
-      if (soloDisp && stockNum(r) <= 0) return false;
-      if (!enCategoria(r, cat)) return false;
-      if (marca && f(r, "Marca") !== marca) return false;
-      if (min != null || max != null) {
-        const p = precioNum(r);
-        if (p == null) return false;
-        if (min != null && p < min) return false;
-        if (max != null && p > max) return false;
-      }
-      if (nq) {
-        const hay = norm([
-          f(r, "Código"), f(r, "Marca"), f(r, "Modelo"),
-          f(r, "Procesador"), f(r, "Categoría"), f(r, "Descripción"),
-        ].join(" "));
-        if (!hay.includes(nq)) return false;
-      }
-      return true;
-    });
-  }, [rows, q, cat, marca, precioMin, precioMax, soloDisp]);
-
-  const hayFiltros = q || cat || marca || precioMin || precioMax || soloDisp;
+  const catActiva = categorias.find((c) => norm(c.filtro) === norm(aplicado.categoria));
+  const nActivos = activos(aplicado);
 
   return (
     <section className="catalog wrap" id="catalogo">
@@ -88,54 +61,39 @@ export default function Catalog({ rows = [], demo = false, categoriasAdmin = [] 
         </div>
       )}
 
-      {categorias.length > 1 && (
-        <div className="cat-chips">
-          <button className={`cat-chip${cat === "" ? " active" : ""}`} aria-pressed={cat === ""} onClick={() => elegirCategoria("")}>Todos</button>
-          {categorias.map((c) => {
-            const on = norm(cat) === norm(c.filtro);
-            return (
-              <button key={c.filtro} className={`cat-chip${on ? " active" : ""}`} aria-pressed={on} onClick={() => elegirCategoria(on ? "" : c.filtro)}>
-                {c.nombre}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      <div className="cat-layout">
+        <FiltrosCatalogo rows={base} borrador={borrador} setBorrador={setBorrador} categorias={categorias}
+          mostrarPrecios={mostrarPrecios} coinciden={coinciden} onAplicar={aplicar} onLimpiar={limpiar}
+          abierto={abierto} onCerrar={cerrar} />
+        {abierto && <div className="fc-fondo" onClick={cerrar} aria-hidden="true" />}
 
-      <div className="filters">
-        <input
-          className="filter-search"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Buscar marca, modelo, procesador, referencia…"
-        />
-        <select className="filter-sel" value={marca} onChange={(e) => setMarca(e.target.value)}>
-          <option value="">Todas las marcas</option>
-          {marcas.map((m) => <option key={m} value={m}>{m}</option>)}
-        </select>
-        <input className="filter-num" type="number" inputMode="numeric" value={precioMin}
-          onChange={(e) => setPrecioMin(e.target.value)} placeholder="Precio mín" />
-        <input className="filter-num" type="number" inputMode="numeric" value={precioMax}
-          onChange={(e) => setPrecioMax(e.target.value)} placeholder="Precio máx" />
-        <label className="filter-check">
-          <input type="checkbox" checked={soloDisp} onChange={(e) => setSoloDisp(e.target.checked)} />
-          <span>Solo disponibles</span>
-        </label>
-        <span className="filter-count">{filtered.length} de {rows.length}</span>
-        {hayFiltros && (
-          <button className="filter-clear" onClick={() => { setQ(""); elegirCategoria(""); setMarca(""); setPrecioMin(""); setPrecioMax(""); setSoloDisp(false); }}>
-            Limpiar
-          </button>
-        )}
+        <div className="cat-main">
+          <div className="filters">
+            <input className="filter-search" type="search" value={q} onChange={(e) => setQ(e.target.value)}
+              placeholder="Buscar marca, modelo, procesador, referencia…" aria-label="Buscar en el catálogo" />
+            <button type="button" className="fc-abrir" onClick={() => setAbierto(true)} aria-expanded={abierto} aria-controls="filtros-catalogo">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" /></svg>
+              Filtros{nActivos > 0 && <span className="fc-n">{nActivos}</span>}
+            </button>
+            <span className="filter-count" role="status">{filtrados.length} {filtrados.length === 1 ? "producto" : "productos"}</span>
+          </div>
+
+          {filtrados.length === 0 ? (
+            <div className="empty-msg fc-vacio">
+              <p><b>No encontramos equipos con esos filtros.</b></p>
+              <p>Prueba quitando alguno o escríbenos y te ayudamos a conseguirlo.</p>
+              <div className="fc-vacio-acc">
+                {(nActivos > 0 || q) && <button type="button" className="fc-limpiar" onClick={() => { setQ(""); limpiar(); }}>Limpiar filtros</button>}
+                {waHref && <a className="btn-wa" href={waHref} target="_blank" rel="noopener noreferrer">💬 Escríbenos por WhatsApp</a>}
+              </div>
+            </div>
+          ) : (
+            <div className="grid">
+              {filtrados.map((r, i) => <ProductCard key={f(r, "Código") + "-" + i} r={r} />)}
+            </div>
+          )}
+        </div>
       </div>
-
-      {filtered.length === 0 ? (
-        <div className="empty-msg">No encontramos productos con esos filtros. Escríbenos por WhatsApp y te ayudamos a conseguirlo.</div>
-      ) : (
-        <div className="grid">
-          {filtered.map((r, i) => <ProductCard key={f(r, "Código") + "-" + i} r={r} />)}
-        </div>
-      )}
     </section>
   );
 }

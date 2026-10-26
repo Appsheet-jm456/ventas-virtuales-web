@@ -148,6 +148,16 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #060E27; }
 .tp-oscuro .filter-count { color: var(--p-luna); }
 .tp-oscuro .filter-clear { border-color: var(--p-red); color: var(--p-luna); }
 .tp-oscuro .filter-clear:hover { color: #fff; border-color: var(--p-luna); }
+.tp-oscuro .fc { background: var(--p-superficie); border-color: var(--p-red); box-shadow: none; }
+.tp-oscuro .fc-head h2 { color: #fff; }
+.tp-oscuro .fc-campo > label, .tp-oscuro .fc-campo legend { color: var(--p-luna); }
+.tp-oscuro .fc-seg { border-color: var(--p-red); }
+.tp-oscuro .fc-seg label { color: #fff; }
+.tp-oscuro .fc-seg label + label { border-color: var(--p-red); }
+.tp-oscuro .fc-seg label.on { background: var(--p-amarillo); color: var(--p-noche); }
+.tp-oscuro .fc-seg label.on small { color: var(--p-noche); }
+.tp-oscuro .fc-limpiar, .tp-oscuro .fc-abrir { background: var(--p-superficie); border-color: var(--p-red); color: #fff; }
+.tp-oscuro .fc-vacio { border-color: var(--p-red); }
 .tp-oscuro .cat-chip { background: var(--p-superficie); border-color: var(--p-red); color: #fff; }
 .tp-oscuro .cat-chip:hover { border-color: var(--p-amarillo); }
 .tp-oscuro .cat-chip.active { background: var(--p-amarillo); border-color: var(--p-amarillo); color: var(--p-noche); }

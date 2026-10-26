@@ -131,6 +131,11 @@ export default function ProductoForm({ inicial, id }) {
           <section className="pr-card pf-sec">
             <h3>Especificaciones</h3>
             <div className="form-grid">{SPECS.map(campo)}</div>
+            <label className="ep-check">
+              <input type="checkbox" id="campo-tactil" checked={HIDDEN_VALUES.includes((fields["Táctil"] || "").toLowerCase())}
+                onChange={(e) => set("Táctil", e.target.checked ? "Sí" : "")} />
+              <span>Pantalla táctil</span>
+            </label>
           </section>
           <section className="pr-card pf-sec">
             <h3>Fotos y video</h3>

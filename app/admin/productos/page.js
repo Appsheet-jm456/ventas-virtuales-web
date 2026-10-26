@@ -47,7 +47,7 @@ const PLANTILLA = [
     "Lenovo", "ThinkPad T14 Gen 2", "Core i5 1145G7", "11", "16GB", "512GB SSD", "Grado A", "1890000", "0",
     "https://drive.google.com/file/d/ID_DE_LA_FOTO/view", "",
     "Portátil empresarial liviano con **SSD** y pantalla Full HD.", "El compañero ideal para la oficina",
-    "El **ThinkPad T14** combina rendimiento y durabilidad.\n\n## Lo que incluye\n- Cargador original\n- Garantía de 3 meses", "Sí",
+    "El **ThinkPad T14** combina rendimiento y durabilidad.\n\n## Lo que incluye\n- Cargador original\n- Garantía de 3 meses", "No", "Sí",
     'Pantalla=14" Full HD IPS; Gráficos=Intel Iris Xe; Conectividad=Wi-Fi 6 + Bluetooth 5.1'],
 ];
 const celdaCsv = (v) => (/[",\n;]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);

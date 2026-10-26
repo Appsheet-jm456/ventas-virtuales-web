@@ -19,6 +19,8 @@ export const FIELDS = [
   { key: "Resumen", label: "Resumen destacado", ph: "¡Llegó uno de los portátiles empresariales más confiables!…", full: true, area: true, max: 400 },
   { key: "Título descripción", label: "Título de la descripción", ph: "El compañero ideal para la productividad", full: true, max: 120 },
   { key: "Descripción larga", label: "Texto de la descripción", ph: "Párrafos, **negrita**, - listas y ## subtítulos", full: true, area: true, max: 5000 },
+  // Táctil (HU-28): «Sí» o vacío, como Oculto; en el formulario es una casilla.
+  { key: "Táctil", label: "Pantalla táctil", ph: "Sí / No" },
 ];
 
 // "Ficha" (HU-27) es una lista de { campo, valor }, no un texto; va aparte de FIELDS.

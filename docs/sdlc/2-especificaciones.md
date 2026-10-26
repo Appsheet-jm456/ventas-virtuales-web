@@ -564,6 +564,9 @@ Como cliente quiero filtrar los productos por sus características desde un pane
 - **Teclado y lector.** Dado el panel, entonces se maneja con Tab y Enter, tiene etiquetas y anuncia el número de resultados; contraste WCAG AA en claro y oscuro.
 - **Rendimiento.** Dado el catálogo, entonces el filtro se calcula en el navegador con los datos públicos ya cargados, sin consultas nuevas por cada clic.
 
+- **Botones de categoría.** Dado el panel, entonces el **Tipo** reemplaza la fila de botones de categoría que había sobre el listado (HU-25): una sola forma de elegir categoría en la página, que se aplica con **Aplicar** como los demás filtros. El menú desplegable de «Productos» sigue llevando directo a cada categoría.
+- **Solo disponibles.** Se conserva la casilla que ya tenía el catálogo, dentro del panel.
+
 **Campo nuevo — Táctil:** hoy no existe en el producto. Se agrega `tactil boolean` (por defecto «No») en `productos`, editable en `/admin/productos` (casilla «Pantalla táctil») y opcional en el CSV; entra en la lista blanca pública. «Tipo» se toma de la **Categoría** del producto (confirmado).
 
 **Plan de tareas:**
