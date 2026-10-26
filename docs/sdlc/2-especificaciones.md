@@ -678,7 +678,7 @@ Como cliente quiero ver las categorías directamente en la barra del menú, para
 ### Panel y datos (backend)
 
 - La barra sale de la tabla **`categorias`** que ya existe (HU-14): **visibles**, en su **orden**; crear, renombrar, ocultar o reordenar en `/admin/categorias` cambia la barra sola en un minuto.
-- **Propuesta (por confirmar):** casilla nueva **«Mostrar en la barra»** por categoría en `/admin/categorias`, para elegir cuáles van a la vista en la barra (las demás quedan en «☰» y «Más ▾»). Requiere una **migración pequeña** (columna `en_barra boolean`, encendida por defecto). Sin la casilla, van todas las visibles.
+- **Decisión del dueño (26 oct):** van **todas las categorías visibles**, sin casilla extra; **no hay migración**.
 - El conteo de productos por categoría del desplegable sale del catálogo público (sin consultas nuevas por clic).
 
 ### Cambios a lo ya hecho
@@ -690,13 +690,12 @@ Como cliente quiero ver las categorías directamente en la barra del menú, para
 
 | # | Tarea | Dónde |
 |---|---|---|
-| 1 | (Si se aprueba) migración `en_barra` y casilla en el panel | `supabase/migrations/`, `app/admin/categorias/`, `lib/categorias.js` |
-| 2 | Barra de categorías con «☰ Todas las categorías», «Más ▾» y «Todos»; categoría activa | `app/components/BarraCategorias.js`, `app/(web)/layout.js` |
-| 3 | Desplegable completo con imagen y conteo; versión celular a pantalla completa | `app/components/`, `tema-pantalla.css`, `tema-oscuro.css` |
-| 4 | Quitar «Inicio», «Productos ▾» y «Contacto» de la barra; retirar `MenuProductos` | `app/(web)/layout.js` |
-| 5 | Pruebas en navegador (escritorio, «Más», celular, teclado, claro/oscuro) y actualizar las de HU-25 | `docs/sdlc/4-pruebas.md` |
+| 1 | Barra de categorías con «☰ Todas las categorías», «Más ▾» y «Todos»; categoría activa | `app/components/BarraCategorias.js`, `app/(web)/layout.js` |
+| 2 | Desplegable completo con imagen y conteo; versión celular a pantalla completa | `app/components/`, `tema-pantalla.css`, `tema-oscuro.css` |
+| 3 | Quitar «Inicio», «Productos ▾» y «Contacto» de la barra; retirar `MenuProductos` | `app/(web)/layout.js` |
+| 4 | Pruebas en navegador (escritorio, «Más», celular, teclado, claro/oscuro) y actualizar las de HU-25 | `docs/sdlc/4-pruebas.md` |
 
-**Preguntas abiertas:** ¿se agrega la casilla «Mostrar en la barra» o van todas las visibles? ¿Las categorías en mayúsculas como la referencia?
+**Decisiones del dueño (26 oct):** todas las categorías visibles van en la barra; al dar clic en **«☰ Todas las categorías»** se despliega la lista de categorías. Las categorías se muestran en **mayúsculas**, como la referencia.
 
 ---
 
@@ -713,8 +712,8 @@ Como cliente quiero ver arriba de la página las redes sociales de la tienda, d�
 - **Derecha — enlaces:**
   - **📍 Ubicación de la tienda**: muestra la dirección corta (p. ej. «Cali · CC Pasarela, local 2-107»); al pulsar abre **Google Maps** con la tienda, o despliega la dirección completa y el horario («Tiendas ▾» de la referencia).
   - **Nosotros**: lleva a `/nosotros` (HU-33); **solo aparece si esa página está publicada**.
-  - **Contacto**: lleva a la sección de contacto del pie (`#contacto`), con dirección, WhatsApp y horario. (El dueño indicará si prefiere otra ubicación para Contacto.)
-- **Orden con la cinta en movimiento (HU-24) — propuesta por confirmar:** arriba de todo la **cinta**, debajo esta **franja**, luego el encabezado con el logo. Las dos se van con el scroll y el encabezado queda pegado arriba como hoy.
+  - **Contacto**: lleva a la sección de contacto del **pie de página** (`#contacto`), con dirección, WhatsApp y horario (decisión del dueño).
+- **Orden con la cinta en movimiento (HU-24):** arriba de todo la **cinta**, debajo esta **franja**, luego el encabezado con el logo. Las dos se van con el scroll y el encabezado queda pegado arriba como hoy.
 - Dado el celular, entonces la franja muestra solo los **íconos de redes**, el **📍** y **Contacto**, en una sola línea, sin scroll horizontal; «Nosotros» pasa al pie.
 - Dado que la franja está apagada en el panel, entonces no se muestra y no deja espacio.
 - El panel `/admin` **no** muestra la franja.
@@ -722,7 +721,7 @@ Como cliente quiero ver arriba de la página las redes sociales de la tienda, d�
 ### Panel y datos (backend)
 
 - Nueva sección **«Barra superior»** en `/admin/configuracion`: interruptor **«Mostrar barra superior»**; **texto corto de la ubicación**; **enlace de Google Maps** (opcional; si falta, se arma con la dirección registrada); casillas para mostrar **Ubicación**, **Nosotros** y **Contacto**; vista previa.
-- Las redes se siguen editando en **Redes sociales** (ya existe); se pueden agregar **YouTube** y **LinkedIn** como campos opcionales si el dueño las tiene.
+- Las redes se siguen editando en **Redes sociales** (ya existe): solo **Facebook, Instagram y TikTok** (sin YouTube ni LinkedIn, decisión del dueño).
 - Se guarda en la configuración existente (`configuracion › catalogo`/`empresa`: `barra_visible`, `ubicacion_texto`, `ubicacion_mapa`), **sin tablas ni migraciones**; se valida que el enlace del mapa empiece por `https://`.
 
 **Plan de tareas:**
@@ -735,7 +734,7 @@ Como cliente quiero ver arriba de la página las redes sociales de la tienda, d�
 | 4 | Estilos claro/oscuro y celular; orden con la cinta | `tema-pantalla.css`, `tema-oscuro.css` |
 | 5 | Pruebas en navegador (redes vacías, mapa, Nosotros oculto/visible, apagada, celular) restaurando la configuración real | `docs/sdlc/4-pruebas.md` |
 
-**Preguntas abiertas:** ¿orden cinta → franja → encabezado está bien? ¿Agregamos YouTube y LinkedIn? ¿«Contacto» va al pie o a una página de contacto propia?
+**Decisiones del dueño (26 oct):** sin YouTube ni LinkedIn; «Contacto» lleva al pie de página. Orden: cinta → franja → encabezado.
 
 ---
 
@@ -747,7 +746,7 @@ Como dueño quiero crear y mantener desde `/admin` la página **«Nosotros»** (
 
 ### Web pública (frontend)
 
-- Dada la dirección **`/nosotros`**, entonces se ve el **título** de la página y sus **bloques** en orden; cada bloque tiene **título**, **texto** (texto seguro: párrafos, **negrita**, listas, subtítulos) y, si tiene, una **foto** al lado (a la derecha o a la izquierda, alternando o según elija el dueño).
+- Dada la dirección **`/nosotros`**, entonces se ve el **título** de la página y sus **bloques** en orden (p. ej. **biografía de la empresa** y **tiempo en el mercado**); cada bloque tiene **título**, **texto** (texto seguro: párrafos, **negrita**, listas, subtítulos) y, si tiene, una **foto** al lado, a la **izquierda o a la derecha según elija el dueño en cada bloque**.
 - Dada una franja de **cifras** («+10 años en el mercado», «+5.000 equipos entregados», «Garantía en todos los equipos»), entonces se muestran como tarjetas destacadas con número grande.
 - Dado el celular, entonces cada bloque va en una columna: foto arriba y texto debajo, sin scroll horizontal.
 - Dada la página oculta, entonces `/nosotros` responde «no encontrada» y el enlace «Nosotros» no aparece en la barra superior (HU-32) ni en el pie.
@@ -772,7 +771,7 @@ Como dueño quiero crear y mantener desde `/admin` la página **«Nosotros»** (
 | 5 | Enlace «Nosotros» en barra superior (HU-32) y pie, solo si está publicada | `app/(web)/layout.js` |
 | 6 | Pruebas en navegador (crear, foto, reordenar, ocultar, celular, claro/oscuro) y borrar fotos QA de Cloudinary | `docs/sdlc/4-pruebas.md` |
 
-**Preguntas abiertas:** ¿un **Blog** con entradas fechadas (noticias, consejos) también, o solo «Nosotros»? Si se quiere Blog, va como HU aparte. ¿Las fotos alternan izquierda/derecha solas o las elige el dueño en cada bloque?
+**Decisiones del dueño (26 oct):** **solo «Nosotros»** (sin Blog); cada bloque puede llevar **foto a la izquierda o a la derecha**, elegida por el dueño, para la biografía de la empresa y el tiempo en el mercado.
 
 ---
 
