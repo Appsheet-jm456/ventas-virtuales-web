@@ -602,6 +602,7 @@ Como cliente quiero leer, en la ficha del equipo, un resumen destacado y una des
 - Dada la tarjeta **Especificaciones** (los datos de la Ficha técnica, HU-27), entonces cada fila muestra un ícono según la característica (procesador, memoria, almacenamiento, pantalla, gráficos, conectividad, puertos, batería, sistema…; uno genérico para las demás), la característica en negrita a la izquierda y el valor a la derecha.
 - Dado que el producto solo tiene uno de los dos, entonces ese bloque ocupa el ancho completo (la ficha técnica como tabla «Ficha técnica completa», igual que antes).
 - Dado el celular o una pantalla angosta (< 960 px), entonces las columnas se apilan: primero Descripción y luego Especificaciones, sin sticky ni scroll horizontal.
+- Dado el **resumen destacado** y la fila de **datos clave con íconos**, entonces van en una caja **debajo de las fotos** (columna izquierda, mismo ancho de la galería), para llenar ese espacio y aligerar la columna derecha (nombre, precio, datos y WhatsApp). En celular la caja va **después** del botón de WhatsApp, para no separar las fotos del nombre.
 
 **Datos:** columnas nuevas `resumen text`, `detalle_titulo text` y `detalle text` (vacías por defecto) en `productos`, con migración y lista blanca pública.
 

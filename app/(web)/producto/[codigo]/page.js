@@ -130,20 +130,28 @@ export default async function ProductPage({ params }) {
       </div>
 
       <div className="pd-grid">
-        <Gallery images={parseImages(r)} videos={parseVideos(r)} alt={nombre} sold={sold} />
+        {/* Izquierda: fotos y, debajo, el resumen con los datos clave (ajuste del 26 oct: llena el
+            espacio bajo la galería y aligera la columna derecha). En celular va después del botón. */}
+        <div className="pd-izq">
+          <Gallery images={parseImages(r)} videos={parseVideos(r)} alt={nombre} sold={sold} />
+          {(resumen || datos.length > 0) && (
+            <div className="pd-resumen-caja">
+              {resumen && <p className="pd-resumen"><LineaSegura texto={resumen} /></p>}
+              {datos.length > 0 && (
+                <ul className="pd-datos" aria-label="Datos clave">
+                  {datos.map(([ico, etiqueta, valor]) => (
+                    <li key={ico} title={etiqueta}><Ico d={ICONOS[ico]} /><span><span className="sr-only">{etiqueta}: </span>{valor}</span></li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="pd-info">
           {f(r, "Estado") && <span className="pd-insignia">{f(r, "Estado")}</span>}
           <h1>{nombre}</h1>
           <div className="pd-code">Ref: {f(r, "Código")}</div>
-          {resumen && <p className="pd-resumen"><LineaSegura texto={resumen} /></p>}
-          {datos.length > 0 && (
-            <ul className="pd-datos" aria-label="Datos clave">
-              {datos.map(([ico, etiqueta, valor]) => (
-                <li key={ico} title={etiqueta}><Ico d={ICONOS[ico]} /><span><span className="sr-only">{etiqueta}: </span>{valor}</span></li>
-              ))}
-            </ul>
-          )}
 
           {precio
             ? <div className="pd-price">{precio}</div>

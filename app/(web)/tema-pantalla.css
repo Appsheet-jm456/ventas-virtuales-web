@@ -174,7 +174,21 @@
   display: inline-block; margin-bottom: 10px; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; color: #0B6B4B; background: #E3F5EE; border: 1px solid #A9DCC8;
 }
-.tp .pd-resumen { margin: 14px 0; padding-left: 16px; border-left: 4px solid var(--p-cian); color: #33415C; font-size: 16px; line-height: 1.65; }
+/* Resumen y datos clave bajo la galería (ajuste del 26 oct). */
+.tp .pd-izq { min-width: 0; }
+.tp .pd-resumen-caja {
+  margin-top: 22px; padding: 22px 24px; background: var(--p-niebla); border: 1px solid var(--border); border-radius: 14px;
+}
+.tp .pd-resumen { margin: 0; padding-left: 16px; border-left: 4px solid var(--p-cian); color: #33415C; font-size: 16px; line-height: 1.7; }
+.tp .pd-resumen-caja .pd-datos { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--border); }
+.tp .pd-resumen-caja .pd-resumen:only-child, .tp .pd-resumen-caja .pd-datos:only-child { margin-top: 0; padding-top: 0; border-top: 0; }
+/* Celular: fotos, luego nombre/precio/WhatsApp y después el resumen. */
+@media (max-width: 860px) {
+  .tp .pd-izq { display: contents; }
+  .tp .pd-izq > :first-child { order: 1; }
+  .tp .pd-info { order: 2; }
+  .tp .pd-resumen-caja { order: 3; margin-top: 0; }
+}
 .tp .pd-resumen strong { color: var(--p-noche); }
 .tp .pd-datos { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 4px 0 16px; padding: 0; color: #4A5872; font-size: 14px; }
 .tp .pd-datos li { display: inline-flex; align-items: center; gap: 6px; }
