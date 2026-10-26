@@ -8,6 +8,7 @@ import { useAdmin } from "../AdminShell";
 import { descartarSubidas } from "../SubirImagen";
 import FotosProducto, { listaDe } from "./FotosProducto";
 import FichaTecnica from "./FichaTecnica";
+import DescripcionAmpliada from "./DescripcionAmpliada";
 import { FIELDS, HIDDEN_VALUES, CLAVE_AVISO } from "./campos";
 
 // Formulario de producto en página completa (HU-18), para crear y para editar. Secciones en dos
@@ -145,6 +146,11 @@ export default function ProductoForm({ inicial, id }) {
               />
             </div>
             {campo("Video")}
+          </section>
+          <section className="pr-card pf-sec" id="descripcion-ampliada">
+            <h3>Descripción ampliada</h3>
+            <p className="ct-hint">Resumen bajo el nombre y bloque «Descripción» antes de la ficha técnica, en la página del producto. Vacíos, no se muestran.</p>
+            <DescripcionAmpliada fields={fields} set={set} disabled={busy} />
           </section>
           <section className="pr-card pf-sec" id="ficha-tecnica">
             <h3>Ficha técnica</h3>

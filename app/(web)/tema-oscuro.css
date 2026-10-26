@@ -167,6 +167,11 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #060E27; }
 .tp-oscuro .specs td { color: #fff; }
 .tp-oscuro .btn-wa.off { background: #26365F; color: var(--p-luna); }
 .tp-oscuro .pd-note { color: var(--p-luna); }
+.tp-oscuro .pd-insignia { color: #8FE3C1; background: rgba(15, 160, 110, .14); border-color: rgba(143, 227, 193, .4); }
+.tp-oscuro .pd-resumen, .tp-oscuro .pd-detalle-txt { color: #DCE4F5; }
+.tp-oscuro .pd-resumen strong, .tp-oscuro .pd-detalle-txt strong, .tp-oscuro .pd-detalle h2, .tp-oscuro .pd-detalle-txt h3 { color: #fff; }
+.tp-oscuro .pd-datos { color: var(--p-luna); }
+.tp-oscuro .pd-chip { color: var(--p-cian-claro); background: rgba(0, 168, 224, .12); border-color: rgba(76, 195, 240, .4); }
 .tp-oscuro .pd-ficha h2 { color: #fff; }
 .tp-oscuro .pd-ficha-tabla { background: var(--p-superficie); border-color: var(--p-red); box-shadow: none; }
 .tp-oscuro .pd-ficha-tabla th, .tp-oscuro .pd-ficha-tabla td, .tp-oscuro .pd-ficha-tabla tr { border-color: var(--p-red); }

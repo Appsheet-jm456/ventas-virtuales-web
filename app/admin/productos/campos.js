@@ -15,6 +15,10 @@ export const FIELDS = [
   { key: "Stock", label: "Stock", ph: "1", num: true },
   { key: "Foto", label: "Fotos (la primera es la portada)", ph: "https://res.cloudinary.com/…", full: true, area: true },
   { key: "Video", label: "Video — URL", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
+  // Descripción ampliada (HU-29): texto seguro, límites en lib/inventory.js (LARGOS).
+  { key: "Resumen", label: "Resumen destacado", ph: "¡Llegó uno de los portátiles empresariales más confiables!…", full: true, area: true, max: 400 },
+  { key: "Título descripción", label: "Título de la descripción", ph: "El compañero ideal para la productividad", full: true, max: 120 },
+  { key: "Descripción larga", label: "Texto de la descripción", ph: "Párrafos, **negrita**, - listas y ## subtítulos", full: true, area: true, max: 5000 },
 ];
 
 // "Ficha" (HU-27) es una lista de { campo, valor }, no un texto; va aparte de FIELDS.

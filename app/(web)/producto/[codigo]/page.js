@@ -5,6 +5,8 @@ import { waLink } from "../../../../lib/site";
 import { getSite, mensajeProducto } from "../../../../lib/configuracion";
 import Gallery from "../../../components/Gallery";
 import { fichaDe } from "../../../../lib/ficha";
+import { textoPlano } from "../../../../lib/texto-seguro";
+import TextoSeguro, { LineaSegura } from "../../../components/TextoSeguro";
 
 export const revalidate = 60;
 
@@ -28,9 +30,19 @@ export async function generateMetadata({ params }) {
   const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Código");
   return {
     title: `${nombre} — ${site.nombre}`,
-    description: f(r, "Descripción").slice(0, 150) || `Compra ${nombre} en ${site.nombre}.`,
+    description: (textoPlano(f(r, "Resumen")) || f(r, "Descripción")).slice(0, 150) || `Compra ${nombre} en ${site.nombre}.`,
   };
 }
+
+// Íconos de la fila de datos clave (HU-29), trazo de 24×24.
+const ICONOS = {
+  cpu: <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" />,
+  ram: <><rect x="3" y="7" width="18" height="10" rx="1.5" /><path d="M7 7v10M11 7v10M15 7v10M3 20h18" /></>,
+  disco: <><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="15.5" cy="12" r="3" /><path d="M7 9h2M7 15h2" /></>,
+  pantalla: <><rect x="2" y="4" width="20" height="13" rx="1.5" /><path d="M8 21h8M12 17v4" /></>,
+};
+const Ico = ({ d }) => <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{d}</svg>;
+const sinTilde = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 const SPECS = [
   ["Categoría", "Categoría"],
@@ -68,6 +80,17 @@ export default async function ProductPage({ params }) {
   const precio = fmtPrecio(r);
   const msg = mensajeProducto(site.mensajeProducto, nombre, f(r, "Código"));
   const ficha = fichaDe(r.Ficha);
+  const valorFicha = (palabra) => ficha.find((x) => sinTilde(x.campo).includes(palabra))?.valor || "";
+  const generacion = f(r, "Generación");
+  const datos = [
+    ["cpu", "Procesador", [f(r, "Procesador"), generacion && !/gen/i.test(f(r, "Procesador")) ? `${generacion}ª Gen` : ""].filter(Boolean).join(" ")],
+    ["ram", "Memoria RAM", f(r, "RAM")],
+    ["disco", "Almacenamiento", f(r, "Almacenamiento")],
+    ["pantalla", "Pantalla", valorFicha("pantalla")],
+  ].filter((x) => x[2]);
+  const resumen = f(r, "Resumen");
+  const detalleTitulo = f(r, "Título descripción");
+  const detalle = f(r, "Descripción larga");
 
   return (
     <main className="pd wrap">
@@ -79,8 +102,17 @@ export default async function ProductPage({ params }) {
         <Gallery images={parseImages(r)} videos={parseVideos(r)} alt={nombre} sold={sold} />
 
         <div className="pd-info">
+          {f(r, "Estado") && <span className="pd-insignia">{f(r, "Estado")}</span>}
           <h1>{nombre}</h1>
           <div className="pd-code">Ref: {f(r, "Código")}</div>
+          {resumen && <p className="pd-resumen"><LineaSegura texto={resumen} /></p>}
+          {datos.length > 0 && (
+            <ul className="pd-datos" aria-label="Datos clave">
+              {datos.map(([ico, etiqueta, valor]) => (
+                <li key={ico} title={etiqueta}><Ico d={ICONOS[ico]} /><span><span className="sr-only">{etiqueta}: </span>{valor}</span></li>
+              ))}
+            </ul>
+          )}
 
           {precio
             ? <div className="pd-price">{precio}</div>
@@ -126,6 +158,15 @@ export default async function ProductPage({ params }) {
           )}
         </div>
       </div>
+
+      {/* Descripción ampliada (HU-29): texto seguro dibujado con React, sin HTML del dueño. */}
+      {(detalleTitulo || detalle) && (
+        <section className="pd-detalle" aria-labelledby={detalleTitulo ? "pd-detalle-t" : undefined} aria-label={detalleTitulo ? undefined : "Descripción"}>
+          <span className="pd-chip">Descripción</span>
+          {detalleTitulo && <h2 id="pd-detalle-t">{detalleTitulo}</h2>}
+          <TextoSeguro texto={detalle} className="pd-detalle-txt" />
+        </section>
+      )}
 
       {/* Ficha técnica completa (HU-27): la carga el dueño en /admin/productos. Texto plano: React
           escapa todo, no se interpreta HTML. Sin filas, el bloque no existe. */}

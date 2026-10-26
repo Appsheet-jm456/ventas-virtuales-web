@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Descripción ampliada del producto (HU-29)
+
+La página del equipo arranca con una insignia del estado («Grado B», «Usado en buen estado»…), el nombre, un resumen destacado con barra azul y una fila de datos clave con íconos (procesador, RAM, almacenamiento y pantalla). Debajo de las fotos aparece el bloque «Descripción» con su título y un texto largo con párrafos, negritas, subtítulos y listas, antes de la ficha técnica. Se escribe en `/admin/productos` con botones Negrita, Lista y Subtítulo y vista previa, o por CSV. Por seguridad no se acepta HTML: se muestra como texto. Nuevas columnas en Supabase (migración del 26 oct). Sin cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Ficha técnica completa del producto (HU-27)
 
 La página de cada equipo muestra, debajo de las fotos y del botón de WhatsApp, una tabla «Ficha técnica completa» (Característica → Valor, filas alternadas) con todos los datos que el dueño quiera. Se carga en `/admin/productos` al crear o editar: agregar, ordenar y quitar filas, plantilla de portátil, copiar la ficha de otro producto y vista previa; también por la carga CSV con la columna opcional **Ficha**. Sin ficha, el bloque no aparece. Nueva columna `ficha` en Supabase (migración del 26 oct). Sin cambio de versión del brief.

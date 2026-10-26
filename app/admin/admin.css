@@ -403,3 +403,17 @@
   .ft-valor { grid-column: 1 / -1; grid-row: 2; }
   .ft-acc { grid-column: 2; grid-row: 1; }
 }
+
+/* Descripción ampliada del producto (HU-29) */
+.da { display: flex; flex-direction: column; gap: 12px; }
+.da-pie { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.da-cuenta { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.da-barra { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.da-fmt { width: auto; padding: 0 10px; font-size: 13px; color: var(--text); }
+.da-texto { min-height: 200px; line-height: 1.5; }
+.da-previa { border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.da-insignia { align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #0B7A55; background: #E3F5EE; border: 1px solid #A9DCC8; border-radius: 6px; padding: 5px 10px; }
+.da-resumen { margin: 0; border-left: 4px solid #2F80ED; padding-left: 14px; color: #33415C; line-height: 1.6; }
+.da-titulo { margin: 6px 0 0; font-size: 18px; }
+.da-cuerpo p, .da-cuerpo ul { margin: 0 0 10px; line-height: 1.6; }
+.da-cuerpo h3 { font-size: 15px; margin: 12px 0 6px; }
