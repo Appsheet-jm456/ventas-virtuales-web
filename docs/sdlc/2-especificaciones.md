@@ -628,14 +628,16 @@ Como cliente quiero ver, al final de la página de un equipo, otros portátiles 
 
 **Dónde (26 oct, pedido del dueño):** al **final de la página del producto**, justo antes del pie de página («Contacto»), debajo de la descripción y las especificaciones.
 
-**Decisiones propuestas (por confirmar con el dueño):** las dos filas, **«Te pueden interesar»** primero y **«Vistos recientemente»** debajo; hasta **4 productos** por fila en escritorio; solo en la página del producto (el catálogo queda como está).
+**Decisiones del dueño (26 oct):** las **dos filas**, **«Te pueden interesar»** primero y **«Vistos recientemente»** debajo; **4 productos visibles por fila**, con un **botón a la derecha (y a la izquierda) para ver los demás** cuando hay más; **solo en la ficha del producto** (el catálogo queda como está).
 
-- **Te pueden interesar.** Dada la ficha `/producto/<código>`, entonces se muestran hasta **4 equipos parecidos**, elegidos por reglas simples en este orden: misma **categoría**, misma **marca**, **precio** dentro de ±30 % y procesador de generación cercana; primero los **disponibles**. Nunca aparece el mismo equipo que se está viendo. Si faltan, se completan con otros disponibles de la categoría.
+- **Te pueden interesar.** Dada la ficha `/producto/<código>`, entonces se muestran hasta **12 equipos parecidos** (4 visibles a la vez, el resto con las flechas), elegidos por reglas simples en este orden: misma **categoría**, misma **marca**, **precio** dentro de ±30 % y procesador de generación cercana; primero los **disponibles**. Nunca aparece el mismo equipo que se está viendo. Si faltan, se completan con otros disponibles de la categoría. Los más parecidos van primero, así los 4 visibles son los mejores.
 - **Vistos recientemente.** Dado un visitante que ya abrió otros productos, entonces se muestran hasta **8** de los últimos que vio, del más reciente al más antiguo, sin incluir el actual. Si es su primera visita o no vio otros, la fila **no aparece**.
 - **Privacidad (decisión 0010).** El historial se guarda **solo en el navegador del visitante** (almacenamiento local), con **solo los códigos de producto**: no se envía al servidor, no usa cookies, no se asocia a una persona y **no requiere aviso de cookies**. Un enlace **«Borrar historial»** junto al título de la fila lo limpia.
 - **Siempre al día.** Dado que un producto visto se oculta, se elimina o ya no se publica, entonces desaparece de «Vistos»; los precios, el estado y las fotos salen siempre del catálogo actual, no de lo guardado.
 - **Tarjetas.** Dadas las filas, entonces usan las **mismas tarjetas del catálogo** (foto, nombre, procesador, precio, «Disponible» o «Agotado»), con enlace a su ficha. Con **«Mostrar precios»** apagado en `/admin/configuracion`, no muestran precio; con **«Mostrar agotados»** apagado, no incluyen agotados.
-- **Escritorio y celular.** Dado el escritorio, entonces 4 tarjetas por fila; dado el celular, entonces la fila se **desliza de lado** con tarjetas de buen tamaño, sin scroll horizontal de la página.
+- **Flechas.** Dada una fila con más de 4 productos (escritorio), entonces se ven **4 tarjetas** y un botón **›** a la derecha que avanza de a una página; al avanzar aparece el botón **‹** para volver. Cada botón se **desactiva o desaparece** en el extremo y tiene nombre para lector de pantalla («Ver más productos», «Ver anteriores»). Con 4 o menos, no hay flechas.
+- **Celular.** Dado el celular, entonces la fila se **desliza con el dedo** (se ve parte de la siguiente tarjeta para que se note que hay más), con tarjetas de buen tamaño y **sin scroll horizontal de la página**; las flechas no se muestran.
+- **Teclado.** Dado el teclado, entonces las flechas son botones alcanzables con Tab y la fila también se recorre con Tab entre tarjetas, mostrando la tarjeta enfocada.
 - **Sin datos.** Dado que no hay equipos parecidos (catálogo muy pequeño), entonces **no se muestra el bloque** y no deja espacio.
 - **Accesibilidad.** Dados teclado y lector de pantalla, entonces cada fila es una región con su título, las tarjetas son enlaces con foco visible y el botón «Borrar historial» tiene nombre claro; contraste WCAG AA en modo claro y oscuro.
 - **Sin cambios de datos:** no lleva migración, tablas ni columnas nuevas; usa el catálogo público que la página ya carga.
@@ -645,12 +647,11 @@ Como cliente quiero ver, al final de la página de un equipo, otros portátiles 
 | # | Tarea | Dónde |
 |---|---|---|
 | 1 | Reglas de «Te pueden interesar» (categoría, marca, precio, generación, disponibilidad) | `lib/sugeridos.js` |
-| 2 | Bloque «Te pueden interesar» en la ficha, con las tarjetas del catálogo | `app/(web)/producto/[codigo]/page.js`, `app/components/` |
+| 2 | Fila deslizable con flechas y 4 visibles (compartida por las dos filas), con las tarjetas del catálogo | `app/components/FilaProductos.js` |
+| 2b | Bloque «Te pueden interesar» en la ficha | `app/(web)/producto/[codigo]/page.js` |
 | 3 | Historial de vistos en el navegador, con control de límite, validación contra el catálogo y «Borrar historial» | `app/components/VistosRecientemente.js` |
-| 4 | Fila deslizable en celular y estilos claro y oscuro | `tema-pantalla.css`, `tema-oscuro.css` |
-| 5 | Prueba en navegador (Playwright) con productos `QA-*`: sugeridos correctos y sin repetir, vistos en orden y sin el actual, ocultar un producto lo quita, borrar historial, precios y agotados ocultos, celular, teclado; borrar al final | `docs/sdlc/4-pruebas.md` |
-
-**Preguntas abiertas:** ¿quieres las dos filas o solo una? ¿Cuántos sugeridos (4 u 8)? ¿También en el catálogo `/productos`, o solo en la ficha?
+| 4 | Estilos de la fila, flechas y celular, en claro y oscuro | `tema-pantalla.css`, `tema-oscuro.css` |
+| 5 | Prueba en navegador (Playwright) con productos `QA-*`: sugeridos correctos y sin repetir, 4 visibles y flechas que avanzan y retroceden, vistos en orden y sin el actual, ocultar un producto lo quita, borrar historial, precios y agotados ocultos, celular (deslizar), teclado; borrar al final | `docs/sdlc/4-pruebas.md` |
 
 ---
 
