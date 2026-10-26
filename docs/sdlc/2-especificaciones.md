@@ -511,6 +511,75 @@ Tabla nueva `paginas` (única tabla nueva de esta mejora, con RLS: lectura públ
 
 ---
 
+## HU-27 · Ficha técnica completa del producto, editable desde el panel
+
+Como cliente quiero ver en la página de cada equipo (p. ej. «HP EliteBook») una ficha técnica completa, para saber exactamente qué compro; y como dueño quiero cargar esos datos desde `/admin/productos`, sin tocar código.
+
+**Referencia (imágenes del 26 oct):** tabla «Ficha técnica completa» de dos columnas (Marca / Modelo, Procesador, Memoria RAM, Almacenamiento, Pantalla, Gráficos, Conectividad, Ethernet…) con filas alternadas.
+
+- **Dónde.** Dada la ficha `/producto/<código>`, entonces la ficha técnica aparece **debajo de las fotos** y del botón «Estoy interesado · WhatsApp», con el título **Ficha técnica completa**. En celular va en una sola columna, sin desbordar.
+- **Qué muestra.** Dada la ficha, entonces es una tabla de **Característica → Valor** con filas alternadas y los datos que el dueño cargó, en el orden que los puso. Si el producto no tiene ficha, entonces **no se muestra** el bloque ni deja espacio.
+- **Datos que ya existen.** Dado un producto sin ficha cargada, entonces la web **no inventa** filas; solo mantiene lo actual (marca, modelo, procesador, RAM, almacenamiento, estado).
+- **Panel.** Dado `/admin/productos/<id>` (edición en página completa, HU-18) y **Nuevo producto**, entonces hay una sección **Ficha técnica** con filas de dos campos (Característica y Valor) donde puedo **agregar, editar, quitar y reordenar** (subir/bajar) filas.
+- **Sugerencias.** Dada una fila nueva, entonces el campo Característica propone nombres habituales (Pantalla, Gráficos, Conectividad, Puertos, Batería, Sistema operativo, Peso, Teclado, Cámara, Garantía…) pero admite cualquier texto.
+- **Plantilla.** Dado el botón **Usar plantilla de portátil**, entonces carga las filas típicas vacías para rellenar; no pisa lo ya escrito.
+- **Copiar.** Dado el botón **Copiar ficha de otro producto**, entonces busco por código o modelo y se copian sus filas para ajustarlas (útil con lotes iguales).
+- **Límites.** Hasta **40 filas** por producto; Característica hasta 60 caracteres y Valor hasta 300. Filas con ambos campos vacíos se descartan al guardar.
+- **Seguridad.** Todo es **texto plano**: no se acepta HTML y la web lo escapa.
+- **Carga CSV.** Dada la carga CSV, entonces una columna opcional **Ficha** acepta `Pantalla=14" HD; Gráficos=Intel UHD 620` (pares separados por `;`); sin la columna, la ficha existente **no se borra**.
+- **Vista previa y avisos.** Dado el panel, entonces ve cómo queda la ficha antes de guardar y avisa si salgo con cambios sin guardar.
+- **Pública y privacidad.** Dada la API pública, entonces la ficha se agrega a la **lista blanca de columnas** (RN-04); nada interno se expone.
+- Se ve igual en modo claro y oscuro con contraste WCAG AA.
+
+**Datos:** columna nueva `ficha jsonb not null default '[]'` en `productos` (lista de `{campo, valor}`), con migración; sin tablas nuevas.
+
+**Plan de tareas:**
+
+| # | Tarea | Dónde |
+|---|---|---|
+| 1 | Migración `ficha` y lista blanca pública (RN-04) | `supabase/migrations/`, `lib/inventory.js` |
+| 2 | Validación y límites de la ficha | `lib/productos.js` o `lib/ficha.js` |
+| 3 | Sección **Ficha técnica** del formulario (filas, reordenar, sugerencias, plantilla, copiar) | `app/admin/productos/ProductoForm.js`, `campos.js` |
+| 4 | Columna `Ficha` en la carga CSV (opcional, sin borrar) | `app/admin/productos/`, `lib/csv.js` |
+| 5 | Bloque público bajo fotos y WhatsApp, en claro y oscuro | `app/(web)/producto/[codigo]/page.js`, `tema-pantalla.css`, `tema-oscuro.css` |
+| 6 | Prueba en navegador con producto `QA-*`: crear, editar, reordenar, vacío, celular, CSV; borrar al final | `docs/sdlc/4-pruebas.md` |
+
+**Preguntas abiertas:** ¿las otras dos imágenes (insignia «Usado en buen estado», título y texto destacado, y la **Descripción** larga con título) entran como HU-29 «Descripción ampliada del producto»? ¿La ficha se muestra siempre abierta o plegable en celular?
+
+---
+
+## HU-28 · Filtro dinámico para el cliente en Productos
+
+Como cliente quiero filtrar los productos por sus características desde un panel al lado, para encontrar rápido el equipo que busco.
+
+- **Dónde.** Dada la página `/productos`, entonces el panel de filtros está en **forma vertical a la izquierda** del listado (como en HU-19 del panel); en celular se abre con un botón **Filtros** encima del listado, a pantalla completa.
+- **Filtros.** Dado el panel, entonces ofrece: **Marca**, **Modelo**, **Procesador**, **Tipo**, **Precio mínimo**, **Precio máximo** y **Táctil** (Sí / No / Todos).
+- **Dinámico.** Dadas las listas, entonces las opciones salen de los productos publicados (no de una lista fija), muestran **cuántos productos** tiene cada una, y al elegir una, las otras solo ofrecen lo que aún tiene resultados; «8GB» y «8 GB» cuentan como uno. Solo salen las opciones que existen.
+- **Aplicar.** Dado el botón **Aplicar**, entonces el listado se actualiza con los filtros elegidos (no antes); junto a él hay **Limpiar** y se ve cuántos filtros hay activos y cuántos productos coinciden.
+- **Enlace.** Dados los filtros aplicados, entonces quedan en la dirección (`/productos?marca=HP&procesador=…&tactil=si&min=…&max=…`) y se pueden compartir; al volver atrás de una ficha, siguen como estaban.
+- **Combina.** Dados los filtros, entonces se combinan entre sí, con la **búsqueda** y con la **categoría** del menú desplegable (HU-25): elegir una categoría en el menú marca ese **Tipo** en el panel y viceversa.
+- **Precios.** Dado un mínimo mayor que el máximo, entonces avisa y no deja el listado en blanco sin explicación. Con **Mostrar precios** apagado en la configuración, entonces **no se ofrecen** los filtros de precio.
+- **Sin resultados.** Dado que nada coincide, entonces dice «No encontramos equipos con esos filtros» y ofrece **Limpiar filtros** y escribir por WhatsApp.
+- **Agotados.** Dado el ajuste de agotados de `/admin/configuracion`, entonces los filtros respetan lo que la web ya muestra u oculta.
+- **Teclado y lector.** Dado el panel, entonces se maneja con Tab y Enter, tiene etiquetas y anuncia el número de resultados; contraste WCAG AA en claro y oscuro.
+- **Rendimiento.** Dado el catálogo, entonces el filtro se calcula en el navegador con los datos públicos ya cargados, sin consultas nuevas por cada clic.
+
+**Campo nuevo — Táctil:** hoy no existe en el producto. Se agrega `tactil boolean` (por defecto «No») en `productos`, editable en `/admin/productos` (casilla «Pantalla táctil») y opcional en el CSV; entra en la lista blanca pública. «Tipo» se toma de la **Categoría** del producto (supuesto por confirmar).
+
+**Plan de tareas:**
+
+| # | Tarea | Dónde |
+|---|---|---|
+| 1 | Migración `tactil`, casilla en el formulario y columna opcional del CSV; lista blanca pública | `supabase/migrations/`, `campos.js`, `lib/inventory.js` |
+| 2 | Lógica de filtros dinámicos con conteos (reutilizar la de HU-19) | `lib/filtros.js` |
+| 3 | Panel vertical con **Aplicar**, **Limpiar** y botón Filtros en celular | `app/components/Catalog.js`, `FiltrosCatalogo.js`, `tema-pantalla.css` |
+| 4 | Filtros en la dirección y unión con búsqueda y categoría (HU-25) | `app/(web)/productos/page.js` |
+| 5 | Prueba en navegador con productos `QA-*`: cada filtro, combinación, vacío, enlace, celular, precios ocultos; borrar al final | `docs/sdlc/4-pruebas.md` |
+
+**Preguntas abiertas:** ¿«Tipo» es la categoría (Portátil usado, Impresora…) o el tipo de equipo (Ultrabook, Workstation, 2 en 1)? ¿Se filtra aplicando con el botón siempre, o también al instante en computador?
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
