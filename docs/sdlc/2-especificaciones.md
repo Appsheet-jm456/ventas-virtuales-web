@@ -524,7 +524,7 @@ Como cliente quiero ver en la página de cada equipo (p. ej. «HP EliteBook») u
 - **Sugerencias.** Dada una fila nueva, entonces el campo Característica propone nombres habituales (Pantalla, Gráficos, Conectividad, Puertos, Batería, Sistema operativo, Peso, Teclado, Cámara, Garantía…) pero admite cualquier texto.
 - **Plantilla.** Dado el botón **Usar plantilla de portátil**, entonces carga las filas típicas vacías para rellenar; no pisa lo ya escrito.
 - **Copiar.** Dado el botón **Copiar ficha de otro producto**, entonces busco por código o modelo y se copian sus filas para ajustarlas (útil con lotes iguales).
-- **Límites.** Hasta **40 filas** por producto; Característica hasta 60 caracteres y Valor hasta 300. Filas con ambos campos vacíos se descartan al guardar.
+- **Límites.** Hasta **40 filas** por producto; Característica hasta 60 caracteres y Valor hasta 300. Las filas **sin valor** (p. ej. las de la plantilla que no se llenaron) se descartan al guardar y el panel lo avisa; un valor sin característica da error.
 - **Seguridad.** Todo es **texto plano**: no se acepta HTML y la web lo escapa.
 - **Carga CSV.** Dada la carga CSV, entonces una columna opcional **Ficha** acepta `Pantalla=14" HD; Gráficos=Intel UHD 620` (pares separados por `;`); sin la columna, la ficha existente **no se borra**.
 - **Vista previa y avisos.** Dado el panel, entonces ve cómo queda la ficha antes de guardar y avisa si salgo con cambios sin guardar.

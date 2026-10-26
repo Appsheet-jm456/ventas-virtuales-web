@@ -17,7 +17,8 @@ export const FIELDS = [
   { key: "Video", label: "Video — URL", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
 ];
 
-export const EMPTY = { ...Object.fromEntries(FIELDS.map((c) => [c.key, ""])), Oculto: "" };
+// "Ficha" (HU-27) es una lista de { campo, valor }, no un texto; va aparte de FIELDS.
+export const EMPTY = { ...Object.fromEntries(FIELDS.map((c) => [c.key, ""])), Oculto: "", Ficha: [] };
 
 // ¿Está oculto de la tienda web? (columna "Oculto")
 export const HIDDEN_VALUES = ["sí", "si", "true", "1", "x", "oculto", "yes", "y"];
@@ -29,6 +30,7 @@ export function camposDe(r) {
   const fields = {};
   for (const c of FIELDS) fields[c.key] = txt(r, c.key);
   fields["Oculto"] = txt(r, "Oculto");
+  fields["Ficha"] = Array.isArray(r?.Ficha) ? r.Ficha.map((x) => ({ campo: x.campo, valor: x.valor })) : [];
   return fields;
 }
 

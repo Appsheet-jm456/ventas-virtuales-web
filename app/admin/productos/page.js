@@ -42,10 +42,11 @@ const specsDe = (r) => [f(r, "Procesador"), f(r, "RAM"), f(r, "Almacenamiento"),
 // Plantilla CSV: encabezados que entiende la carga y una fila de ejemplo que, si se carga por
 // error, queda oculta y agotada.
 const PLANTILLA = [
-  [...FIELDS.map((c) => c.key), "Oculto"],
+  [...FIELDS.map((c) => c.key), "Oculto", "Ficha"],
   ["EJEMPLO-001", "Portátil usado", "PORTATIL LENOVO THINKPAD T14 GEN 2 CORE I5 1145G7 RAM 16GB SSD 512GB GR A",
     "Lenovo", "ThinkPad T14 Gen 2", "Core i5 1145G7", "11", "16GB", "512GB SSD", "Grado A", "1890000", "0",
-    "https://drive.google.com/file/d/ID_DE_LA_FOTO/view", "", "Sí"],
+    "https://drive.google.com/file/d/ID_DE_LA_FOTO/view", "", "Sí",
+    'Pantalla=14" Full HD IPS; Gráficos=Intel Iris Xe; Conectividad=Wi-Fi 6 + Bluetooth 5.1'],
 ];
 const celdaCsv = (v) => (/[",\n;]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
 
@@ -547,6 +548,7 @@ export default function ProductosPage() {
             <li><b>Guárdala como CSV UTF-8</b> y súbela aquí.</li>
             <li><b>Revisa la vista previa</b> y confirma la carga.</li>
           </ol>
+          <p className="ct-hint">Columna opcional <b>Ficha</b> (ficha técnica): pares <span className="mono">Característica=Valor</span> separados por punto y coma, p. ej. <span className="mono">Pantalla=14" HD; Gráficos=Intel UHD 620</span>. Si la dejas vacía, la ficha del producto no se toca.</p>
           <button type="button" className="btn-ghost pr-btn" onClick={descargarPlantilla}><Ico d={I.file} />Descargar plantilla CSV</button>
 
           <div

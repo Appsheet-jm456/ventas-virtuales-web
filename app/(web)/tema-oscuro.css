@@ -167,6 +167,12 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #060E27; }
 .tp-oscuro .specs td { color: #fff; }
 .tp-oscuro .btn-wa.off { background: #26365F; color: var(--p-luna); }
 .tp-oscuro .pd-note { color: var(--p-luna); }
+.tp-oscuro .pd-ficha h2 { color: #fff; }
+.tp-oscuro .pd-ficha-tabla { background: var(--p-superficie); border-color: var(--p-red); box-shadow: none; }
+.tp-oscuro .pd-ficha-tabla th, .tp-oscuro .pd-ficha-tabla td, .tp-oscuro .pd-ficha-tabla tr { border-color: var(--p-red); }
+.tp-oscuro .pd-ficha-tabla tr:nth-child(even) { background: rgba(255, 255, 255, .04); }
+.tp-oscuro .pd-ficha-tabla th { color: var(--p-luna); }
+.tp-oscuro .pd-ficha-tabla td { color: #fff; }
 
 /* Galería: la foto grande y las miniaturas también en recuadro claro */
 .tp-oscuro .pp-main { background: var(--p-claro); border-color: var(--p-red); }

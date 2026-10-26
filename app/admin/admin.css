@@ -371,3 +371,35 @@
 .cf-cinta-demo span { flex-shrink: 0; padding-right: 48px; animation: cf-cinta 14s linear infinite; }
 @keyframes cf-cinta { from { transform: translateX(0); } to { transform: translateX(-100%); } }
 @media (prefers-reduced-motion: reduce) { .cf-cinta-demo span { animation: none; } .cf-cinta-demo span + span { display: none; } .cf-cinta-demo { padding-left: 14px; } }
+
+/* Ficha técnica del producto (HU-27) */
+.ft { display: flex; flex-direction: column; gap: 10px; }
+.ft-vacio { margin: 0; }
+.ft-filas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.ft-fila { display: grid; grid-template-columns: 22px minmax(0, 2fr) minmax(0, 3fr) auto; gap: 6px; align-items: center; }
+.ft-num { font-size: 12px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.ft-acc { display: flex; gap: 2px; }
+.ft-btn { width: 32px; height: 36px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; cursor: pointer; color: var(--muted); font-size: 14px; }
+.ft-btn:hover:not(:disabled) { color: var(--text); border-color: var(--muted); }
+.ft-btn:disabled { opacity: .35; cursor: default; }
+.ft-quitar:hover:not(:disabled) { color: var(--bad); border-color: var(--bad); }
+.ft-barra { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ft-cuenta { margin-left: auto; }
+.ft-copiar { display: flex; flex-direction: column; gap: 6px; padding: 12px; border: 1px dashed var(--border); border-radius: 10px; }
+.ft-copiar label { font-size: 13px; font-weight: 600; }
+.ft-copiar-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ft-copiar-lista button { width: 100%; text-align: left; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 13px; color: var(--text); }
+.ft-copiar-lista button:hover { border-color: var(--blue); }
+.ft-copiar-lista .mono { font-family: var(--mono); color: var(--blue); }
+.ft-previa { display: flex; flex-direction: column; gap: 6px; }
+.ft-tabla { width: 100%; border-collapse: collapse; font-size: 14px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.ft-tabla th, .ft-tabla td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.ft-tabla th { width: 38%; font-weight: 500; color: var(--muted); }
+.ft-tabla tr:nth-child(even) { background: var(--bg-soft, #F6F7F9); }
+@media (max-width: 640px) {
+  .ft-fila { grid-template-columns: 1fr auto; padding: 8px; border: 1px solid var(--border); border-radius: 10px; }
+  .ft-num { display: none; }
+  .ft-campo { grid-column: 1; }
+  .ft-valor { grid-column: 1 / -1; grid-row: 2; }
+  .ft-acc { grid-column: 2; grid-row: 1; }
+}

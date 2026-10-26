@@ -5,6 +5,12 @@
 
 ---
 
+## 26 oct 2026 · Ficha técnica completa del producto (HU-27)
+
+La página de cada equipo muestra, debajo de las fotos y del botón de WhatsApp, una tabla «Ficha técnica completa» (Característica → Valor, filas alternadas) con todos los datos que el dueño quiera. Se carga en `/admin/productos` al crear o editar: agregar, ordenar y quitar filas, plantilla de portátil, copiar la ficha de otro producto y vista previa; también por la carga CSV con la columna opcional **Ficha**. Sin ficha, el bloque no aparece. Nueva columna `ficha` en Supabase (migración del 26 oct). Sin cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Categorías en el menú «Productos» (HU-25)
 
 Al pasar el puntero sobre «Productos» en el menú (o tocar su flecha en el celular) se despliegan «Todos los productos» y las categorías que el dueño maneja en `/admin/categorias`; al elegir una, el catálogo muestra solo esos equipos, con el nombre de la categoría como título y una dirección que se puede compartir por WhatsApp. Los botones de categoría del listado usan ahora esas mismas categorías. Se maneja también con el teclado. Sin cambio de versión del brief.

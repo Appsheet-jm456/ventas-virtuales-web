@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAdmin } from "../AdminShell";
 import { descartarSubidas } from "../SubirImagen";
 import FotosProducto, { listaDe } from "./FotosProducto";
+import FichaTecnica from "./FichaTecnica";
 import { FIELDS, HIDDEN_VALUES, CLAVE_AVISO } from "./campos";
 
 // Formulario de producto en página completa (HU-18), para crear y para editar. Secciones en dos
@@ -52,6 +53,15 @@ export default function ProductoForm({ inicial, id }) {
   useEffect(() => () => {
     if (!guardadoRef.current) descartarSubidas(token, subidasRef.current);
   }, []);
+
+  // Para «Copiar ficha de otro producto»: el catálogo del panel con la sesión.
+  async function cargarProductos() {
+    const res = await fetch("/api/products", { cache: "no-store", headers: { Authorization: `Bearer ${await token()}` } });
+    if (res.status === 401) { logout(); throw new Error("Sesión expirada: vuelve a entrar."); }
+    const d = await res.json();
+    if (d.error) throw new Error(d.error);
+    return d.rows || [];
+  }
 
   function salir() {
     if (cambios && !window.confirm("Tienes cambios sin guardar. ¿Salir sin guardar?")) return;
@@ -135,6 +145,12 @@ export default function ProductoForm({ inicial, id }) {
               />
             </div>
             {campo("Video")}
+          </section>
+          <section className="pr-card pf-sec" id="ficha-tecnica">
+            <h3>Ficha técnica</h3>
+            <p className="ct-hint">Tabla «Característica → Valor» que se ve debajo de las fotos en la página del producto, en este orden.</p>
+            <FichaTecnica value={fields.Ficha} onChange={(v) => set("Ficha", v)} cargarProductos={cargarProductos}
+              codigoActual={fields["Código"]} disabled={busy} />
           </section>
         </div>
 

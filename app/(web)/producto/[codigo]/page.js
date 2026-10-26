@@ -4,6 +4,7 @@ import { parseImages, parseVideos } from "../../../../lib/images";
 import { waLink } from "../../../../lib/site";
 import { getSite, mensajeProducto } from "../../../../lib/configuracion";
 import Gallery from "../../../components/Gallery";
+import { fichaDe } from "../../../../lib/ficha";
 
 export const revalidate = 60;
 
@@ -66,6 +67,7 @@ export default async function ProductPage({ params }) {
   const sold = stockNum(r) <= 0;
   const precio = fmtPrecio(r);
   const msg = mensajeProducto(site.mensajeProducto, nombre, f(r, "Código"));
+  const ficha = fichaDe(r.Ficha);
 
   return (
     <main className="pd wrap">
@@ -124,6 +126,24 @@ export default async function ProductPage({ params }) {
           )}
         </div>
       </div>
+
+      {/* Ficha técnica completa (HU-27): la carga el dueño en /admin/productos. Texto plano: React
+          escapa todo, no se interpreta HTML. Sin filas, el bloque no existe. */}
+      {ficha.length > 0 && (
+        <section className="pd-ficha" aria-labelledby="pd-ficha-t">
+          <h2 id="pd-ficha-t">Ficha técnica completa</h2>
+          <table className="pd-ficha-tabla">
+            <tbody>
+              {ficha.map((x, i) => (
+                <tr key={i}>
+                  <th scope="row">{x.campo}</th>
+                  <td>{x.valor}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
     </main>
   );
 }
