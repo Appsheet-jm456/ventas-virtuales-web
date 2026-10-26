@@ -544,7 +544,7 @@ Como cliente quiero ver en la página de cada equipo (p. ej. «HP EliteBook») u
 | 5 | Bloque público bajo fotos y WhatsApp, en claro y oscuro | `app/(web)/producto/[codigo]/page.js`, `tema-pantalla.css`, `tema-oscuro.css` |
 | 6 | Prueba en navegador con producto `QA-*`: crear, editar, reordenar, vacío, celular, CSV; borrar al final | `docs/sdlc/4-pruebas.md` |
 
-**Preguntas abiertas:** ¿las otras dos imágenes (insignia «Usado en buen estado», título y texto destacado, y la **Descripción** larga con título) entran como HU-29 «Descripción ampliada del producto»? ¿La ficha se muestra siempre abierta o plegable en celular?
+**Decisión (26 oct):** la ficha se muestra **siempre abierta** (también en celular, en una columna). La descripción larga con título de las otras imágenes es **HU-29**.
 
 ---
 
@@ -564,7 +564,7 @@ Como cliente quiero filtrar los productos por sus características desde un pane
 - **Teclado y lector.** Dado el panel, entonces se maneja con Tab y Enter, tiene etiquetas y anuncia el número de resultados; contraste WCAG AA en claro y oscuro.
 - **Rendimiento.** Dado el catálogo, entonces el filtro se calcula en el navegador con los datos públicos ya cargados, sin consultas nuevas por cada clic.
 
-**Campo nuevo — Táctil:** hoy no existe en el producto. Se agrega `tactil boolean` (por defecto «No») en `productos`, editable en `/admin/productos` (casilla «Pantalla táctil») y opcional en el CSV; entra en la lista blanca pública. «Tipo» se toma de la **Categoría** del producto (supuesto por confirmar).
+**Campo nuevo — Táctil:** hoy no existe en el producto. Se agrega `tactil boolean` (por defecto «No») en `productos`, editable en `/admin/productos` (casilla «Pantalla táctil») y opcional en el CSV; entra en la lista blanca pública. «Tipo» se toma de la **Categoría** del producto (confirmado).
 
 **Plan de tareas:**
 
@@ -576,7 +576,37 @@ Como cliente quiero filtrar los productos por sus características desde un pane
 | 4 | Filtros en la dirección y unión con búsqueda y categoría (HU-25) | `app/(web)/productos/page.js` |
 | 5 | Prueba en navegador con productos `QA-*`: cada filtro, combinación, vacío, enlace, celular, precios ocultos; borrar al final | `docs/sdlc/4-pruebas.md` |
 
-**Preguntas abiertas:** ¿«Tipo» es la categoría (Portátil usado, Impresora…) o el tipo de equipo (Ultrabook, Workstation, 2 en 1)? ¿Se filtra aplicando con el botón siempre, o también al instante en computador?
+**Decisiones (26 oct):** **Tipo = Categoría** del producto (Portátil usado, Impresora…). Los filtros se aplican **solo con el botón Aplicar** (el cliente elige y pulsa; no se filtra al instante), también en computador.
+
+---
+
+## HU-29 · Descripción ampliada del producto (insignia, resumen y descripción larga)
+
+Como cliente quiero leer, en la ficha del equipo, un resumen destacado y una descripción larga con título, para entender por qué me conviene; y como dueño quiero escribirlos desde `/admin/productos`.
+
+**Referencia (imágenes del 26 oct):** insignia «Usado en buen estado», título del producto, **resumen destacado** con barra azul a la izquierda y fila de datos con íconos (procesador, RAM, SSD, pantalla), y más abajo un bloque **Descripción** con título propio, párrafos y **negritas**.
+
+**Decisión sobre HTML (26 oct):** la descripción **no acepta HTML**. Usa el mismo texto seguro de HU-26: párrafos, `**negrita**`, listas con «- » y subtítulos con «## ». Se ve igual que la referencia y el panel ofrece botones **Negrita**, **Lista** y **Subtítulo**; se evita que un pegado con scripts o estilos dañe la web (seguridad, RN-04).
+
+- Dada la ficha `/producto/<código>`, entonces arriba muestra la **insignia** con el campo **Estado** del producto (ya existe), el nombre, el **resumen destacado** y la fila de datos clave con íconos tomados de procesador, RAM, almacenamiento y pantalla (los que existan).
+- Dado el bloque **Descripción**, entonces muestra el **título** y el **texto largo** cargados; va **antes** de la Ficha técnica (HU-27).
+- Dado que un producto no tiene resumen, título o texto largo, entonces ese bloque **no se muestra** y no deja espacio.
+- Dado `/admin/productos/<id>` y **Nuevo producto**, entonces hay una sección **Descripción ampliada** con: **Resumen** (hasta 400 caracteres, con contador), **Título de la descripción** (hasta 120) y **Texto** (hasta 5000) con los botones de formato y **vista previa**.
+- Dada la carga CSV, entonces las columnas opcionales **Resumen**, **Título descripción** y **Descripción larga** se leen; sin ellas **no se borra** lo existente.
+- Modo claro y oscuro con contraste WCAG AA; celular en una columna.
+
+**Datos:** columnas nuevas `resumen text`, `detalle_titulo text` y `detalle text` (vacías por defecto) en `productos`, con migración y lista blanca pública.
+
+**Plan de tareas:**
+
+| # | Tarea | Dónde |
+|---|---|---|
+| 1 | Migración de las tres columnas y lista blanca (RN-04) | `supabase/migrations/`, `lib/inventory.js` |
+| 2 | Texto seguro compartido con HU-26 | `lib/texto-seguro.js` |
+| 3 | Sección del formulario con contadores, botones de formato y vista previa | `app/admin/productos/ProductoForm.js`, `campos.js` |
+| 4 | Encabezado y bloque Descripción en la ficha pública | `app/(web)/producto/[codigo]/page.js`, `tema-pantalla.css`, `tema-oscuro.css` |
+| 5 | Columnas opcionales del CSV | `app/admin/productos/`, `lib/csv.js` |
+| 6 | Prueba en navegador con producto `QA-*`: texto con HTML intentado (debe verse como texto), vacío, celular; borrar al final | `docs/sdlc/4-pruebas.md` |
 
 ---
 
