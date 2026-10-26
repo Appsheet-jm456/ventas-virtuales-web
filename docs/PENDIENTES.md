@@ -45,7 +45,7 @@ Después del despliegue:
 - **HU-18 Editar producto en pantalla completa**: hecha y aprobada por el dueño el 21 oct.
 - **HU-19 Columna Código y filtros del listado**: hecha y aprobada por el dueño el 21 oct.
 - **HU-20 Tamaño de la tabla y paginación**: hecha y aprobada por el dueño el 21 oct.
-- **Hecho el 26 oct (sin push):** HU-24 cinta en movimiento · HU-25 desplegable de categorías · HU-26 políticas editables (tabla `paginas`, decisión 0011) · HU-27 ficha técnica · HU-28 filtro dinámico (campo `tactil`) · HU-29 descripción ampliada. Migraciones aplicadas en Supabase con OK del dueño. Siguiente: revisión del dueño, push, «Preguntas frecuentes» (HU nueva) y «Pegar ficha» en el formulario (ajuste de HU-27).
+- **Hecho el 26 oct (sin push):** HU-24 cinta en movimiento · HU-25 desplegable de categorías · HU-26 políticas editables (tabla `paginas`, decisión 0011) · HU-27 ficha técnica · HU-28 filtro dinámico (campo `tactil`) · HU-29 descripción ampliada. Migraciones aplicadas en Supabase con OK del dueño. Siguiente: **HU-30 productos sugeridos y vistos recientemente** (especificada, falta orden de build), «Preguntas frecuentes» (HU nueva) y «Pegar ficha» en el formulario (ajuste de HU-27). Meta Pixel y aviso de cookies: **no por ahora** (decisión del dueño, 26 oct); la web no usa cookies de rastreo (decisión 0010).
 - **HU-23 Mejoras de la web pública** (lista del dueño, 22 oct; se documentan una a una como HU-23, HU-24… antes del código):
   1. **Filtro dinámico para el cliente** en Productos.
   2. **Mejorar la búsqueda de productos.**

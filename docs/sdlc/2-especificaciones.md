@@ -622,6 +622,38 @@ Como cliente quiero leer, en la ficha del equipo, un resumen destacado y una des
 
 ---
 
+## HU-30 · Productos sugeridos y vistos recientemente
+
+Como cliente quiero ver, al final de la página de un equipo, otros portátiles parecidos y los que ya revisé, para comparar sin volver al catálogo y no perder de vista lo que me gustó.
+
+**Dónde (26 oct, pedido del dueño):** al **final de la página del producto**, justo antes del pie de página («Contacto»), debajo de la descripción y las especificaciones.
+
+**Decisiones propuestas (por confirmar con el dueño):** las dos filas, **«Te pueden interesar»** primero y **«Vistos recientemente»** debajo; hasta **4 productos** por fila en escritorio; solo en la página del producto (el catálogo queda como está).
+
+- **Te pueden interesar.** Dada la ficha `/producto/<código>`, entonces se muestran hasta **4 equipos parecidos**, elegidos por reglas simples en este orden: misma **categoría**, misma **marca**, **precio** dentro de ±30 % y procesador de generación cercana; primero los **disponibles**. Nunca aparece el mismo equipo que se está viendo. Si faltan, se completan con otros disponibles de la categoría.
+- **Vistos recientemente.** Dado un visitante que ya abrió otros productos, entonces se muestran hasta **8** de los últimos que vio, del más reciente al más antiguo, sin incluir el actual. Si es su primera visita o no vio otros, la fila **no aparece**.
+- **Privacidad (decisión 0010).** El historial se guarda **solo en el navegador del visitante** (almacenamiento local), con **solo los códigos de producto**: no se envía al servidor, no usa cookies, no se asocia a una persona y **no requiere aviso de cookies**. Un enlace **«Borrar historial»** junto al título de la fila lo limpia.
+- **Siempre al día.** Dado que un producto visto se oculta, se elimina o ya no se publica, entonces desaparece de «Vistos»; los precios, el estado y las fotos salen siempre del catálogo actual, no de lo guardado.
+- **Tarjetas.** Dadas las filas, entonces usan las **mismas tarjetas del catálogo** (foto, nombre, procesador, precio, «Disponible» o «Agotado»), con enlace a su ficha. Con **«Mostrar precios»** apagado en `/admin/configuracion`, no muestran precio; con **«Mostrar agotados»** apagado, no incluyen agotados.
+- **Escritorio y celular.** Dado el escritorio, entonces 4 tarjetas por fila; dado el celular, entonces la fila se **desliza de lado** con tarjetas de buen tamaño, sin scroll horizontal de la página.
+- **Sin datos.** Dado que no hay equipos parecidos (catálogo muy pequeño), entonces **no se muestra el bloque** y no deja espacio.
+- **Accesibilidad.** Dados teclado y lector de pantalla, entonces cada fila es una región con su título, las tarjetas son enlaces con foco visible y el botón «Borrar historial» tiene nombre claro; contraste WCAG AA en modo claro y oscuro.
+- **Sin cambios de datos:** no lleva migración, tablas ni columnas nuevas; usa el catálogo público que la página ya carga.
+
+**Plan de tareas:**
+
+| # | Tarea | Dónde |
+|---|---|---|
+| 1 | Reglas de «Te pueden interesar» (categoría, marca, precio, generación, disponibilidad) | `lib/sugeridos.js` |
+| 2 | Bloque «Te pueden interesar» en la ficha, con las tarjetas del catálogo | `app/(web)/producto/[codigo]/page.js`, `app/components/` |
+| 3 | Historial de vistos en el navegador, con control de límite, validación contra el catálogo y «Borrar historial» | `app/components/VistosRecientemente.js` |
+| 4 | Fila deslizable en celular y estilos claro y oscuro | `tema-pantalla.css`, `tema-oscuro.css` |
+| 5 | Prueba en navegador (Playwright) con productos `QA-*`: sugeridos correctos y sin repetir, vistos en orden y sin el actual, ocultar un producto lo quita, borrar historial, precios y agotados ocultos, celular, teclado; borrar al final | `docs/sdlc/4-pruebas.md` |
+
+**Preguntas abiertas:** ¿quieres las dos filas o solo una? ¿Cuántos sugeridos (4 u 8)? ¿También en el catálogo `/productos`, o solo en la ficha?
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
