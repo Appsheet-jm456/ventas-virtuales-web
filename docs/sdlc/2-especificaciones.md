@@ -404,6 +404,52 @@ Como dueño quiero elegir desde el panel si la web pública se ve en modo claro 
 
 ---
 
+## HU-24 · Cinta en movimiento «Ventas Virtual Colombia»
+
+Como dueño quiero una cinta con un mensaje que se desplaza en la parte superior de la web, para destacar a qué nos dedicamos o una promoción sin tocar código.
+
+**Decisiones (26 oct):** va en la **parte de arriba, sobre el encabezado** (franja delgada, la primera cosa que se ve); el mensaje se **edita desde `/admin/configuracion`** y tiene **interruptor de apagado**; se mueve de **derecha a izquierda**.
+
+- Dado cualquier página pública (Inicio, Categorías, Productos y ficha), entonces la cinta se ve encima del encabezado, de borde a borde.
+- Dado el mensaje, entonces se desplaza de derecha a izquierda en bucle continuo, sin saltos (el texto se repite hasta llenar el ancho).
+- Dado el puntero (o el foco con teclado) sobre la cinta, entonces el movimiento se **pausa**.
+- Dado que el sistema pide «reducir movimiento», entonces la cinta **no se mueve**: queda el mensaje fijo y centrado.
+- Dado `/admin/configuracion`, entonces hay una sección **Cinta** con: interruptor **Mostrar cinta**, caja de **Mensaje** (hasta 200 caracteres, con contador) y una vista previa.
+- Dado que pulso **Guardar cambios**, entonces la web se actualiza al recargar, a más tardar en un minuto (igual que HU-22).
+- Dado que **nunca se configuró**, entonces la cinta se ve **encendida** con el mensaje base «Ventas Virtual Colombia · Equipos portátiles corporativos» (el dueño puede completar la frase).
+- Dado el interruptor apagado o el mensaje vacío, entonces la cinta **no se muestra** y no deja espacio.
+- Dados modo claro y modo oscuro, entonces la cinta cumple la guía visual y el contraste WCAG AA (texto amarillo sobre azul superficie) en ambos.
+- Dado el panel `/admin`, entonces **no muestra** la cinta.
+- Se guarda en la clave `catalogo` de `configuracion` (`cinta_visible`, `cinta_texto`), sin tablas nuevas; solo lo cambia quien entra al panel.
+
+**Plan de tareas (SDD: especificar → build por orden del dueño → prueba en 3001 → OK → push):**
+
+| # | Tarea | Dónde |
+|---|---|---|
+| 1 | Valores base `cinta_visible: true` y `cinta_texto` | `lib/configuracion.js` (`CATALOGO_BASE`) |
+| 2 | Componente `Cinta` (CSS puro, pausa al pasar el puntero, `prefers-reduced-motion`) | `app/components/Cinta.js`, `app/(web)/tema-pantalla.css` |
+| 3 | Insertarla sobre el encabezado leyendo `getConfig()` | `app/(web)/layout.js` |
+| 4 | Sección **Cinta** en el panel con interruptor, mensaje y contador | `app/admin/configuracion/page.js` |
+| 5 | Prueba en navegador (Playwright): mueve, pausa, apaga, vacío, claro/oscuro, celular; restaurar la configuración real al final | `docs/sdlc/4-pruebas.md` |
+
+---
+
+## HU-25 · Categorías al dar clic en «Productos»
+
+Como cliente quiero ver las categorías al elegir «Productos», para llegar rápido al tipo de equipo que busco.
+
+**Supuestos por confirmar con el dueño:** al pulsar **Productos** en el menú se muestra una fila de **categorías** (Portátiles usados, Portátiles nuevos, Impresoras, Accesorios, Partes) **debajo del encabezado**, que luego filtra el listado; las categorías salen de `/admin/categorias` (no están fijas en el código).
+
+- Dado el menú, cuando el cliente pulsa **Productos**, entonces ve el listado con una fila de categorías encima, con «Todos» marcado.
+- Dada una categoría, cuando la pulsa, entonces el listado muestra solo esos productos y la categoría queda marcada; el enlace se puede compartir (`/productos?categoria=...`).
+- Dado que el dueño crea, renombra o quita una categoría en `/admin/categorias`, entonces la fila se actualiza sola (en un minuto).
+- Dado el celular, entonces la fila se desliza horizontalmente sin partir el texto.
+- Dado teclado y lector de pantalla, entonces cada categoría es un enlace con foco visible y la activa se anuncia.
+
+**Preguntas abiertas:** ¿fila fija arriba o menú desplegable al pasar sobre «Productos»?; ¿se muestra el número de productos por categoría?
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
