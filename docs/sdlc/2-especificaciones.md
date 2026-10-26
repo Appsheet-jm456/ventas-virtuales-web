@@ -461,6 +461,56 @@ Como cliente quiero que al elegir «Productos» se despliegue la lista de catego
 
 ---
 
+## HU-26 · Páginas de políticas editables desde el panel (garantía, devolución, envíos, términos y privacidad)
+
+Como dueño quiero crear, modificar y quitar desde `/admin` las páginas de políticas, para mantener la garantía, las devoluciones, los envíos, los términos y la privacidad al día sin pedir cambios de código; y como cliente quiero encontrar rápido un título o subtítulo dentro de cada política.
+
+**Páginas iniciales (se crean con borradores «por revisar»):** Garantía · Política de devolución · Política de envíos · Términos y condiciones · Política de privacidad (Ley 1581). El dueño o su asesor legal valida el texto antes de publicar; Claude no da el texto como definitivo.
+
+### Modelos de diseño evaluados
+
+| Modelo | Cómo se ve | Para quién |
+|---|---|---|
+| **A · Índice a la izquierda + secciones tipo «+» (acordeón)** | Índice fijo con «01, 02…»; a la derecha, cada sección se abre y se cierra | Políticas largas con muchos bloques; la lectura es corta y ordenada |
+| **B · Índice a la izquierda + texto corrido** | Índice fijo que marca la sección que se está leyendo; a la derecha todo el texto seguido | Textos legales que se leen completos (privacidad, términos) y se imprimen mejor |
+| **C · Solo texto** | Una columna de texto con títulos | Páginas cortas; sin ayuda para saltar entre títulos |
+
+**Decisión del dueño (26 oct):** le gusta el **índice al lado izquierdo** para que el cliente llegue rápido al título. Se implementan **A y B con el mismo índice** y el dueño elige el estilo **por página** (por defecto, **A · acordeón**). C queda como la forma que toma una página con una sola sección.
+
+### Criterios
+
+- **Pública.** Dado `/politicas/<nombre>` (p. ej. `/politicas/garantia`), entonces se ve el título, la fecha de última actualización, el **índice a la izquierda** (sticky al hacer scroll) y las secciones a la derecha en el estilo elegido.
+- **Índice.** Dado el índice, cuando el cliente pulsa un título, entonces la página baja a esa sección (y en acordeón la abre); en texto corrido el índice marca la sección visible. Cada sección tiene enlace propio (`#duracion-de-la-garantia`) que se puede compartir.
+- **Buscar en la página.** Dado el campo «Buscar en esta política» sobre el índice, cuando el cliente escribe, entonces el índice y las secciones se filtran por título y texto, y las coincidencias quedan resaltadas.
+- **Celular.** Dado un celular, entonces el índice pasa a un desplegable «Contenido» arriba de las secciones. El botón flotante de WhatsApp **no tapa** el índice ni el texto (ver imagen de referencia).
+- **Pie de página.** Dado el pie, entonces una columna **Soporte** lista las políticas visibles (p. ej. «Política de envíos», «Términos y Condiciones», «Política de Privacidad») con enlace a cada una, y se actualiza sola al agregar o quitar páginas.
+- **Panel.** Dado `/admin/politicas` (nuevo módulo del panel), entonces el dueño ve la lista de páginas y puede **crear, editar, ocultar y quitar** (pidiendo confirmación) y **ordenar** cuál sale primero.
+- **Editor.** Dada una página en edición, entonces el dueño cambia: título, dirección (se propone desde el título y se puede ajustar), estilo (acordeón o texto corrido), visible sí/no y la **lista de secciones**: agregar, renombrar, borrar, **subir y bajar**, cada una con su texto.
+- **Texto.** Dado el texto de una sección, entonces admite párrafos, listas con «- » y **negrita** con `**así**`. No se acepta HTML (seguridad); se escapa todo lo que escriba el dueño.
+- **Vista previa y guardado.** Dado que pulsa **Guardar cambios**, entonces la web se actualiza al recargar, a más tardar en un minuto. Se puede ver una **vista previa** antes de guardar y el panel avisa si hay cambios sin guardar.
+- **Borrador.** Dada una página oculta, entonces no aparece en el pie ni en la web (responde «no encontrada»), pero el dueño la sigue viendo en el panel.
+- **Sin páginas.** Dado que no hay ninguna visible, entonces la columna Soporte no se muestra.
+- **Accesibilidad.** Dado teclado y lector de pantalla, entonces el índice y el acordeón se manejan con Tab, Enter/Espacio y Escape, con foco visible y estado «abierto/cerrado» anunciado; contraste WCAG AA en modo claro y oscuro.
+- **Permisos.** Solo quien entra al panel puede cambiarlas; el público solo lee las visibles.
+
+### Datos y plan de tareas
+
+Tabla nueva `paginas` (única tabla nueva de esta mejora, con RLS: lectura pública solo de las visibles; escritura solo de usuarios autenticados): `slug`, `titulo`, `estilo` (`acordeon` | `texto`), `orden`, `visible`, `secciones` (JSON: lista de `{titulo, texto}`), `actualizado`. Decisión técnica nueva: **0011 · Páginas de contenido en Supabase**.
+
+| # | Tarea | Dónde |
+|---|---|---|
+| 1 | Decisión 0011 y migración `paginas` con RLS y 5 borradores iniciales | `docs/decisiones/`, `supabase/migrations/` |
+| 2 | Capa de datos: leer visibles, CRUD del panel, límites (título, secciones, texto) | `lib/paginas.js` |
+| 3 | Texto seguro: párrafos, listas y negrita sin HTML | `lib/texto-seguro.js` |
+| 4 | Página pública con índice, acordeón o texto corrido, buscador y enlaces por sección | `app/(web)/politicas/[slug]/`, `tema-pantalla.css`, `tema-oscuro.css` |
+| 5 | Columna **Soporte** en el pie leyendo las páginas visibles | `app/(web)/layout.js` |
+| 6 | Módulo `/admin/politicas`: lista, crear, editar secciones, ocultar, ordenar, quitar, vista previa | `app/admin/politicas/`, `AdminShell.js` |
+| 7 | Prueba en navegador (Playwright) con datos `QA-*`: crear, editar, ocultar, quitar, buscar, celular, teclado, claro/oscuro; borrar al final | `docs/sdlc/4-pruebas.md` |
+
+**Preguntas abiertas:** ¿los borradores iniciales los redacto yo como base para que los revise un asesor, o el dueño trae el texto? ¿La página «Preguntas frecuentes» (también en la imagen) entra aquí o es otra HU?
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
