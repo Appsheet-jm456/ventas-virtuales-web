@@ -69,6 +69,45 @@ En Supabase y Cloudinary no hay que cambiar nada para el dominio nuevo. Cuando s
 recuperación de contraseña por correo, habrá que agregar el dominio en Supabase (*Authentication ›
 URL Configuration*).
 
+## Resistencia ante tráfico alto y ataques
+
+**Pregunta que origina la tarea:** ¿qué pasa si entran 100.000 personas o si alguien ataca la web, y cómo se
+diseña para que lo soporte con Hostinger y el dominio propio?
+
+**Idea de diseño:** cachear en capas para que casi ninguna visita llegue al servidor ni a la base de datos.
+
+```
+Visitante → Cloudflare (caché + WAF) → Hostinger (Next.js) → Supabase
+              absorbe 90–99 %            solo lo que falta       casi nada
+```
+
+**Ya cubierto por el diseño:** la RLS impide escribir sin sesión; la clave secreta de Supabase no se usa
+en la web; la API pública no expone costo ni proveedor (RN-04); las fichas no admiten HTML; el repositorio
+no tiene secretos; el cron diario evita la pausa del plan gratuito de Supabase.
+
+**Por hacer, en este orden** (cada punto es una tarea en `tareas.csv`):
+
+1. **Límites del plan de Hostinger Web Apps** (CPU, RAM, peticiones simultáneas, qué pasa al excederse).
+   Decide si alcanza o si hay que pasar a un VPS. Bloquea el resto.
+2. **Cloudflare gratis delante del dominio:** DNS en Cloudflare, caché, protección DDoS, WAF y modo «Under Attack».
+3. **Cabeceras:** `Cache-Control: s-maxage` en las páginas públicas y de seguridad (CSP, HSTS,
+   X-Frame-Options) en `next.config.js`.
+4. **Límite de peticiones** en `/api/eventos`, `/api/products`, `/api/admin/*` y el inicio de sesión del panel.
+5. **Dos pasos (MFA) para el dueño** en Supabase Auth, además de cambiar `Admin123*`.
+6. **Alerta de caída** (UptimeRobot u otra) y **prueba de restauración** de la copia diaria de Supabase.
+7. **Prueba de carga** (k6) contra la URL temporal antes de mover el dominio.
+8. **Planes de Supabase y Cloudinary:** revisar límites de conexiones y ancho de banda; subir de plan si hay un
+   lanzamiento fuerte.
+
+Además, `npm audit` y actualizar `next` con frecuencia.
+
+**Criterio de cierre:** páginas públicas servidas desde caché de Cloudflare, límites activos en las rutas
+que escriben, panel con dos pasos, alerta de caída funcionando y una prueba de carga documentada en
+`sdlc/4-pruebas.md`.
+
+**Pregunta abierta:** si el plan de Hostinger no alcanza, ¿se sube a VPS o se usa otro hosting durante las
+campañas? Se responde con el punto 1 (decisión 0006 revisable).
+
 ## Lista de verificación en la URL temporal
 
 - [ ] Inicio: banner rotativo, categorías y línea de portátiles con productos reales
