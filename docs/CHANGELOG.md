@@ -5,6 +5,12 @@
 
 ---
 
+## 27 oct 2026 · Flujo de desarrollo y EDT
+
+Se documenta cómo se trabaja cada mejora o bug: registrar, documentar, implementar, probar, aprobar y cerrar, con `tareas.csv` como fuente de verdad, Notion como tablero y una EDT en Google Sheets como mapa del proyecto (6 fases, 77 tareas, con avance por fase). Los bugs se registran como `BUG-n` con su nivel, y uno Crítico o Alto abierto bloquea la salida en línea. Nuevo `docs/FLUJO_DESARROLLO.md`, regla en `CLAUDE.md` y el generador `docs/notion/edt_generar.py`. Sin cambio de versión del brief.
+
+---
+
 ## 26 oct 2026 · Página «Nosotros» editable (HU-33)
 
 Nueva página `/nosotros` con la biografía de la empresa, los años en el mercado y lo que la diferencia: bloques de texto con foto a la izquierda o a la derecha y una franja de cifras destacadas. Se edita en `/admin/configuracion › Nosotros` (agregar, editar, reordenar y quitar bloques, subir fotos, cifras y vista previa) y arranca con una estructura sugerida sin publicar. Al publicarla aparece «Nosotros» en la barra superior y en el pie. Se guarda en la configuración existente: sin tablas nuevas ni migraciones. Sin cambio de versión del brief.
