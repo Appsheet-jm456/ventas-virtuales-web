@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 4 de noviembre de 2026 · **Camino 1 (landing)** · **HU-34 usuarios y roles** aprobada por el dueño y con push (prueba 143/143, migración aplicada). Para que el módulo Usuarios funcione en Vercel, agregar `SUPABASE_SECRET_KEY`. **BUG-1:** falta agregar al crontab la línea `--si-falta` (ver `scripts/supabase-diario.py`). Los 5 borradores de políticas siguen **ocultos**. Dominios en Hostinger: confirmar que estén pagados (aparecían «no está registrado»).
+> **Última sesión:** 4 de noviembre de 2026 · **Camino 1 (landing)** · **HU-34 usuarios y roles** aprobada por el dueño y con push (prueba 143/143, migración aplicada). Para que el módulo Usuarios funcione en Vercel, agregar `SUPABASE_SECRET_KEY`. **BUG-1** cerrado: la línea `--si-falta` ya está en el crontab; aún no se ha visto recuperar sola una copia tras un apagado real, así que conviene mirar `diario.log` después del próximo. Los 5 borradores de políticas siguen **ocultos**. Dominios en Hostinger: confirmar que estén pagados (aparecían «no está registrado»).
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
