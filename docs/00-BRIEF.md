@@ -167,9 +167,9 @@ dónde se guardan los pedidos.*
 **Camino 1 — landing:**
 
 - [x] ¿A qué hosting se despliega? → **Hostinger Web Apps**, con el dominio comprado ahí.
-- [ ] ¿Cuál es el dominio exacto?
-- [ ] ¿Cuántos productos activos hay en Baserow y quién los actualiza de ahora en adelante?
-- [ ] ¿Quién usa el panel admin? ¿Una sola clave basta?
+- [x] ¿Cuál es el dominio exacto? → **ventasvirtualcolombia.com** y **ventasvirtualcolombia.shop**, ambos en Hostinger. (4 nov: el panel de Hostinger los mostraba «no está registrado», sin fecha de caducidad: confirmar que la compra esté pagada. Falta decidir cuál es el principal y cuál redirige.)
+- [x] ¿Cuántos productos activos hay y quién los actualiza de ahora en adelante? → Catálogo en Excel con **70 a 125 productos** (en tienda y en bodega). Lo mantiene **el encargado de actualizar listas y catálogos de la página web**. Se actualiza **a mano** en `/admin/productos` cuando llega un equipo suelto y **por CSV** cuando llega un lote. La frecuencia varía: un lote de 10 una semana, de 20 otra, o ninguno.
+- [x] ¿Quién usa el panel admin? ¿Una sola clave basta? → **No basta**: lo usarán **Dueños, Encargados de actualizar el catálogo, Vendedores y otros asignados**, cada uno con su usuario y su rol. Se especificó como **HU-34 · Usuarios y roles del panel** (módulo `/admin/configuracion/usuarios`); la matriz de permisos y el alcance del rol «Otros» siguen por confirmar con el dueño.
 - [x] ¿Se miden visitas (Google Analytics o Meta Pixel)? → **Métricas propias en Supabase**, sin cookies ni datos personales (decisión 0010).
 
 **Camino 2 — tienda completa (se responden después):**

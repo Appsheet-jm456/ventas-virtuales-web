@@ -768,6 +768,67 @@ Como dueño quiero crear y mantener desde `/admin` la página **«Nosotros»** (
 
 ---
 
+## HU-34 · Usuarios y roles del panel
+
+Como dueño quiero agregar, modificar y desactivar desde `/admin/configuracion/usuarios` a las personas que usan el panel (Dueños, Encargados de actualizar el catálogo, Vendedores y otros asignados), y decidir qué puede hacer cada rol; para que cada quien vea y cambie solo lo suyo.
+
+**Origen (4 nov 2026, al responder la pregunta abierta «¿Quién usa el panel?» del brief):** el panel lo usarán Dueños, Encargados de actualizar listas y catálogos de la página web, Vendedores y otros asignados. Hoy no existe módulo de usuarios: las cuentas se crean a mano en Supabase y **cualquier usuario autenticado puede escribir en todo** (las reglas RLS de las tablas solo distinguen «autenticado» de «público»).
+
+**Estado:** especificada, sin código. Las decisiones marcadas «por confirmar» se cierran con el dueño antes de construir.
+
+### Matriz de permisos propuesta (por confirmar)
+
+| Módulo | Dueño | Encargado | Vendedor | Otros |
+|---|---|---|---|---|
+| Bandeja (visitas, clics) | ✅ | ❌ | ✅ | por definir |
+| Productos (listado, editar, Carga CSV) | ✅ | ✅ | solo ver | por definir |
+| Banners y categorías | ✅ | ✅ | ❌ | por definir |
+| Políticas y Nosotros | ✅ | ❌ | ❌ | ❌ |
+| Configuración de la tienda | ✅ | ❌ | ❌ | ❌ |
+| **Usuarios** | ✅ | ❌ | ❌ | ❌ |
+
+### Panel (frontend)
+
+- Dado un **Dueño**, cuando entra a `/admin/configuracion`, entonces ve la sección **Usuarios** con la lista (nombre, correo, rol, estado activo/desactivado, último acceso).
+- Dado el botón **Agregar usuario**, entonces pide nombre, correo y rol; al guardar, el usuario recibe un **correo de invitación** para crear su contraseña (nadie recibe una contraseña escrita por el dueño).
+- Dado un usuario de la lista, entonces el Dueño puede **cambiar su nombre y su rol**, **desactivarlo** (pierde el acceso al instante, se conserva su historial) o **reactivarlo**, y **reenviar la invitación**.
+- Dado el menú lateral del panel (HU-10), entonces cada rol ve **solo los módulos permitidos**; una dirección no permitida escrita a mano responde «sin permiso» y no muestra datos.
+- Dado el último Dueño activo, entonces el sistema **no deja desactivarlo ni quitarle el rol**, para que el panel nunca quede sin Dueño.
+- Dado que un usuario cambia de rol o se desactiva mientras tiene la sesión abierta, entonces el cambio rige en su **siguiente acción** (a más tardar en un minuto), sin esperar a que cierre sesión.
+- Dado el modo claro y oscuro, el celular y el teclado, entonces el módulo mantiene contraste WCAG AA, foco visible y no desborda.
+
+### Datos y seguridad (backend)
+
+- **Tabla nueva `perfiles`** (única tabla nueva): `user_id` (referencia a `auth.users`), `nombre`, `rol` (`dueno` | `encargado` | `vendedor` | `otro`), `activo`, `creado`, `ultimo_acceso`. Migración **solo con el OK del dueño** (la aprobación no se extiende a otras migraciones).
+- **RLS por rol:** las tablas del panel (`productos`, `banners`, `categorias`, `paginas`, `configuracion`, `eventos`) dejan de aceptar «cualquier autenticado» y pasan a validar el rol del usuario y que esté activo. Lectura pública sin cambios (RN-04: solo datos de venta).
+- **Verificación doble:** el rol se comprueba **en la base de datos (RLS) y en cada acción del servidor**; ocultar un botón nunca es el único control.
+- **Crear y desactivar usuarios** usa la clave de servicio de Supabase **solo en el servidor** (nunca en el navegador ni en el repositorio, decisión 0002).
+- **Migración de lo que ya existe:** los usuarios actuales pasan a rol `dueno` al aplicar la migración, para no dejar a nadie sin acceso.
+- **Registro:** cada alta, cambio de rol, desactivación y reactivación guarda quién lo hizo y cuándo.
+- Límites: nombre hasta 80 caracteres; correo válido y único; rol de la lista cerrada.
+- Relación con otras tareas: la verificación en dos pasos (5.2.6) debe poder exigirse a los Dueños; el límite de peticiones del login (5.2.5) cubre también este módulo.
+
+### Decisiones por confirmar con el dueño
+
+1. **Matriz de permisos:** qué ve y qué cambia el Vendedor (propuesta: Bandeja y Productos solo lectura).
+2. **Rol «Otros»:** rol fijo con permisos mínimos (p. ej. «Consulta») o permisos a medida por persona. Propuesta: **roles fijos**; los permisos a medida complican la base de datos y las pruebas.
+3. **Varios Dueños:** si puede haber más de uno y si un Dueño puede quitar a otro.
+4. **Eliminar:** propuesta de **desactivar** en lugar de borrar, para conservar el historial; el borrado definitivo, si se pide, solo para usuarios que nunca entraron.
+
+### Plan de tareas
+
+| # | Tarea | Dónde |
+|---|---|---|
+| 1 | Cerrar las 4 decisiones y actualizar la matriz | esta sección |
+| 2 | Decisión técnica 0012 · Roles y permisos del panel | `docs/decisiones/` |
+| 3 | Migración `perfiles` + RLS por rol + usuarios actuales como Dueño (con OK del dueño) | `supabase/migrations/` |
+| 4 | Capa de datos y verificación de rol en cada acción del servidor | `lib/perfiles.js`, `app/admin/**` |
+| 5 | Módulo `/admin/configuracion/usuarios`: lista, agregar con invitación, editar, desactivar, reenviar | `app/admin/configuracion/usuarios/` |
+| 6 | Menú del panel y direcciones filtrados por rol | `AdminShell.js` |
+| 7 | Prueba en navegador (Playwright) con usuarios `QA-*` por rol: cada rol ve y puede solo lo suyo, el último Dueño no se desactiva; borrar al final | `docs/sdlc/4-pruebas.md` |
+
+---
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |

@@ -44,7 +44,7 @@ S=[
  ("3.3","Web pública: producto y filtros",["HU-27","HU-28","HU-29","HU-30"]),
  ("3.4","Web pública: páginas de marca",["HU-26","HU-33"]),
  ("3.5","Diseño visual",["HU-21","HU-22"]),
- ("3.6","Panel de administración",["Acceso al panel","HU-10","HU-11","HU-12","HU-13","HU-14","HU-15","HU-18","HU-19","HU-20"]),
+ ("3.6","Panel de administración",["Acceso al panel","HU-10","HU-11","HU-12","HU-13","HU-14","HU-15","HU-18","HU-19","HU-20","HU-34"]),
  ("3.7","Datos y catálogo",["Crear cuenta y proyecto en Supabase","Aplicar el esquema de Supabase","Pasar el catálogo de Baserow","Carga de productos por CSV","Subir imágenes a Cloudinary","Cargar los productos de Baserow","HU-17"]),
  ("3.8","Seguridad de la API",["Proteger la API pública","Filtrar la API pública"]),
 ]),
