@@ -7,7 +7,7 @@
 
 ## 4 nov 2026 · Usuarios, roles y permisos del panel (HU-34)
 
-El panel ahora tiene usuarios con rol. El Superadmin crea roles y define qué puede cada uno; se agregan personas con un enlace de activación por WhatsApp, y cada quien ve solo sus módulos. Se cierra el hueco por el que cualquier cuenta del panel podía cambiar todo. La copia diaria ahora incluye las políticas y los usuarios (BUG-1). Pendiente la aprobación del dueño.
+El panel ahora tiene usuarios con rol. El Superadmin crea roles y define qué puede cada uno; se agregan personas con un enlace de activación por WhatsApp, y cada quien ve solo sus módulos. Se cierra el hueco por el que cualquier cuenta del panel podía cambiar todo. La copia diaria ahora incluye las políticas y los usuarios (BUG-1). Aprobada por el dueño el 4 nov.
 
 ---
 

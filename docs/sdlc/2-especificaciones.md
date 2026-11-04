@@ -774,7 +774,7 @@ Como Superadmin quiero crear roles y definir qué puede hacer cada uno; y como q
 
 **Origen (4 nov 2026):** el panel lo usarán Dueños, Encargados de actualizar listas y catálogos, Vendedores y otros asignados. Antes las cuentas se creaban a mano en Supabase y **cualquier usuario autenticado podía escribir en todo**.
 
-**Estado:** construida y probada; falta la aprobación del dueño. Decisión técnica: **0012**.
+**Estado:** hecha y aprobada por el dueño el 4 nov 2026. Decisión técnica: **0012**.
 
 ### Decisiones del dueño (4 nov)
 

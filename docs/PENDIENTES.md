@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 4 de noviembre de 2026 · **Camino 1 (landing)** · **HU-34 usuarios y roles** construida y probada (143/143), migración aplicada en Supabase, commit local **sin push**, falta la aprobación del dueño. Para publicarla, agregar `SUPABASE_SECRET_KEY` en Vercel. **BUG-1:** falta agregar al crontab la línea `--si-falta` (ver `scripts/supabase-diario.py`). Los 5 borradores de políticas siguen **ocultos**. Dominios en Hostinger: confirmar que estén pagados (aparecían «no está registrado»).
+> **Última sesión:** 4 de noviembre de 2026 · **Camino 1 (landing)** · **HU-34 usuarios y roles** aprobada por el dueño y con push (prueba 143/143, migración aplicada). Para que el módulo Usuarios funcione en Vercel, agregar `SUPABASE_SECRET_KEY`. **BUG-1:** falta agregar al crontab la línea `--si-falta` (ver `scripts/supabase-diario.py`). Los 5 borradores de políticas siguen **ocultos**. Dominios en Hostinger: confirmar que estén pagados (aparecían «no está registrado»).
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
