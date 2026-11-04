@@ -174,11 +174,11 @@ dónde se guardan los pedidos.*
 
 **Camino 2 — tienda completa (se responden después):**
 
-- [ ] ¿Quiénes somos: qué historia, años de experiencia, clientes y logros se cuentan?
-- [ ] ¿Las políticas ya existen por escrito o hay que redactarlas desde cero?
-- [ ] ¿Dónde se guardan los pedidos y el inventario? ¿Se sigue con Baserow?
-- [ ] ¿Qué hosting soporta la app completa? ¿Basta el plan actual?
-- [ ] Cuando llegue el ecommerce: ¿qué pasarela, qué transportadora y quién hace el alistamiento?
+- [ ] ¿Quiénes somos: qué historia, años de experiencia, clientes y logros se cuentan? → **En curso (4 nov):** el dueño armará un archivo con los datos completos del negocio (historia, años, clientes, logros). Con él se llena la página «Nosotros» (HU-33).
+- [ ] ¿Las políticas ya existen por escrito o hay que redactarlas desde cero? → **Parcial (4 nov):** se toman de la base del local que ya existe. **Garantías:** existe. **Devolución:** pendiente. **Privacidad y datos (Ley 1581):** pendiente del abogado. Los borradores de HU-26 siguen ocultos hasta tener los textos.
+- [x] ¿Dónde se guardan los pedidos y el inventario? ¿Se sigue con Baserow? → **Supabase** (ya no Baserow), alimentado desde **Contada**, el software contable del local (4 nov).
+- [x] ¿Qué hosting soporta la app completa? ¿Basta el plan actual? → **Hostinger y VPS** (4 nov). Por confirmar qué corre en cada uno (la landing en Web Apps; la tienda completa, probablemente en el VPS).
+- [ ] Cuando llegue el ecommerce: ¿qué pasarela, qué transportadora y quién hace el alistamiento? → **Alistamiento (4 nov):** lo hace la tienda; una persona con el **rol Despacho** empaca y lleva el paquete a la transportadora. **Faltan** la pasarela de pago y la transportadora.
 
 ## Próximo paso
 

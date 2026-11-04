@@ -811,7 +811,7 @@ Como dueño quiero agregar, modificar y desactivar desde `/admin/configuracion/u
 ### Decisiones por confirmar con el dueño
 
 1. **Matriz de permisos:** qué ve y qué cambia el Vendedor (propuesta: Bandeja y Productos solo lectura).
-2. **Rol «Otros»:** rol fijo con permisos mínimos (p. ej. «Consulta») o permisos a medida por persona. Propuesta: **roles fijos**; los permisos a medida complican la base de datos y las pruebas.
+2. **Rol «Otros»:** rol fijo con permisos mínimos (p. ej. «Consulta») o permisos a medida por persona. Propuesta: **roles fijos**; los permisos a medida complican la base de datos y las pruebas. El dueño ya mencionó un rol **Despacho** (empaca y lleva a la transportadora, Camino 2): candidato a rol fijo propio cuando llegue el módulo de pedidos.
 3. **Varios Dueños:** si puede haber más de uno y si un Dueño puede quitar a otro.
 4. **Eliminar:** propuesta de **desactivar** en lugar de borrar, para conservar el historial; el borrado definitivo, si se pide, solo para usuarios que nunca entraron.
 

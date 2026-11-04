@@ -3,7 +3,7 @@ Escribir el brief v1.0,1 · Diseño,Producto,Hecha,Alta,"Problema, usuarios, alc
 Escribir las reglas del negocio,1 · Diseño,Producto,Hecha,Alta,RN-01 a RN-10. Falta validarlas con el dueño.,docs/REGLAS_DEL_NEGOCIO.md
 Documentar el modelo de datos y la arquitectura,1 · Diseño,Arquitectura,Hecha,Media,"Tabla de Baserow, flujo de datos y estructura del código.",docs/notion_modelado_datos.md
 Montar el espejo en Notion,1 · Diseño,Método,Hecha,Alta,Mismo esquema de Futur Green (decisión 0001). Solo se escriben los bloques que cambian.,docs/notion/COMO_MONTARLO.md
-Responder las preguntas abiertas del brief,1 · Diseño,Producto,Pendiente,Alta,"Hosting, dominio, diseño visual, productos activos, usuarios del admin y analítica.",docs/00-BRIEF.md
+Responder las preguntas abiertas del brief,1 · Diseño,Producto,En curso,Alta,"Hosting, dominio, diseño visual, productos activos, usuarios del admin y analítica. 4 nov: respondidas P1 dominio, P2 productos, P3 usuarios (HU-34), P6 Supabase + Contada, P7 Hostinger y VPS. Faltan: Quiénes somos (archivo del dueño), políticas de devolución y privacidad (abogado), pasarela y transportadora.",docs/00-BRIEF.md
 Validar las reglas del negocio con el dueño,1 · Diseño,Producto,Pendiente,Alta,,docs/REGLAS_DEL_NEGOCIO.md
 Escribir las historias de usuario con criterios de aceptación,2 · Especificaciones,Producto,En curso,Alta,"HU-01 a HU-06 escritas para la landing (Inicio, Categorías, Productos). Falta validarlas con el dueño.",docs/sdlc/2-especificaciones.md
 Configurar las pruebas automáticas (unitarias y de punta a punta),4 · Pruebas,Camino 1,Pendiente,Media,,docs/sdlc/4-pruebas.md
