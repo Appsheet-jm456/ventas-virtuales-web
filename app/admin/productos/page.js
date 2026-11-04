@@ -93,7 +93,8 @@ function Miniatura({ r }) {
 }
 
 export default function ProductosPage() {
-  const { token, logout } = useAdmin();
+  const { token, logout, puede } = useAdmin();
+  const soloVer = !puede("productos", "editar");
 
   const [tab, setTab] = useState("lista");
   const [rows, setRows] = useState([]);
@@ -361,12 +362,16 @@ export default function ProductosPage() {
         <button type="button" role="tab" id="tab-lista" aria-controls="panel-lista" aria-selected={tab === "lista"} onClick={() => setTab("lista")}>
           Listado <span className="pr-n">{rows.length}</span>
         </button>
-        <button type="button" role="tab" id="tab-csv" aria-controls="panel-csv" aria-selected={tab === "csv"} onClick={() => setTab("csv")}>
-          Carga CSV
-        </button>
-        <button type="button" role="tab" id="tab-fotos" aria-controls="panel-fotos" aria-selected={tab === "fotos"} onClick={() => setTab("fotos")}>
-          Migrar fotos {pendientesMig.length > 0 && <span className="pr-n">{pendientesMig.length}</span>}
-        </button>
+        {!soloVer && (
+          <>
+            <button type="button" role="tab" id="tab-csv" aria-controls="panel-csv" aria-selected={tab === "csv"} onClick={() => setTab("csv")}>
+              Carga CSV
+            </button>
+            <button type="button" role="tab" id="tab-fotos" aria-controls="panel-fotos" aria-selected={tab === "fotos"} onClick={() => setTab("fotos")}>
+              Migrar fotos {pendientesMig.length > 0 && <span className="pr-n">{pendientesMig.length}</span>}
+            </button>
+          </>
+        )}
       </div>
 
       {demo && <div className="demo-note">Modo demo: Supabase no está configurado; los cambios no se guardarán.</div>}
@@ -398,7 +403,7 @@ export default function ProductosPage() {
             <button type="button" className="adm-ibtn" onClick={load} disabled={loading} aria-label="Recargar" title="Recargar">
               <Ico d={I.reload} />
             </button>
-            <button type="button" className="btn pr-btn" onClick={openNew}><Ico d={I.plus} />Nuevo producto</button>
+            {!soloVer && <button type="button" className="btn pr-btn" onClick={openNew}><Ico d={I.plus} />Nuevo producto</button>}
           </div>
 
           <div className="pr-lista">
@@ -459,14 +464,18 @@ export default function ProductosPage() {
                               style={{ top: menu.top, left: menu.left, transform: menu.arriba ? "translateY(-100%)" : undefined }}
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <button type="button" role="menuitem" onClick={accion(() => openEdit(r))}><Ico d={I.edit} />Editar</button>
-                              <button type="button" role="menuitem" onClick={accion(() => toggleAgotado(r))}>
-                                <Ico d={stockNum(r) > 0 ? I.slash : I.check} />{stockNum(r) > 0 ? "Marcar agotado" : "Reponer (stock 1)"}
-                              </button>
-                              <button type="button" role="menuitem" onClick={accion(() => toggleOculto(r))}>
-                                <Ico d={isHidden(r) ? I.eye : I.eyeoff} />{isHidden(r) ? "Mostrar en la web" : "Ocultar de la web"}
-                              </button>
-                              <button type="button" role="menuitem" className="bad" onClick={accion(() => setBorrar(r))}><Ico d={I.trash} />Eliminar</button>
+                              <button type="button" role="menuitem" onClick={accion(() => openEdit(r))}><Ico d={soloVer ? I.eye : I.edit} />{soloVer ? "Ver" : "Editar"}</button>
+                              {!soloVer && (
+                                <>
+                                  <button type="button" role="menuitem" onClick={accion(() => toggleAgotado(r))}>
+                                    <Ico d={stockNum(r) > 0 ? I.slash : I.check} />{stockNum(r) > 0 ? "Marcar agotado" : "Reponer (stock 1)"}
+                                  </button>
+                                  <button type="button" role="menuitem" onClick={accion(() => toggleOculto(r))}>
+                                    <Ico d={isHidden(r) ? I.eye : I.eyeoff} />{isHidden(r) ? "Mostrar en la web" : "Ocultar de la web"}
+                                  </button>
+                                  <button type="button" role="menuitem" className="bad" onClick={accion(() => setBorrar(r))}><Ico d={I.trash} />Eliminar</button>
+                                </>
+                              )}
                             </div>
                           )}
                         </div>

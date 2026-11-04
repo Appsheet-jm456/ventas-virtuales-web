@@ -11,9 +11,13 @@ Conserva los últimos DIAS_CONSERVAR días. Lee las claves de .env.local (nunca 
 Corre con cron en el servidor atlasjm:
 
     15 3 * * * /usr/bin/python3 /home/atlasjm/ventas-virtuales-web/scripts/supabase-diario.py >> /home/atlasjm/respaldos/ventas-virtual/diario.log 2>&1
+    45 * * * * /usr/bin/python3 /home/atlasjm/ventas-virtuales-web/scripts/supabase-diario.py --si-falta >> /home/atlasjm/respaldos/ventas-virtual/diario.log 2>&1
+
+La segunda línea recupera la copia si el servidor estaba apagado a las 03:15: con --si-falta no hace
+nada cuando la copia de hoy ya existe y salió completa.
 
 Restaurar: cada archivo es la lista de filas de su tabla, lista para insertarla de nuevo.
-Las cuentas de acceso al panel (Supabase Auth) no se copian.
+Las contraseñas y cuentas de Supabase Auth no se copian; sí los perfiles, roles y permisos del panel.
 """
 import datetime
 import json
@@ -24,7 +28,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 DESTINO = Path.home() / "respaldos" / "ventas-virtual"
-TABLAS = ["productos", "categorias", "banners", "configuracion", "eventos"]
+TABLAS = ["productos", "categorias", "banners", "configuracion", "eventos", "paginas", "roles", "rol_permisos", "perfiles"]
 DIAS_CONSERVAR = 30
 LOTE = 1000
 
@@ -73,6 +77,8 @@ def main():
         sys.exit(f"{ahora:%Y-%m-%d %H:%M} ✗ Faltan NEXT_PUBLIC_SUPABASE_URL o SUPABASE_SECRET_KEY en .env.local")
 
     carpeta = DESTINO / ahora.date().isoformat()
+    if "--si-falta" in sys.argv and all((carpeta / f"{t}.json").exists() for t in TABLAS):
+        return
     carpeta.mkdir(parents=True, exist_ok=True)
     resumen, fallos = [], []
     for tabla in TABLAS:

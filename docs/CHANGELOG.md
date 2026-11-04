@@ -5,6 +5,12 @@
 
 ---
 
+## 4 nov 2026 · Usuarios, roles y permisos del panel (HU-34)
+
+El panel ahora tiene usuarios con rol. El Superadmin crea roles y define qué puede cada uno; se agregan personas con un enlace de activación por WhatsApp, y cada quien ve solo sus módulos. Se cierra el hueco por el que cualquier cuenta del panel podía cambiar todo. La copia diaria ahora incluye las políticas y los usuarios (BUG-1). Pendiente la aprobación del dueño.
+
+---
+
 ## 27 oct 2026 · Flujo de desarrollo y EDT
 
 Se documenta cómo se trabaja cada mejora o bug: registrar, documentar, implementar, probar, aprobar y cerrar, con `tareas.csv` como fuente de verdad, Notion como tablero y una EDT en Google Sheets como mapa del proyecto (6 fases, 77 tareas, con avance por fase). Los bugs se registran como `BUG-n` con su nivel, y uno Crítico o Alto abierto bloquea la salida en línea. Nuevo `docs/FLUJO_DESARROLLO.md`, regla en `CLAUDE.md` y el generador `docs/notion/edt_generar.py`. Sin cambio de versión del brief.

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useAdmin } from "../AdminShell";
-import { supabaseNavegador } from "../../../lib/supabase-browser";
 import { cld } from "../../../lib/cdn";
 import SubirImagen, { REGLAS, descartarSubidas } from "../SubirImagen";
 
@@ -20,7 +19,7 @@ const SECCIONES = [
   ["cf-cinta", "Cinta"],
   ["cf-barra", "Barra superior"],
   ["cf-nosotros", "Nosotros"],
-  ["cf-cuenta", "Cuenta"],
+  ["cf-cuenta", "Cuenta y usuarios"],
 ];
 
 const EJEMPLO = { producto: "Lenovo ThinkPad T14 Gen 2", codigo: "100-101-1234" };
@@ -55,13 +54,12 @@ function Interruptor({ id, titulo, texto, valor, onChange }) {
 }
 
 export default function ConfiguracionPage() {
-  const { token, logout } = useAdmin();
+  const { token, logout, puede } = useAdmin();
   const [guardado, setGuardado] = useState(null); // { empresa, catalogo } como está en la base
   const [form, setForm] = useState(null);
   const [busy, setBusy] = useState(false);
   const [okMsg, setOkMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [clave, setClave] = useState({ nueva: "", repetir: "", busy: false, ok: "", error: "" });
   const [logosSubidos, setLogosSubidos] = useState([]); // subidos y aún sin guardar
   const [subiendoLogo, setSubiendoLogo] = useState(false);
 
@@ -117,20 +115,6 @@ export default function ConfiguracionPage() {
       setErrMsg(String(e?.message || e));
     } finally {
       setBusy(false);
-    }
-  }
-
-  async function cambiarClave(e) {
-    e.preventDefault();
-    if (clave.nueva.length < 8) { setClave((c) => ({ ...c, error: "La contraseña debe tener al menos 8 caracteres.", ok: "" })); return; }
-    if (clave.nueva !== clave.repetir) { setClave((c) => ({ ...c, error: "Las dos contraseñas no coinciden.", ok: "" })); return; }
-    setClave((c) => ({ ...c, busy: true, error: "", ok: "" }));
-    const { error } = await supabaseNavegador().auth.updateUser({ password: clave.nueva });
-    if (error) {
-      const msg = /different from the old/i.test(error.message) ? "La nueva contraseña debe ser distinta de la actual." : "No se pudo cambiar: " + error.message;
-      setClave((c) => ({ ...c, busy: false, error: msg }));
-    } else {
-      setClave({ nueva: "", repetir: "", busy: false, error: "", ok: "Contraseña cambiada. Úsala la próxima vez que entres." });
     }
   }
 
@@ -322,23 +306,12 @@ export default function ConfiguracionPage() {
         </div>
 
         <section className="pr-card" id="cf-cuenta">
-          <h2 className="pr-h">Cuenta</h2>
-          <p className="pr-sub">Cambia la contraseña con la que entras al panel. Se guarda aparte de la configuración.</p>
-          <form className="cf-grid" onSubmit={cambiarClave}>
-            <Campo id="cf-clave" label="Contraseña nueva" ayuda="Mínimo 8 caracteres.">
-              <input id="cf-clave" className="input" type="password" autoComplete="new-password" value={clave.nueva}
-                onChange={(e) => setClave((c) => ({ ...c, nueva: e.target.value, error: "", ok: "" }))} />
-            </Campo>
-            <Campo id="cf-clave2" label="Repite la contraseña">
-              <input id="cf-clave2" className="input" type="password" autoComplete="new-password" value={clave.repetir}
-                onChange={(e) => setClave((c) => ({ ...c, repetir: e.target.value, error: "", ok: "" }))} />
-            </Campo>
-            <div className="ct-full">
-              <button type="submit" className="btn-ghost" disabled={clave.busy || !clave.nueva}>{clave.busy ? "Cambiando…" : "Cambiar contraseña"}</button>
-              {clave.error && <div className="form-error">{clave.error}</div>}
-              {clave.ok && <p className="pr-aviso ok" role="status" style={{ marginTop: 10 }}><Ico d={CHECK} />{clave.ok}</p>}
-            </div>
-          </form>
+          <h2 className="pr-h">Cuenta y usuarios</h2>
+          <p className="pr-sub">Tu contraseña se cambia en Mi cuenta. Las personas del panel y sus roles se administran en Usuarios.</p>
+          <div className="us-acc">
+            <a className="btn-ghost pr-btn" href="/admin/cuenta">Mi cuenta</a>
+            {puede("usuarios") && <a className="btn pr-btn" href="/admin/configuracion/usuarios">Usuarios y roles →</a>}
+          </div>
         </section>
       </div>
     </div>

@@ -2,7 +2,7 @@
 // Exige la sesión de Supabase Auth (Authorization: Bearer); además la RLS solo deja escribir
 // a usuarios autenticados.
 import { createRow, updateRow, deleteRow } from "../../../lib/inventory";
-import { tokenDe, usuarioDeToken, supabaseConfigurado } from "../../../lib/supabase";
+import { exigir } from "../../../lib/permisos";
 
 export const dynamic = "force-dynamic";
 
@@ -13,13 +13,9 @@ function friendlyError(msg) {
 }
 
 export async function POST(request) {
-  if (!supabaseConfigurado()) {
-    return Response.json({ error: "El panel no está configurado: faltan las claves de Supabase." }, { status: 500 });
-  }
-  const token = tokenDe(request);
-  if (!(await usuarioDeToken(token))) {
-    return Response.json({ error: "Sesión no válida." }, { status: 401 });
-  }
+  const a = await exigir(request, "productos", "editar");
+  if (a.respuesta) return a.respuesta;
+  const { token } = a;
 
   let body;
   try {

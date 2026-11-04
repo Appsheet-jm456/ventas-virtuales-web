@@ -1,6 +1,7 @@
 // Carga de productos por CSV (HU-09). op "vista": analiza y no guarda. op "aplicar": guarda.
 // Clave = Código. Lo que no viene en el archivo no se toca.
-import { tokenDe, usuarioDeToken, userClient, supabaseConfigurado } from "../../../../lib/supabase";
+import { userClient } from "../../../../lib/supabase";
+import { exigir } from "../../../../lib/permisos";
 import { analizarCsv } from "../../../../lib/csv";
 
 export const dynamic = "force-dynamic";
@@ -17,9 +18,9 @@ async function codigosExistentes(cliente) {
 }
 
 export async function POST(request) {
-  if (!supabaseConfigurado()) return Response.json({ error: "Faltan las claves de Supabase." }, { status: 500 });
-  const token = tokenDe(request);
-  if (!(await usuarioDeToken(token))) return Response.json({ error: "Sesión no válida." }, { status: 401 });
+  const a = await exigir(request, "productos", "editar");
+  if (a.respuesta) return a.respuesta;
+  const { token } = a;
 
   let body;
   try { body = await request.json(); } catch { return Response.json({ error: "Petición inválida." }, { status: 400 }); }

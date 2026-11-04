@@ -768,64 +768,74 @@ Como dueño quiero crear y mantener desde `/admin` la página **«Nosotros»** (
 
 ---
 
-## HU-34 · Usuarios y roles del panel
+## HU-34 · Usuarios, roles y permisos del panel
 
-Como dueño quiero agregar, modificar y desactivar desde `/admin/configuracion/usuarios` a las personas que usan el panel (Dueños, Encargados de actualizar el catálogo, Vendedores y otros asignados), y decidir qué puede hacer cada rol; para que cada quien vea y cambie solo lo suyo.
+Como Superadmin quiero crear roles y definir qué puede hacer cada uno; y como quien administra el panel quiero agregar, modificar y desactivar a las personas desde `/admin/configuracion/usuarios`, para que cada quien vea y cambie solo lo suyo.
 
-**Origen (4 nov 2026, al responder la pregunta abierta «¿Quién usa el panel?» del brief):** el panel lo usarán Dueños, Encargados de actualizar listas y catálogos de la página web, Vendedores y otros asignados. Hoy no existe módulo de usuarios: las cuentas se crean a mano en Supabase y **cualquier usuario autenticado puede escribir en todo** (las reglas RLS de las tablas solo distinguen «autenticado» de «público»).
+**Origen (4 nov 2026):** el panel lo usarán Dueños, Encargados de actualizar listas y catálogos, Vendedores y otros asignados. Antes las cuentas se creaban a mano en Supabase y **cualquier usuario autenticado podía escribir en todo**.
 
-**Estado:** especificada, sin código. Las decisiones marcadas «por confirmar» se cierran con el dueño antes de construir.
+**Estado:** construida y probada; falta la aprobación del dueño. Decisión técnica: **0012**.
 
-### Matriz de permisos propuesta (por confirmar)
+### Decisiones del dueño (4 nov)
 
-| Módulo | Dueño | Encargado | Vendedor | Otros |
-|---|---|---|---|---|
-| Bandeja (visitas, clics) | ✅ | ❌ | ✅ | por definir |
-| Productos (listado, editar, Carga CSV) | ✅ | ✅ | solo ver | por definir |
-| Banners y categorías | ✅ | ✅ | ❌ | por definir |
-| Políticas y Nosotros | ✅ | ❌ | ❌ | ❌ |
-| Configuración de la tienda | ✅ | ❌ | ❌ | ❌ |
-| **Usuarios** | ✅ | ❌ | ❌ | ❌ |
+1. **Superadmin** (`appsheetjm@gmail.com`, la cuenta de desarrollo): acceso total y único que crea roles y define permisos.
+2. **Roles editables** con permisos por módulo. Se arranca con los de la tabla.
+3. **Despacho** no se crea todavía: el Superadmin lo creará cuando exista el módulo de pedidos (Camino 2).
+4. **Acceso de personas nuevas:** enlace para copiar y enviar por WhatsApp (Supabase no tiene correo configurado).
+5. **Quitar acceso:** se desactiva, para conservar el historial. Solo se elimina a quien nunca entró.
+
+### Roles iniciales (el Superadmin los puede cambiar, salvo el suyo)
+
+| Módulo | Superadmin | Dueño | Encargado | Vendedor | Consulta |
+|---|---|---|---|---|---|
+| Bandeja (visitas, clics) | ✅ | ✅ | ❌ | ver | ❌ |
+| Productos (listado, editar, Carga CSV) | ✅ | ✅ | ✅ | ver | ver |
+| Banners | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Categorías | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Políticas y Nosotros | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Configuración de la tienda | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Usuarios | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Roles y permisos | ✅ | ❌ | ❌ | ❌ | ❌ |
 
 ### Panel (frontend)
 
-- Dado un **Dueño**, cuando entra a `/admin/configuracion`, entonces ve la sección **Usuarios** con la lista (nombre, correo, rol, estado activo/desactivado, último acceso).
-- Dado el botón **Agregar usuario**, entonces pide nombre, correo y rol; al guardar, el usuario recibe un **correo de invitación** para crear su contraseña (nadie recibe una contraseña escrita por el dueño).
-- Dado un usuario de la lista, entonces el Dueño puede **cambiar su nombre y su rol**, **desactivarlo** (pierde el acceso al instante, se conserva su historial) o **reactivarlo**, y **reenviar la invitación**.
-- Dado el menú lateral del panel (HU-10), entonces cada rol ve **solo los módulos permitidos**; una dirección no permitida escrita a mano responde «sin permiso» y no muestra datos.
-- Dado el último Dueño activo, entonces el sistema **no deja desactivarlo ni quitarle el rol**, para que el panel nunca quede sin Dueño.
-- Dado que un usuario cambia de rol o se desactiva mientras tiene la sesión abierta, entonces el cambio rige en su **siguiente acción** (a más tardar en un minuto), sin esperar a que cierre sesión.
-- Dado el modo claro y oscuro, el celular y el teclado, entonces el módulo mantiene contraste WCAG AA, foco visible y no desborda.
+- Dado quien tiene el permiso **Usuarios**, cuando entra a `/admin/configuracion/usuarios`, entonces ve la lista: nombre, correo, rol, estado (Activo, Pendiente de activar, Desactivado) y último acceso.
+- Dado **Agregar usuario**, cuando escribe nombre, correo y rol, entonces se crea la cuenta sin contraseña y aparece un **enlace de acceso** para copiar o enviar por WhatsApp. Vence en 1 hora y sirve una vez.
+- Dado el enlace, cuando la persona lo abre en `/activar` y escribe su contraseña dos veces (mínimo 8 caracteres), entonces entra al panel. Un enlace vencido o usado lo avisa. La vista previa de WhatsApp no lo gasta.
+- Dado un usuario, entonces se puede **editar** su nombre y rol, ver su **historial**, generar otro **enlace de acceso** (también sirve si olvidó la contraseña), **desactivarlo** o **reactivarlo**, y **eliminarlo** solo si nunca entró.
+- Dado el **Superadmin**, entonces ve además la pestaña **Roles y permisos**: crear, renombrar y eliminar roles (si no tienen usuarios), y elegir por módulo Sin acceso, Ver o Ver y editar. El rol Superadmin no se cambia.
+- Dado el menú lateral, entonces cada rol ve **solo sus módulos**; quien no tiene Bandeja entra a su primer módulo. Una dirección no permitida muestra «Sin permiso».
+- Dado un módulo con permiso **Ver**, entonces aparece el aviso «Solo consulta» y los formularios quedan deshabilitados. En Productos se conservan búsqueda y filtros, sin Nuevo producto, Carga CSV ni Migrar fotos, y el menú de cada producto solo ofrece **Ver**.
+- Dado **Mi cuenta** (`/admin/cuenta`), entonces cualquier usuario activo ve su rol y cambia su contraseña. Esta opción pasó de Configuración a Mi cuenta porque todos los roles la necesitan.
+- Dado un cambio de permisos, entonces rige en la siguiente acción de la persona, sin volver a entrar. Dado un usuario desactivado, entonces pierde el acceso al instante y no puede volver a entrar.
+- Celular sin scroll horizontal; foco visible y etiquetas en los campos.
 
 ### Datos y seguridad (backend)
 
-- **Tabla nueva `perfiles`** (única tabla nueva): `user_id` (referencia a `auth.users`), `nombre`, `rol` (`dueno` | `encargado` | `vendedor` | `otro`), `activo`, `creado`, `ultimo_acceso`. Migración **solo con el OK del dueño** (la aprobación no se extiende a otras migraciones).
-- **RLS por rol:** las tablas del panel (`productos`, `banners`, `categorias`, `paginas`, `configuracion`, `eventos`) dejan de aceptar «cualquier autenticado» y pasan a validar el rol del usuario y que esté activo. Lectura pública sin cambios (RN-04: solo datos de venta).
-- **Verificación doble:** el rol se comprueba **en la base de datos (RLS) y en cada acción del servidor**; ocultar un botón nunca es el único control.
-- **Crear y desactivar usuarios** usa la clave de servicio de Supabase **solo en el servidor** (nunca en el navegador ni en el repositorio, decisión 0002).
-- **Migración de lo que ya existe:** los usuarios actuales pasan a rol `dueno` al aplicar la migración, para no dejar a nadie sin acceso.
-- **Registro:** cada alta, cambio de rol, desactivación y reactivación guarda quién lo hizo y cuándo.
-- Límites: nombre hasta 80 caracteres; correo válido y único; rol de la lista cerrada.
-- Relación con otras tareas: la verificación en dos pasos (5.2.6) debe poder exigirse a los Dueños; el límite de peticiones del login (5.2.5) cubre también este módulo.
+- Tablas nuevas `roles`, `rol_permisos` y `perfiles` (migración `20261104120000_usuarios_roles`, con reversa en `supabase/reversas/`).
+- **RLS por permiso** en `productos`, `banners`, `categorias`, `paginas`, `configuracion` y `eventos`, con la función `panel_puede(módulo, nivel)`. Lo público (rol anon) no cambia.
+- **Verificación doble:** cada ruta de `/api/admin/*` y la firma de Cloudinary (por destino) exigen el permiso; la RLS lo repite.
+- **Nadie se sube el rol:** `perfiles`, `roles` y `rol_permisos` no tienen reglas de escritura; se cambian solo en el servidor con la clave secreta.
+- **Reglas:** solo un Superadmin toca o asigna Superadmin; nadie cambia su propio rol ni se desactiva o elimina a sí mismo; un disparador en la base impide quedarse sin Superadmin activo.
+- **Historial:** cada alta, cambio, desactivación, reactivación y enlace guarda quién, qué y cuándo (últimos 50, en `perfiles.historial`).
+- **Límites:** nombre hasta 80 caracteres, rol hasta 40, descripción hasta 200; correo válido y único.
+- **Copia diaria:** incluye `perfiles`, `roles`, `rol_permisos` (y `paginas`, ver BUG-1).
 
-### Decisiones por confirmar con el dueño
+### Variables
 
-1. **Matriz de permisos:** qué ve y qué cambia el Vendedor (propuesta: Bandeja y Productos solo lectura).
-2. **Rol «Otros»:** rol fijo con permisos mínimos (p. ej. «Consulta») o permisos a medida por persona. Propuesta: **roles fijos**; los permisos a medida complican la base de datos y las pruebas. El dueño ya mencionó un rol **Despacho** (empaca y lleva a la transportadora, Camino 2): candidato a rol fijo propio cuando llegue el módulo de pedidos.
-3. **Varios Dueños:** si puede haber más de uno y si un Dueño puede quitar a otro.
-4. **Eliminar:** propuesta de **desactivar** en lugar de borrar, para conservar el historial; el borrado definitivo, si se pide, solo para usuarios que nunca entraron.
+`SUPABASE_SECRET_KEY` debe estar en Vercel y Hostinger, marcada como secreto. Sin ella, el módulo Usuarios avisa que falta; el resto del panel funciona.
 
 ### Plan de tareas
 
 | # | Tarea | Dónde |
 |---|---|---|
-| 1 | Cerrar las 4 decisiones y actualizar la matriz | esta sección |
-| 2 | Decisión técnica 0012 · Roles y permisos del panel | `docs/decisiones/` |
-| 3 | Migración `perfiles` + RLS por rol + usuarios actuales como Dueño (con OK del dueño) | `supabase/migrations/` |
-| 4 | Capa de datos y verificación de rol en cada acción del servidor | `lib/perfiles.js`, `app/admin/**` |
-| 5 | Módulo `/admin/configuracion/usuarios`: lista, agregar con invitación, editar, desactivar, reenviar | `app/admin/configuracion/usuarios/` |
-| 6 | Menú del panel y direcciones filtrados por rol | `AdminShell.js` |
-| 7 | Prueba en navegador (Playwright) con usuarios `QA-*` por rol: cada rol ve y puede solo lo suyo, el último Dueño no se desactiva; borrar al final | `docs/sdlc/4-pruebas.md` |
+| 1 | Decisión 0012 | `docs/decisiones/` |
+| 2 | Migración, reversa y usuario actual como Superadmin (OK del dueño, 4 nov) | `supabase/` |
+| 3 | Permisos en el servidor y en todas las rutas | `lib/permisos.js`, `lib/modulos.js`, `lib/supabase-admin.js`, `app/api/` |
+| 4 | Usuarios y roles | `lib/usuarios.js`, `app/admin/configuracion/usuarios/`, `app/api/admin/usuarios`, `app/api/admin/roles` |
+| 5 | Activación y Mi cuenta | `app/activar/`, `app/admin/cuenta/` |
+| 6 | Menú y modo solo consulta | `app/admin/AdminShell.js`, `app/admin/productos/page.js` |
+| 7 | Prueba con usuarios QA por rol | `docs/sdlc/4-pruebas.md` |
 
 ---
 

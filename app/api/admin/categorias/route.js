@@ -1,7 +1,8 @@
 // API del panel para categorías (HU-14): listar, crear, actualizar, ordenar y quitar.
-// Exige la sesión de Supabase Auth (Authorization: Bearer); la RLS solo deja escribir al
-// usuario autenticado.
-import { tokenDe, usuarioDeToken, supabaseConfigurado } from "../../../../lib/supabase";
+// Exige la sesión de Supabase Auth (Authorization: Bearer); la RLS repite la
+// verificación de permisos (HU-34).
+import { exigir, sinPermiso } from "../../../../lib/permisos";
+import { tienePermiso } from "../../../../lib/modulos";
 import {
   listarCategorias, crearCategoria, actualizarCategoria, intercambiarOrden, quitarCategoria,
 } from "../../../../lib/categorias";
@@ -9,13 +10,9 @@ import {
 export const dynamic = "force-dynamic";
 
 export async function POST(request) {
-  if (!supabaseConfigurado()) {
-    return Response.json({ error: "El panel no está configurado: faltan las claves de Supabase." }, { status: 500 });
-  }
-  const token = tokenDe(request);
-  if (!(await usuarioDeToken(token))) {
-    return Response.json({ error: "Sesión no válida." }, { status: 401 });
-  }
+  const a = await exigir(request, "categorias");
+  if (a.respuesta) return a.respuesta;
+  const { token, acceso } = a;
 
   let body;
   try {
@@ -24,6 +21,8 @@ export async function POST(request) {
     return Response.json({ error: "Petición inválida." }, { status: 400 });
   }
   const { op, id, campos = {} } = body || {};
+
+  if (body?.op !== "listar" && !tienePermiso(acceso.permisos, "categorias", "editar")) return sinPermiso();
 
   try {
     if (op === "listar") return Response.json({ categorias: await listarCategorias(token) });

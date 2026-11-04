@@ -1,19 +1,16 @@
 // API del panel para la configuración de la tienda (HU-15): leer y guardar.
-// Exige la sesión de Supabase Auth (Authorization: Bearer); la RLS solo deja escribir al
-// usuario autenticado.
-import { tokenDe, usuarioDeToken, supabaseConfigurado } from "../../../../lib/supabase";
+// Exige la sesión de Supabase Auth (Authorization: Bearer); la RLS repite la
+// verificación de permisos (HU-34).
+import { exigir, sinPermiso } from "../../../../lib/permisos";
+import { tienePermiso } from "../../../../lib/modulos";
 import { leerConfiguracion, guardarConfiguracion, EMPRESA_BASE, CATALOGO_BASE } from "../../../../lib/configuracion";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request) {
-  if (!supabaseConfigurado()) {
-    return Response.json({ error: "El panel no está configurado: faltan las claves de Supabase." }, { status: 500 });
-  }
-  const token = tokenDe(request);
-  if (!(await usuarioDeToken(token))) {
-    return Response.json({ error: "Sesión no válida." }, { status: 401 });
-  }
+  const a = await exigir(request, "configuracion");
+  if (a.respuesta) return a.respuesta;
+  const { token, acceso } = a;
 
   let body;
   try {
@@ -21,6 +18,8 @@ export async function POST(request) {
   } catch {
     return Response.json({ error: "Petición inválida." }, { status: 400 });
   }
+
+  if (body?.op !== "leer" && !tienePermiso(acceso.permisos, "configuracion", "editar")) return sinPermiso();
 
   try {
     if (body?.op === "leer") {

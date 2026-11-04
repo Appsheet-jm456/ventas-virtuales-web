@@ -71,6 +71,7 @@ export default function PoliticasPage() {
             <h2 className="pr-h">Políticas y páginas de soporte</h2>
             <p className="pr-sub">Garantía, devoluciones, envíos, términos y privacidad. Las <b>visibles</b> salen en la columna «Soporte» del pie de la web, en este orden.</p>
           </div>
+          <Link className="btn-ghost pr-btn" href="/admin/configuracion/nosotros">Página Nosotros</Link>
           <Link className="btn pr-btn" href="/admin/politicas/nueva"><Ico d={I.plus} />Nueva página</Link>
         </div>
         <div className="admin-table-wrap pr-tabla">

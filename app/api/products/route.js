@@ -1,15 +1,17 @@
 // Catálogo en JSON. El público recibe solo lo activo y las columnas de venta (RN-04). El panel
-// envía el token de su sesión (Authorization: Bearer) y recibe TODO, incluidos los ocultos.
+// envía el token de su sesión y recibe lo que su rol puede ver, incluidos los ocultos (HU-34).
 import { getInventory, getPublicInventory } from "../../../lib/inventory";
-import { tokenDe, usuarioDeToken } from "../../../lib/supabase";
+import { tokenDe } from "../../../lib/supabase";
+import { accesoDeToken } from "../../../lib/permisos";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request) {
   try {
     const token = tokenDe(request);
-    const admin = token ? await usuarioDeToken(token) : null;
+    const admin = token ? await accesoDeToken(token) : null;
     if (token && !admin) return Response.json({ error: "Sesión no válida.", rows: [] }, { status: 401 });
+    if (admin && !admin.activo) return Response.json({ error: "Tu usuario está desactivado o no tiene acceso al panel.", rows: [] }, { status: 403 });
 
     const { rows, demo } = admin ? await getInventory(token) : await getPublicInventory();
     // ?codigos=a,b,c devuelve solo esos productos públicos (HU-30: «Vistos recientemente»).
