@@ -5,12 +5,19 @@ const DESCRIPCION =
   "Venta de portátiles corporativos usados y nuevos, torres tiny, partes y accesorios en Cali, Colombia. Garantía, envíos a todo el país y atención por WhatsApp.";
 
 // El nombre sale de la configuración (HU-15); lib/site.js es el respaldo.
+function urlDelSitio() {
+  const v = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
+  if (!v) return "http://localhost:3000";
+  return /^https?:\/\//i.test(v) ? v : `https://${v}`;
+}
+
 export async function generateMetadata() {
   const site = await getSite();
   const titulo = `${site.nombre} — Computadores corporativos nuevos y usados en Cali`;
   return {
     // Con el dominio definitivo en NEXT_PUBLIC_SITE_URL, las vistas previas al compartir usan URLs absolutas.
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+    // Tolera que falte el «https://» en la variable (un valor sin esquema rompía la compilación).
+    metadataBase: new URL(urlDelSitio()),
     title: titulo,
     description: DESCRIPCION,
     icons: { icon: "/marca/icono.png", apple: "/marca/icono.png" },
