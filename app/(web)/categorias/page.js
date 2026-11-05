@@ -1,0 +1,36 @@
+import Link from "next/link";
+import { getPublicInventory } from "../../../lib/inventory";
+import { getSite } from "../../../lib/configuracion";
+import { getCategoriasPublicas } from "../../../lib/categorias";
+import { CategoryTile } from "../../components/CategoryStrip";
+
+export const revalidate = 60;
+
+export async function generateMetadata() {
+  const site = await getSite();
+  return {
+    title: `Categorías — ${site.nombre}`,
+    description: "Portátiles, torres tiny, partes y accesorios. Elige una categoría y mira lo disponible.",
+  };
+}
+
+export default async function CategoriasPage() {
+  let rows = [];
+  try {
+    rows = (await getPublicInventory()).rows;
+  } catch {
+    rows = [];
+  }
+  const categorias = await getCategoriasPublicas(rows);
+
+  return (
+    <main className="wrap home-sec">
+      <div className="crumbs"><Link href="/">Inicio</Link> / Categorías</div>
+      <h1 className="section-title">Categorías</h1>
+      <p className="section-sub">Elige una categoría para ver los productos disponibles.</p>
+      {categorias.length
+        ? <div className="cat-grid">{categorias.map((c) => <CategoryTile key={c.nombre} c={c} />)}</div>
+        : <div className="empty-msg">Pronto publicaremos nuestras categorías.</div>}
+    </main>
+  );
+}

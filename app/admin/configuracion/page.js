@@ -1,0 +1,319 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+
+import { useAdmin } from "../AdminShell";
+import { cld } from "../../../lib/cdn";
+import SubirImagen, { REGLAS, descartarSubidas } from "../SubirImagen";
+
+// Módulo Configuración del panel (HU-15): datos de la empresa, WhatsApp, redes, horario, reglas
+// del catálogo y cambio de contraseña. Se guarda en la tabla `configuracion` de Supabase.
+
+const SECCIONES = [
+  ["cf-empresa", "Empresa"],
+  ["cf-contacto", "Contacto y WhatsApp"],
+  ["cf-redes", "Redes sociales"],
+  ["cf-horario", "Horario"],
+  ["cf-catalogo", "Catálogo"],
+  ["cf-apariencia", "Apariencia"],
+  ["cf-cinta", "Cinta"],
+  ["cf-barra", "Barra superior"],
+  ["cf-nosotros", "Nosotros"],
+  ["cf-cuenta", "Cuenta y usuarios"],
+];
+
+const EJEMPLO = { producto: "Lenovo ThinkPad T14 Gen 2", codigo: "100-101-1234" };
+const CINTA_MAX = 200; // igual que lib/configuracion.js (HU-24)
+const UBICACION_MAX = 80; // igual que lib/configuracion.js (HU-32)
+
+function Ico({ d }) {
+  return <svg className="adm-i" viewBox="0 0 24 24" aria-hidden="true">{d}</svg>;
+}
+const CHECK = <path d="M20 6L9 17l-5-5" />;
+
+function Campo({ id, label, ayuda, children }) {
+  return (
+    <div className="field cf-field">
+      <label htmlFor={id}>{label}</label>
+      {children}
+      {ayuda && <small className="ct-hint">{ayuda}</small>}
+    </div>
+  );
+}
+
+function Interruptor({ id, titulo, texto, valor, onChange }) {
+  return (
+    <div className="cf-switch">
+      <div>
+        <b id={`${id}-t`}>{titulo}</b>
+        <small>{texto}</small>
+      </div>
+      <button type="button" id={id} className="cf-tg" role="switch" aria-checked={valor} aria-labelledby={`${id}-t`} onClick={() => onChange(!valor)} />
+    </div>
+  );
+}
+
+export default function ConfiguracionPage() {
+  const { token, logout, puede } = useAdmin();
+  const [guardado, setGuardado] = useState(null); // { empresa, catalogo } como está en la base
+  const [form, setForm] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [okMsg, setOkMsg] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [logosSubidos, setLogosSubidos] = useState([]); // subidos y aún sin guardar
+  const [subiendoLogo, setSubiendoLogo] = useState(false);
+
+  useEffect(() => { cargar(); }, []);
+
+  async function api(payload) {
+    const res = await fetch("/api/admin/configuracion", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${await token()}` },
+      body: JSON.stringify(payload),
+    });
+    if (res.status === 401) { logout(); throw new Error("Sesión expirada: vuelve a entrar."); }
+    const d = await res.json();
+    if (d.error) throw new Error(d.error);
+    return d;
+  }
+
+  async function cargar() {
+    try {
+      const d = await api({ op: "leer" });
+      const v = { empresa: d.empresa, catalogo: d.catalogo };
+      setGuardado(v);
+      setForm(v);
+    } catch (e) {
+      setErrMsg(String(e?.message || e));
+    }
+  }
+
+  const cambios = useMemo(() => form && guardado && JSON.stringify(form) !== JSON.stringify(guardado), [form, guardado]);
+
+  // Avisa antes de salir de la página con cambios sin guardar.
+  useEffect(() => {
+    if (!cambios) return;
+    const aviso = (e) => { e.preventDefault(); e.returnValue = ""; };
+    window.addEventListener("beforeunload", aviso);
+    return () => window.removeEventListener("beforeunload", aviso);
+  }, [cambios]);
+
+  const setE = (k) => (e) => setForm((s) => ({ ...s, empresa: { ...s.empresa, [k]: e.target.value } }));
+  const setC = (k) => (v) => setForm((s) => ({ ...s, catalogo: { ...s.catalogo, [k]: v } }));
+
+  async function guardar() {
+    setBusy(true); setOkMsg(""); setErrMsg("");
+    try {
+      const d = await api({ op: "guardar", empresa: form.empresa, catalogo: form.catalogo });
+      const v = { empresa: { ...form.empresa, ...d.empresa }, catalogo: d.catalogo };
+      setGuardado(v);
+      setForm(v);
+      descartarSubidas(token, logosSubidos.filter((u) => u !== v.empresa.logo));
+      setLogosSubidos([]);
+      setOkMsg("Configuración guardada. La web la toma en menos de un minuto.");
+    } catch (e) {
+      setErrMsg(String(e?.message || e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function ir(e, id) {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  if (!form) {
+    return (
+      <div className="pr">
+        {errMsg ? <p className="pr-aviso bad" role="alert">{errMsg}</p> : <p className="pr-sub">Cargando la configuración…</p>}
+      </div>
+    );
+  }
+
+  const { empresa, catalogo } = form;
+  const numero = String(empresa.whatsapp || "").replace(/[\s+().-]/g, "");
+  const mensaje = String(empresa.mensaje_producto || "").replaceAll("{producto}", EJEMPLO.producto).replaceAll("{codigo}", EJEMPLO.codigo);
+
+  return (
+    <div className="cf">
+      <nav className="cf-nav" aria-label="Secciones de configuración">
+        {SECCIONES.map(([id, nombre]) => <a key={id} href={`#${id}`} onClick={(e) => ir(e, id)}>{nombre}</a>)}
+      </nav>
+
+      <div className="cf-stack">
+        {okMsg && <p className="pr-aviso ok" role="status"><Ico d={CHECK} />{okMsg}</p>}
+        {errMsg && <p className="pr-aviso bad" role="alert">{errMsg}</p>}
+
+        <section className="pr-card" id="cf-empresa">
+          <h2 className="pr-h">Empresa</h2>
+          <p className="pr-sub">Aparece en el encabezado, el pie de página y el título de la web.</p>
+          <div className="cf-grid">
+            <Campo id="cf-nombre" label="Nombre comercial">
+              <input id="cf-nombre" className="input" value={empresa.nombre} onChange={setE("nombre")} />
+            </Campo>
+            <Campo id="cf-ciudad" label="Ciudad">
+              <input id="cf-ciudad" className="input" value={empresa.ciudad} onChange={setE("ciudad")} />
+            </Campo>
+          </div>
+          <Campo id="cf-lema" label="Lema">
+            <textarea id="cf-lema" className="input" rows={2} value={empresa.lema} onChange={setE("lema")} />
+          </Campo>
+          <div className="cf-logo">
+            <img className="cf-logo-img" src={empresa.logo ? cld(empresa.logo, "f_auto,q_auto,h_120") : "/marca/logo-oscuro.png"} alt="Logo actual" />
+            <div className="cf-logo-txt">
+              <b>Logo</b>
+              <small className="ct-hint">{empresa.logo ? "Logo subido desde el panel." : <>Se usa el logo de la guía visual (<span className="mono">public/marca/</span>).</>} La web es oscura: sube una versión con el texto en blanco. Se guarda con <b>Guardar cambios</b>.</small>
+              <SubirImagen id="cf-logo-subir" reglas={REGLAS.logo} texto={empresa.logo ? "Cambiar logo" : "Subir logo"} onSubiendo={setSubiendoLogo}
+                onSubida={(url) => { setLogosSubidos((l) => [...l, url]); setForm((s) => ({ ...s, empresa: { ...s.empresa, logo: url } })); }} />
+              {empresa.logo && <button type="button" className="pr-link" onClick={() => setForm((s) => ({ ...s, empresa: { ...s.empresa, logo: "" } }))}>Volver al logo del archivo</button>}
+            </div>
+          </div>
+        </section>
+
+        <section className="pr-card" id="cf-contacto">
+          <h2 className="pr-h">Contacto y WhatsApp</h2>
+          <p className="pr-sub">El botón «Estoy interesado» abre WhatsApp con este número y este mensaje.</p>
+          <Campo id="cf-direccion" label="Dirección del local">
+            <textarea id="cf-direccion" className="input" rows={2} value={empresa.direccion} onChange={setE("direccion")} />
+          </Campo>
+          <div className="cf-grid">
+            <Campo id="cf-wa" label="WhatsApp (con indicativo)" ayuda="Solo números, sin espacios. Ejemplo: 573175591252.">
+              <input id="cf-wa" className="input mono" inputMode="numeric" value={empresa.whatsapp} onChange={setE("whatsapp")} />
+            </Campo>
+            <Campo id="cf-wa-ver" label="Cómo se muestra el número" ayuda="Así lo ve el cliente en la web. Ejemplo: 317 559 1252.">
+              <input id="cf-wa-ver" className="input" value={empresa.whatsapp_visible} onChange={setE("whatsapp_visible")} />
+            </Campo>
+          </div>
+          <Campo id="cf-msg" label="Mensaje al tocar «Estoy interesado»" ayuda="{producto} se cambia por el nombre del equipo y {codigo} por su código.">
+            <textarea id="cf-msg" className="input" rows={2} value={empresa.mensaje_producto} onChange={setE("mensaje_producto")} />
+          </Campo>
+          <div className="cf-preview">
+            <b>Vista previa</b>
+            <span className="mono">wa.me/{numero || "…"}</span>
+            <span>«{mensaje}»</span>
+          </div>
+        </section>
+
+        <section className="pr-card" id="cf-redes">
+          <h2 className="pr-h">Redes sociales</h2>
+          <p className="pr-sub">Déjalo vacío para no mostrar el enlace en el pie de página.</p>
+          <div className="cf-grid cf-grid3">
+            <Campo id="cf-ig" label="Instagram"><input id="cf-ig" className="input" value={empresa.instagram} onChange={setE("instagram")} placeholder="https://www.instagram.com/…" /></Campo>
+            <Campo id="cf-fb" label="Facebook"><input id="cf-fb" className="input" value={empresa.facebook} onChange={setE("facebook")} placeholder="https://www.facebook.com/…" /></Campo>
+            <Campo id="cf-tt" label="TikTok"><input id="cf-tt" className="input" value={empresa.tiktok} onChange={setE("tiktok")} placeholder="https://www.tiktok.com/@…" /></Campo>
+          </div>
+        </section>
+
+        <section className="pr-card" id="cf-horario">
+          <h2 className="pr-h">Horario de atención</h2>
+          <p className="pr-sub">Se muestra en el pie de página. Vacío = no se muestra.</p>
+          <Campo id="cf-hor" label="Horario">
+            <input id="cf-hor" className="input" value={empresa.horario} onChange={setE("horario")} placeholder="Lunes a sábado, 9:00 a.m. a 6:00 p.m." />
+          </Campo>
+        </section>
+
+        <section className="pr-card" id="cf-catalogo">
+          <h2 className="pr-h">Catálogo</h2>
+          <p className="pr-sub">Reglas de cómo ve el inventario el cliente.</p>
+          <Interruptor id="cf-agotados" titulo="Mostrar productos agotados" texto="Se ven con la cinta «Agotado» y sin botón de compra. Apagado: desaparecen de la web hasta que tengan stock."
+            valor={catalogo.mostrar_agotados} onChange={setC("mostrar_agotados")} />
+          <Interruptor id="cf-precios" titulo="Mostrar precios" texto="Apagado: los productos dicen «Precio: consultar» y el cliente pregunta por WhatsApp."
+            valor={catalogo.mostrar_precios} onChange={setC("mostrar_precios")} />
+        </section>
+
+        <section className="pr-card" id="cf-apariencia">
+          <h2 className="pr-h">Apariencia</h2>
+          <p className="pr-sub">Cómo se ve la web pública (guía visual). El panel no cambia.</p>
+          <Interruptor id="cf-oscuro" titulo="Modo oscuro" texto="Encendido: toda la web en el azul de la pantalla del logo. Apagado: modo claro, con el encabezado y el pie azules y el contenido en blanco. Se ve al recargar la web, a más tardar en un minuto."
+            valor={catalogo.modo_oscuro === true} onChange={setC("modo_oscuro")} />
+          <div className="cf-modos" aria-hidden="true">
+            <div className={`cf-modo${catalogo.modo_oscuro ? "" : " activo"}`}>
+              <div className="cf-mini claro"><span className="cf-mini-hd" /><span className="cf-mini-card" /><span className="cf-mini-card" /><span className="cf-mini-ft" /></div>
+              <small>Modo claro{catalogo.modo_oscuro ? "" : " · en uso"}</small>
+            </div>
+            <div className={`cf-modo${catalogo.modo_oscuro ? " activo" : ""}`}>
+              <div className="cf-mini oscuro"><span className="cf-mini-hd" /><span className="cf-mini-card" /><span className="cf-mini-card" /><span className="cf-mini-ft" /></div>
+              <small>Modo oscuro{catalogo.modo_oscuro ? " · en uso" : ""}</small>
+            </div>
+          </div>
+        </section>
+
+        <section className="pr-card" id="cf-cinta">
+          <h2 className="pr-h">Cinta en movimiento</h2>
+          <p className="pr-sub">Franja delgada encima del encabezado, con un mensaje que se desplaza de derecha a izquierda en toda la web. Se detiene al pasar el puntero.</p>
+          <Interruptor id="cf-cinta-on" titulo="Mostrar cinta" texto="Apagado: la cinta desaparece de la web sin dejar espacio. También se oculta si el mensaje queda vacío."
+            valor={catalogo.cinta_visible !== false} onChange={setC("cinta_visible")} />
+          <Campo id="cf-cinta-txt" label="Mensaje"
+            ayuda={<>Usa « · » para separar ideas. <span className={String(catalogo.cinta_texto || "").length > CINTA_MAX ? "cf-dirty" : ""}>{String(catalogo.cinta_texto || "").length} / {CINTA_MAX} caracteres</span></>}>
+            <textarea id="cf-cinta-txt" className="input" rows={2} maxLength={CINTA_MAX} value={catalogo.cinta_texto || ""}
+              onChange={(e) => setC("cinta_texto")(e.target.value)} placeholder="Ventas Virtual Colombia · Equipos portátiles corporativos" />
+          </Campo>
+          <div className="cf-cinta-prev" aria-hidden="true">
+            <b>Vista previa</b>
+            {catalogo.cinta_visible !== false && String(catalogo.cinta_texto || "").trim()
+              ? <div className="cf-cinta-demo"><span>{catalogo.cinta_texto}</span><span>{catalogo.cinta_texto}</span></div>
+              : <small className="ct-hint">La cinta no se mostrará en la web.</small>}
+          </div>
+        </section>
+
+        <section className="pr-card" id="cf-barra">
+          <h2 className="pr-h">Barra superior</h2>
+          <p className="pr-sub">Franja delgada arriba del logo, debajo de la cinta: redes sociales a la izquierda; ubicación de la tienda, Nosotros y Contacto a la derecha. Las redes se cambian en <a href="#cf-redes" onClick={(e) => ir(e, "cf-redes")}>Redes sociales</a>.</p>
+          <Interruptor id="cf-barra-on" titulo="Mostrar barra superior" texto="Apagado: la franja desaparece de la web sin dejar espacio."
+            valor={catalogo.barra_visible !== false} onChange={setC("barra_visible")} />
+          <Interruptor id="cf-barra-ubi" titulo="Mostrar ubicación de la tienda" texto="Abre Google Maps con la tienda."
+            valor={catalogo.barra_ubicacion !== false} onChange={setC("barra_ubicacion")} />
+          <div className="cf-grid">
+            <Campo id="cf-ubi-txt" label="Texto de la ubicación" ayuda={<>Corto. Vacío: «{empresa.ciudad || "Nuestra tienda"}». {String(catalogo.ubicacion_texto || "").length} / {UBICACION_MAX}</>}>
+              <input id="cf-ubi-txt" className="input" maxLength={UBICACION_MAX} value={catalogo.ubicacion_texto || ""} onChange={(e) => setC("ubicacion_texto")(e.target.value)} placeholder="Cali · CC Pasarela, local 2-107" />
+            </Campo>
+            <Campo id="cf-ubi-mapa" label="Enlace de Google Maps (opcional)" ayuda="Vacío: se busca la dirección del local en Google Maps.">
+              <input id="cf-ubi-mapa" className="input" value={catalogo.ubicacion_mapa || ""} onChange={(e) => setC("ubicacion_mapa")(e.target.value)} placeholder="https://maps.app.goo.gl/…" />
+            </Campo>
+          </div>
+          <Interruptor id="cf-barra-nos" titulo="Mostrar «Nosotros»" texto="Solo aparece cuando la página Nosotros está publicada."
+            valor={catalogo.barra_nosotros !== false} onChange={setC("barra_nosotros")} />
+          <Interruptor id="cf-barra-con" titulo="Mostrar «Contacto»" texto="Lleva a la sección de contacto del pie de página."
+            valor={catalogo.barra_contacto !== false} onChange={setC("barra_contacto")} />
+          <div className="cf-cinta-prev" aria-hidden="true">
+            <b>Vista previa</b>
+            {catalogo.barra_visible !== false
+              ? <div className="cf-barra-demo">
+                  <span>{[empresa.facebook && "f", empresa.instagram && "ig", empresa.tiktok && "tt"].filter(Boolean).map((r) => <i key={r}>{r}</i>)}</span>
+                  <span>
+                    {catalogo.barra_ubicacion !== false && <em>📍 {catalogo.ubicacion_texto || empresa.ciudad || "Nuestra tienda"}</em>}
+                    {catalogo.barra_nosotros !== false && <em>Nosotros</em>}
+                    {catalogo.barra_contacto !== false && <em>Contacto</em>}
+                  </span>
+                </div>
+              : <small className="ct-hint">La barra superior no se mostrará en la web.</small>}
+          </div>
+        </section>
+
+        <section className="pr-card" id="cf-nosotros">
+          <h2 className="pr-h">Página Nosotros</h2>
+          <p className="pr-sub">Biografía de la empresa, años en el mercado, por qué elegirnos y el equipo, con fotos a la izquierda o a la derecha y cifras destacadas. Se publica en <span className="mono">/nosotros</span> y aparece en la barra superior y en el pie.</p>
+          <a className="btn pr-btn" href="/admin/configuracion/nosotros">Editar página Nosotros →</a>
+        </section>
+
+        <div className="cf-savebar">
+          <span className={cambios ? "cf-dirty" : "pr-sub"}>{cambios ? "Hay cambios sin guardar" : "Sin cambios por guardar"}</span>
+          <div className="cf-acciones">
+            <button type="button" className="btn-ghost" onClick={() => { descartarSubidas(token, logosSubidos); setLogosSubidos([]); setForm(guardado); setOkMsg(""); setErrMsg(""); }} disabled={!cambios || busy}>Descartar</button>
+            <button type="button" className="btn pr-btn" onClick={guardar} disabled={!cambios || busy || subiendoLogo}><Ico d={CHECK} />{busy ? "Guardando…" : subiendoLogo ? "Esperando el logo…" : "Guardar cambios"}</button>
+          </div>
+        </div>
+
+        <section className="pr-card" id="cf-cuenta">
+          <h2 className="pr-h">Cuenta y usuarios</h2>
+          <p className="pr-sub">Tu contraseña se cambia en Mi cuenta. Las personas del panel y sus roles se administran en Usuarios.</p>
+          <div className="us-acc">
+            <a className="btn-ghost pr-btn" href="/admin/cuenta">Mi cuenta</a>
+            {puede("usuarios") && <a className="btn pr-btn" href="/admin/configuracion/usuarios">Usuarios y roles →</a>}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

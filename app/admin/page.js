@@ -1,381 +1,200 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
-// Panel de administración del catálogo: crear, editar y eliminar productos
-// directamente en Baserow. Protegido con ADMIN_PASSWORD (se valida en el
-// servidor en cada operación; aquí solo se guarda para la sesión).
+import { useAdmin } from "./AdminShell";
 
-const f = (r, k) => (r?.[k] ?? "").toString().trim();
-const stockNum = (r) => parseInt(f(r, "Stock") || "0", 10) || 0;
-// ¿Está oculto de la tienda web? (columna "Oculto" de Baserow)
-const HIDDEN_VALUES = ["sí", "si", "true", "1", "x", "oculto", "yes", "y"];
-const isHidden = (r) => HIDDEN_VALUES.includes((f(r, "Oculto") || "").toLowerCase());
+// Bandeja de entrada del panel (HU-11): cómo va la web y qué conviene atender hoy.
+// Visitas y clics a WhatsApp salen de la tabla `eventos`; el resto, del catálogo.
 
-// Campos del formulario, en el mismo orden de la tabla de Baserow.
-const FIELDS = [
-  { key: "Código", label: "Código *", ph: "100-101-1234" },
-  { key: "Categoría", label: "Categoría", ph: "Portátil usado" },
-  { key: "Descripción", label: "Nombre producto (Descripción)", ph: "PORTATIL LENOVO THINKPAD…", full: true, area: true },
-  { key: "Marca", label: "Marca", ph: "Lenovo" },
-  { key: "Modelo", label: "Modelo", ph: "ThinkPad X1 Carbon Gen 9" },
-  { key: "Procesador", label: "Procesador", ph: "Core i7 1185G7" },
-  { key: "Generación", label: "Generación", ph: "11" },
-  { key: "RAM", label: "RAM", ph: "16GB" },
-  { key: "Almacenamiento", label: "Almacenamiento", ph: "512GB NVMe" },
-  { key: "Estado", label: "Estado", ph: "Grado A" },
-  { key: "Precio", label: "Precio", ph: "1800000", num: true },
-  { key: "Stock", label: "Stock", ph: "1", num: true },
-  { key: "Foto", label: "Foto(s) — URL (separadas por coma)", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
-  { key: "Video", label: "Video — URL", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
-];
+const PERIODOS = [["7", "Últimos 7 días"], ["14", "Últimos 14 días"], ["30", "Últimos 30 días"], ["mes", "Este mes"]];
+const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+const fecha = (iso) => `${Number(iso.slice(8, 10))} ${MESES[Number(iso.slice(5, 7)) - 1]}`;
+const num = (n) => Number(n || 0).toLocaleString("es-CO");
 
-const EMPTY = { ...Object.fromEntries(FIELDS.map((c) => [c.key, ""])), Oculto: "" };
+function Ico({ d }) {
+  return <svg className="adm-i" viewBox="0 0 24 24" aria-hidden="true">{d}</svg>;
+}
+const I = {
+  slash: <><circle cx="12" cy="12" r="9" /><path d="M5.6 5.6l12.8 12.8" /></>,
+  image: <><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="1.8" /><path d="M21 16l-5-5-8 8" /></>,
+  check: <path d="M20 6L9 17l-5-5" />,
+  box: <><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" /><path d="M3.3 7.5L12 12.5l8.7-5M12 22V12.5" /></>,
+};
 
-function norm(s) {
-  return (s ?? "").toString().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+// Variación frente al periodo anterior, en palabras.
+function Variacion({ actual, previo }) {
+  if (!previo && !actual) return <span className="bj-d">Sin datos en este periodo</span>;
+  if (!previo) return <span className="bj-d up">Nuevo: no hubo en el periodo anterior</span>;
+  const pct = Math.round(((actual - previo) / previo) * 100);
+  if (pct === 0) return <span className="bj-d">Igual que el periodo anterior</span>;
+  return <span className={`bj-d ${pct > 0 ? "up" : "down"}`}>{pct > 0 ? "▲" : "▼"} {Math.abs(pct)}% vs. periodo anterior</span>;
 }
 
-export default function AdminPage() {
-  const [pw, setPw] = useState("");
-  const [authed, setAuthed] = useState(false);
-  const [gateError, setGateError] = useState("");
+// Escala «redonda» para un eje: devuelve el tope y las marcas.
+function escala(max) {
+  if (max <= 0) return { tope: 4, marcas: [0, 1, 2, 3, 4] };
+  const paso0 = max / 4;
+  const pot = 10 ** Math.floor(Math.log10(paso0));
+  const paso = Math.max(1, [1, 2, 5, 10].map((m) => m * pot).find((p) => p >= paso0));
+  const tope = paso * Math.ceil(max / paso);
+  const marcas = [];
+  for (let v = 0; v <= tope + 1e-9; v += paso) marcas.push(Math.round(v));
+  return { tope, marcas };
+}
 
-  const [rows, setRows] = useState([]);
-  const [demo, setDemo] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [q, setQ] = useState("");
-
-  // Modal de edición/creación. editing = { id|null, fields }
-  const [editing, setEditing] = useState(null);
-  const [busy, setBusy] = useState(false);
-  const [formError, setFormError] = useState("");
-  const [okMsg, setOkMsg] = useState("");
-
-  useEffect(() => {
-    const saved = sessionStorage.getItem("vvc-admin-pw");
-    if (saved) { setPw(saved); setAuthed(true); }
-  }, []);
-
-  useEffect(() => {
-    if (authed) load();
-  }, [authed]);
-
-  async function load() {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/products", {
-        cache: "no-store",
-        headers: { "x-admin-password": sessionStorage.getItem("vvc-admin-pw") || pw || "" },
-      });
-      const d = await res.json();
-      setRows(Array.isArray(d.rows) ? d.rows : []);
-      setDemo(!!d.demo);
-    } catch {
-      setRows([]);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // Valida la clave haciendo una operación inocua (update sin campos a id 0
-  // devolvería error de id; usamos una op inexistente que solo pasa el auth).
-  async function enter(e) {
-    e?.preventDefault();
-    setGateError("");
-    if (!pw.trim()) { setGateError("Escribe la clave."); return; }
-    const res = await fetch("/api/admin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-password": pw },
-      body: JSON.stringify({ op: "ping" }),
-    });
-    if (res.status === 401) { setGateError("Clave incorrecta."); return; }
-    if (res.status === 500) {
-      const d = await res.json().catch(() => ({}));
-      setGateError(d.error || "El panel no está configurado en el servidor.");
-      return;
-    }
-    sessionStorage.setItem("vvc-admin-pw", pw);
-    setAuthed(true);
-  }
-
-  function logout() {
-    sessionStorage.removeItem("vvc-admin-pw");
-    setAuthed(false); setPw("");
-  }
-
-  const filtered = useMemo(() => {
-    const nq = norm(q);
-    if (!nq) return rows;
-    return rows.filter((r) =>
-      norm([f(r, "Código"), f(r, "Marca"), f(r, "Modelo"), f(r, "Categoría"), f(r, "Descripción")].join(" ")).includes(nq)
-    );
-  }, [rows, q]);
-
-  function openNew() {
-    setFormError(""); setOkMsg("");
-    setEditing({ id: null, fields: { ...EMPTY } });
-  }
-  function openEdit(r) {
-    setFormError(""); setOkMsg("");
-    const fields = {};
-    for (const c of FIELDS) fields[c.key] = f(r, c.key);
-    fields["Oculto"] = f(r, "Oculto");
-    setEditing({ id: r._id, fields });
-  }
-
-  // Acción rápida desde la tabla: actualiza solo los campos indicados.
-  async function quickUpdate(r, fields, okText) {
-    setOkMsg("");
-    try {
-      const d = await callAdmin({ op: "update", id: r._id, fields });
-      setOkMsg(okText || d.mensaje || "Actualizado.");
-      await load();
-    } catch (e) {
-      window.alert(String(e?.message || e));
-    }
-  }
-
-  // Cambia entre Disponible (Stock 1) y Agotado/Vendido (Stock 0).
-  function toggleAgotado(r) {
-    const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Código");
-    if (stockNum(r) > 0) {
-      quickUpdate(r, { Stock: 0 }, `"${nombre}" marcado como AGOTADO.`);
-    } else {
-      quickUpdate(r, { Stock: 1 }, `"${nombre}" vuelve a estar DISPONIBLE.`);
-    }
-  }
-
-  // Quita de la tienda (oculto) o vuelve a publicar. No borra de Baserow.
-  function toggleOculto(r) {
-    const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Código");
-    if (isHidden(r)) {
-      quickUpdate(r, { Oculto: "" }, `"${nombre}" vuelve a la tienda.`);
-    } else {
-      quickUpdate(r, { Oculto: "Sí" }, `"${nombre}" quitado de la tienda (sigue en Baserow).`);
-    }
-  }
-
-  async function callAdmin(payload) {
-    const res = await fetch("/api/admin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-password": pw },
-      body: JSON.stringify(payload),
-    });
-    if (res.status === 401) { logout(); throw new Error("Sesión expirada: vuelve a entrar."); }
-    const d = await res.json();
-    if (d.error) throw new Error(d.error);
-    return d;
-  }
-
-  async function save() {
-    if (!editing) return;
-    setFormError("");
-    if (!editing.fields["Código"].trim()) { setFormError("El Código es obligatorio."); return; }
-    setBusy(true);
-    try {
-      const d = editing.id
-        ? await callAdmin({ op: "update", id: editing.id, fields: editing.fields })
-        : await callAdmin({ op: "create", fields: editing.fields });
-      setOkMsg(d.mensaje || "Guardado.");
-      setEditing(null);
-      await load();
-    } catch (e) {
-      setFormError(String(e?.message || e));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function remove(r) {
-    const nombre = [f(r, "Marca"), f(r, "Modelo")].filter(Boolean).join(" ") || f(r, "Código");
-    if (!window.confirm(`¿Eliminar "${nombre}" (${f(r, "Código")})?\n\nEsta acción NO se puede deshacer. Si solo se vendió, mejor edítalo y pon Stock 0 (saldrá "Agotado").`)) return;
-    setOkMsg("");
-    try {
-      const d = await callAdmin({ op: "delete", id: r._id });
-      setOkMsg(d.mensaje || "Eliminado.");
-      await load();
-    } catch (e) {
-      setOkMsg("");
-      window.alert(String(e?.message || e));
-    }
-  }
-
-  // ---------- Pantalla de acceso ----------
-  if (!authed) {
-    return (
-      <main className="admin wrap">
-        <form className="admin-gate" onSubmit={enter}>
-          <h1>Panel de administración</h1>
-          <p>Catálogo de Ventas Virtual Colombia. Ingresa la clave de administración.</p>
-          <input
-            className="input"
-            type="password"
-            value={pw}
-            onChange={(e) => setPw(e.target.value)}
-            placeholder="Clave de administración"
-            autoFocus
-          />
-          <button className="btn full" type="submit">Entrar</button>
-          {gateError && <div className="form-error">{gateError}</div>}
-        </form>
-      </main>
-    );
-  }
-
-  // ---------- Panel ----------
+// Barras = visitas (eje izquierdo); línea = clics en WhatsApp (eje derecho).
+function Grafica({ serie }) {
+  const W = 640, H = 230, pl = 40, pr = 40, pt = 12, pb = 28;
+  const n = serie.length;
+  const ev = escala(Math.max(...serie.map((d) => d.visitas), 0));
+  const ew = escala(Math.max(...serie.map((d) => d.whatsapp), 0));
+  const ancho = (W - pl - pr) / n;
+  const y = (v, e) => pt + (H - pt - pb) * (1 - v / e.tope);
+  const cada = Math.ceil(n / 7);
+  const linea = serie.map((d, i) => `${i ? "L" : "M"}${(pl + i * ancho + ancho / 2).toFixed(1)} ${y(d.whatsapp, ew).toFixed(1)}`).join(" ");
+  const ult = serie[n - 1];
   return (
-    <main className="admin wrap">
-      <div className="admin-head">
-        <h1>Administrar catálogo</h1>
-        <div className="admin-tools">
-          <input
-            className="input"
-            style={{ width: 260 }}
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Buscar código, marca, modelo…"
-          />
-          <button className="btn" onClick={openNew}>➕ Nuevo producto</button>
-          <button className="btn-ghost" onClick={load} disabled={loading}>{loading ? "Cargando…" : "Recargar"}</button>
-          <button className="btn-ghost" onClick={logout}>Salir</button>
-        </div>
+    <svg className="bj-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Visitas por día en barras y clics en WhatsApp en línea">
+      {ev.marcas.map((m) => (
+        <g key={m}>
+          <line className="bj-grid" x1={pl} x2={W - pr} y1={y(m, ev)} y2={y(m, ev)} />
+          <text x={pl - 6} y={y(m, ev) + 4} textAnchor="end">{num(m)}</text>
+        </g>
+      ))}
+      {ew.marcas.map((m) => (
+        <text key={m} className="bj-wa-t" x={W - pr + 6} y={y(m, ew) + 4}>{num(m)}</text>
+      ))}
+      {serie.map((d, i) => (
+        <g key={d.dia}>
+          <rect className={`bj-bar${i === n - 1 ? " hoy" : ""}`} x={pl + i * ancho + ancho * 0.18} y={y(d.visitas, ev)}
+            width={ancho * 0.64} height={Math.max(0, y(0, ev) - y(d.visitas, ev))} rx="2">
+            <title>{`${fecha(d.dia)}: ${num(d.visitas)} visitas, ${num(d.whatsapp)} clics en WhatsApp`}</title>
+          </rect>
+          {(i === n - 1 || (i % cada === 0 && n - 1 - i >= cada / 2)) && (
+            <text x={pl + i * ancho + ancho / 2} y={H - 8} textAnchor="middle">{fecha(d.dia)}</text>
+          )}
+        </g>
+      ))}
+      <path className="bj-line" d={linea} />
+      {ult && <circle className="bj-dot" cx={pl + (n - 1) * ancho + ancho / 2} cy={y(ult.whatsapp, ew)} r="4" />}
+    </svg>
+  );
+}
+
+function Alerta({ tipo, icono, titulo, texto, boton, href }) {
+  return (
+    <li className="bj-alerta">
+      <span className={`bj-ic ${tipo}`}><Ico d={icono} /></span>
+      <div><b>{titulo}</b><small>{texto}</small></div>
+      {boton && <Link className="btn-ghost bj-ir" href={href}>{boton}</Link>}
+    </li>
+  );
+}
+
+const plural = (n, uno, varios) => (n === 1 ? uno : varios);
+
+export default function Bandeja() {
+  const { token, logout } = useAdmin();
+  const [periodo, setPeriodo] = useState("14");
+  const [d, setD] = useState(null);
+  const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => { cargar(periodo); }, [periodo]);
+
+  async function cargar(p) {
+    setCargando(true); setError("");
+    try {
+      const res = await fetch("/api/admin/metricas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await token()}` },
+        body: JSON.stringify({ periodo: p }),
+      });
+      if (res.status === 401) { logout(); return; }
+      const j = await res.json();
+      if (j.error) throw new Error(j.error);
+      setD(j);
+    } catch (e) {
+      setError(String(e?.message || e));
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  const c = d?.catalogo;
+  const alertas = [];
+  if (c) {
+    if (c.publicados === 0) alertas.push({ tipo: "warn", icono: I.box, titulo: "No hay productos publicados", texto: "La web muestra el catálogo vacío. Súbelos con la carga CSV.", boton: "Cargar productos", href: "/admin/productos" });
+    if (c.sinFoto > 0) alertas.push({ tipo: "warn", icono: I.image, titulo: `${num(c.sinFoto)} ${plural(c.sinFoto, "producto publicado", "productos publicados")} sin foto`, texto: "Se ven con un icono en vez de foto y suelen venderse menos.", boton: "Ver productos", href: "/admin/productos" });
+    if (c.agotadosViejos > 0) alertas.push({ tipo: "bad", icono: I.slash, titulo: `${num(c.agotadosViejos)} ${plural(c.agotadosViejos, "agotado", "agotados")} hace más de 30 días`, texto: "Considera ocultarlos o reponer el stock.", boton: "Revisar", href: "/admin/productos" });
+    if (d.banners.activos === 0) alertas.push({ tipo: "bad", icono: I.image, titulo: "No hay banners activos", texto: "La portada se queda sin el banner rotativo.", boton: "Ir a banners", href: "/admin/banners" });
+    else if (d.banners.inactivos > 0) alertas.push({ tipo: "warn", icono: I.image, titulo: `${num(d.banners.inactivos)} ${plural(d.banners.inactivos, "banner desactivado", "banners desactivados")}`, texto: `La portada muestra ${num(d.banners.activos)}.`, boton: "Ir a banners", href: "/admin/banners" });
+    if (!alertas.length) alertas.push({ tipo: "ok", icono: I.check, titulo: "Todo en orden", texto: "No hay nada pendiente en el catálogo ni en los banners." });
+  }
+  const sinEventos = d && d.visitas.actual + d.whatsapp.actual === 0;
+
+  return (
+    <div className="pr">
+      <div className="bj-cab">
+        <p className="pr-sub" style={{ margin: 0 }}>
+          {d ? `Del ${fecha(d.periodo.desde)} al ${fecha(d.periodo.hasta)}, hora de Colombia. Sin cookies ni datos personales.` : "Cargando…"}
+        </p>
+        <select id="bj-periodo" className="input bj-per" aria-label="Periodo" value={periodo} onChange={(e) => setPeriodo(e.target.value)} disabled={cargando}>
+          {PERIODOS.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
+        </select>
       </div>
 
-      {demo && <div className="demo-note">Modo demo: Baserow no está configurado; los cambios no se guardarán.</div>}
-      {okMsg && <p className="form-ok">✅ {okMsg}</p>}
+      {error && <p className="pr-aviso bad" role="alert">{error}</p>}
 
-      <div className="admin-table-wrap">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Código</th><th>Categoría</th><th>Marca</th><th>Modelo</th>
-              <th>Precio</th><th>Stock</th><th>Estado web</th><th>Fotos</th><th>Video</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((r) => {
-              const nFotos = f(r, "Foto") ? f(r, "Foto").split(/[\n,]+/).filter((s) => s.trim()).length : 0;
-              return (
-                <tr key={r._id}>
-                  <td className="mono">{f(r, "Código")}</td>
-                  <td>{f(r, "Categoría")}</td>
-                  <td>{f(r, "Marca")}</td>
-                  <td>{f(r, "Modelo")}</td>
-                  <td className="num">{f(r, "Precio") ? `$${Number(f(r, "Precio")).toLocaleString("es-CO")}` : "—"}</td>
-                  <td className="num">
-                    {stockNum(r) > 0
-                      ? f(r, "Stock")
-                      : <span className="badge bad">Agotado</span>}
-                  </td>
-                  <td>
-                    {isHidden(r)
-                      ? <span className="badge off">Oculto</span>
-                      : stockNum(r) > 0
-                        ? <span className="badge ok">En línea</span>
-                        : <span className="badge bad">Agotado</span>}
-                  </td>
-                  <td>{nFotos ? `📷 ${nFotos}` : "—"}</td>
-                  <td>{f(r, "Video") ? "🎬" : "—"}</td>
-                  <td>
-                    <div className="row-actions">
-                      <button className="mini-btn" onClick={() => toggleAgotado(r)} title="Cambia disponible/agotado">
-                        {stockNum(r) > 0 ? "Agotar" : "Disponible"}
-                      </button>
-                      <button className="mini-btn" onClick={() => toggleOculto(r)} title="Quitar/mostrar en la tienda (no borra de Baserow)">
-                        {isHidden(r) ? "Publicar" : "Quitar"}
-                      </button>
-                      <button className="mini-btn" onClick={() => openEdit(r)}>Editar</button>
-                      <button className="mini-btn danger" onClick={() => remove(r)}>Eliminar</button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-            {filtered.length === 0 && (
-              <tr><td colSpan={10} style={{ textAlign: "center", color: "var(--muted)", padding: 26 }}>
-                {loading ? "Cargando…" : "Sin productos."}
-              </td></tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Modal crear/editar */}
-      {editing && (
-        <div className="modal-overlay" onClick={() => !busy && setEditing(null)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-head">
-              <h2>{editing.id ? `Editar ${editing.fields["Código"] || "producto"}` : "Nuevo producto"}</h2>
-              <button className="close-btn" onClick={() => setEditing(null)}>✕</button>
-            </div>
-            <div className="modal-body">
-              <div className="estado-panel">
-                <div className="ep-label">Estado en la tienda web</div>
-                <div className="ep-row">
-                  <div className="seg">
-                    <button
-                      type="button"
-                      className={`seg-btn${(parseInt(editing.fields["Stock"] || "0", 10) || 0) > 0 ? " active-ok" : ""}`}
-                      onClick={() => setEditing((s) => ({ ...s, fields: { ...s.fields, Stock: (parseInt(s.fields["Stock"] || "0", 10) || 0) > 0 ? s.fields["Stock"] : "1" } }))}
-                    >
-                      ✅ Disponible
-                    </button>
-                    <button
-                      type="button"
-                      className={`seg-btn${(parseInt(editing.fields["Stock"] || "0", 10) || 0) <= 0 ? " active-bad" : ""}`}
-                      onClick={() => setEditing((s) => ({ ...s, fields: { ...s.fields, Stock: "0" } }))}
-                    >
-                      🚫 Agotado / Vendido
-                    </button>
-                  </div>
-                  <label className="ep-check">
-                    <input
-                      type="checkbox"
-                      checked={HIDDEN_VALUES.includes((editing.fields["Oculto"] || "").toLowerCase())}
-                      onChange={(e) => setEditing((s) => ({ ...s, fields: { ...s.fields, Oculto: e.target.checked ? "Sí" : "" } }))}
-                    />
-                    <span>Quitar de la tienda (no se elimina de Baserow)</span>
-                  </label>
-                </div>
-                <p className="ep-hint">
-                  <b>Agotado/Vendido:</b> el equipo sigue visible con la cinta “Equipo agotado”.{" "}
-                  <b>Quitar de la tienda:</b> desaparece del catálogo para los clientes, pero se conserva en Baserow.
-                </p>
-              </div>
-              <div className="form-grid">
-                {FIELDS.map((c) => (
-                  <div key={c.key} className={`field${c.full ? " full" : ""}`}>
-                    <label>{c.label}</label>
-                    {c.area ? (
-                      <textarea
-                        className="input"
-                        rows={2}
-                        value={editing.fields[c.key]}
-                        placeholder={c.ph}
-                        onChange={(e) => setEditing((s) => ({ ...s, fields: { ...s.fields, [c.key]: e.target.value } }))}
-                      />
-                    ) : (
-                      <input
-                        className="input"
-                        inputMode={c.num ? "numeric" : undefined}
-                        value={editing.fields[c.key]}
-                        placeholder={c.ph}
-                        onChange={(e) => setEditing((s) => ({ ...s, fields: { ...s.fields, [c.key]: e.target.value } }))}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-              {formError && <div className="form-error">{formError}</div>}
-              <div className="modal-actions">
-                <button className="btn-ghost" onClick={() => setEditing(null)} disabled={busy}>Cancelar</button>
-                <button className="btn" onClick={save} disabled={busy}>{busy ? "Guardando…" : "Guardar"}</button>
-              </div>
-            </div>
+      {d && (
+        <>
+          <div className="bj-kpis">
+            <div className="pr-card bj-kpi"><span className="bj-l">Visitas (páginas vistas)</span><span className="bj-v">{num(d.visitas.actual)}</span><Variacion {...d.visitas} /></div>
+            <div className="pr-card bj-kpi"><span className="bj-l">Clics en WhatsApp</span><span className="bj-v">{num(d.whatsapp.actual)}</span><Variacion {...d.whatsapp} /></div>
+            <div className="pr-card bj-kpi"><span className="bj-l">Productos publicados</span><span className="bj-v">{num(c.publicados)}</span><span className="bj-d">{num(c.ocultos)} {plural(c.ocultos, "oculto", "ocultos")}</span></div>
+            <div className="pr-card bj-kpi"><span className="bj-l">Agotados</span><span className="bj-v">{num(c.agotados)}</span><span className={`bj-d ${c.agotados ? "down" : ""}`}>{c.publicados ? `${Math.round((c.agotados / c.publicados) * 100)}% de lo publicado` : "Sin productos publicados"}</span></div>
           </div>
-        </div>
+
+          <div className="bj-cols">
+            <section className="pr-card">
+              <h2 className="pr-h">Visitas y clics a WhatsApp</h2>
+              <p className="pr-sub">Cuántos visitantes llegan cada día y cuántos escriben a un asesor.</p>
+              {sinEventos
+                ? <div className="bj-vacio">Aún no hay visitas registradas en este periodo. Se cuentan desde que esta versión de la web está publicada.</div>
+                : <>
+                    <div className="tablewrap"><Grafica serie={d.serie} /></div>
+                    <div className="bj-leyenda">
+                      <span><i className="bj-sw bar" />Visitas por día (eje izquierdo)</span>
+                      <span><i className="bj-sw wa" />Clics en WhatsApp (eje derecho)</span>
+                    </div>
+                  </>}
+            </section>
+            <section className="pr-card">
+              <h2 className="pr-h">Más consultados</h2>
+              <p className="pr-sub">Clics en «Estoy interesado» por producto.</p>
+              {d.masConsultados.length === 0
+                ? <div className="bj-vacio">Todavía nadie ha tocado «Estoy interesado» en este periodo.</div>
+                : <ol className="bj-rank">
+                    {d.masConsultados.map((p) => (
+                      <li key={p.codigo}>
+                        <span className="bj-rn">{p.nombre}<small className="mono">{p.codigo}{p.existe ? "" : " · ya no existe"}</small></span>
+                        <b className="num">{num(p.clics)}</b>
+                        <div className="bj-rb"><i style={{ width: `${(p.clics / d.masConsultados[0].clics) * 100}%` }} /></div>
+                      </li>
+                    ))}
+                  </ol>}
+            </section>
+          </div>
+
+          <section className="pr-card">
+            <h2 className="pr-h">Para revisar</h2>
+            <p className="pr-sub">Lo que conviene atender hoy.</p>
+            <ul className="bj-alertas">{alertas.map((a) => <Alerta key={a.titulo} {...a} />)}</ul>
+          </section>
+        </>
       )}
-    </main>
+    </div>
   );
 }

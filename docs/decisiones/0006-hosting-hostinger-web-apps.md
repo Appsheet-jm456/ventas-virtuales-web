@@ -14,8 +14,9 @@ comprado ahí.
 - La landing se despliega en **Hostinger Web Apps** conectando el repositorio de GitHub; cada
   push a la rama de producción redespliega.
 - El dominio se asocia desde el mismo hPanel; el SSL lo gestiona Hostinger.
-- Las claves (`BASEROW_API_TOKEN`, `BASEROW_TABLE_ID`, `ADMIN_PASSWORD`) van como variables de
-  entorno en hPanel (decisión 0002).
+- Las claves van como variables de entorno en hPanel (decisión 0002). *Actualizado 19 oct 2026:*
+  ya no son las de Baserow sino las de Supabase y Cloudinary; la lista vigente está en
+  `docs/sdlc/5-despliegue.md`.
 - Vercel se mantiene como prototipo hasta verificar el nuevo despliegue, y luego se apaga.
 
 ## Consecuencias

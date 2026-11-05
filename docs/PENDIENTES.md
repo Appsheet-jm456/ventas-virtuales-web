@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 12 de octubre de 2026 · Brief `v1.2` · **Camino 1 (landing) · Fase 5 — Despliegue**
+> **Última sesión:** 4 de noviembre de 2026 · **Camino 1 (landing)** · **HU-34 usuarios y roles** aprobada por el dueño y con push (prueba 143/143, migración aplicada). Para que el módulo Usuarios funcione en Vercel, agregar `SUPABASE_SECRET_KEY`. **BUG-1** cerrado: la línea `--si-falta` ya está en el crontab; aún no se ha visto recuperar sola una copia tras un apagado real, así que conviene mirar `diario.log` después del próximo. Los 5 borradores de políticas siguen **ocultos**. Dominios en Hostinger: confirmar que estén pagados (aparecían «no está registrado»).
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
@@ -12,21 +12,65 @@
 | Brief v1.2 (dos caminos: landing y tienda completa) | `docs/00-BRIEF.md` |
 | Reglas del negocio RN-01 a RN-18 | `docs/REGLAS_DEL_NEGOCIO.md` |
 | Modelo de datos (tabla de Baserow) | `docs/notion_modelado_datos.md` |
-| Decisiones 0001 a 0006 | `docs/decisiones/` |
+| Decisiones 0001 a 0008 | `docs/decisiones/` |
 | Espejo en Notion: script y CSV | `docs/notion/` |
 | Rediseño del frontend de la landing | `app/`, `app/globals.css` |
 | Lista blanca de columnas públicas (RN-04) | `lib/inventory.js` |
 | Guía de despliegue en Hostinger | `docs/sdlc/5-despliegue.md` |
+| Nuevo diseño: Inicio, Categorías, Productos (HU-01 a HU-06), publicado en Vercel | PR #1 |
+| Modelo v2 propuesto y plantillas de Baserow | `docs/notion_modelado_datos.md`, `docs/baserow/` |
 
-## ⏭️ Siguiente (Camino 1 · landing)
+## ⏭️ Siguiente (Camino 1 · landing): llevarla a Hostinger
 
-1. El dueño revisa el demo del nuevo diseño (Inicio, Categorías, Productos — HU-01 a HU-06) y envía las imágenes reales (2 banners y una por categoría, ver `docs/sdlc/2-especificaciones.md`).
-2. Fusionar el [PR #1](https://github.com/Appsheet-jm456/ventas-virtuales-web/pull/1).
-3. El dueño **actualiza los productos en Baserow** (están desactualizados).
-4. Desplegar en Hostinger Web Apps siguiendo [sdlc/5-despliegue.md](./sdlc/5-despliegue.md).
-5. Asociar el dominio y apagar Vercel.
+Guía completa en [sdlc/5-despliegue.md](./sdlc/5-despliegue.md). En orden:
 
-## 🗺️ Camino 2 · Tienda completa (se planifica en Notion)
+1. **Cargar los productos reales** (dueño): exportar el CSV del inventario y subirlo en
+   `/admin/productos › Carga CSV`. Hoy la tabla `productos` de Supabase está vacía.
+2. **Subir banners e imágenes reales** en `/admin/banners` (opcional: hay respaldo).
+3. **Cambiar la contraseña de pruebas** (`Admin123*`) en `/admin/configuracion › Cuenta`.
+4. **Publicar en `main`**: Pull Request de `claude/determined-ramanujan-i61gup` hacia
+   `claude/github-upload-iteration-cgbvq9` (la rama por defecto) y renombrar esta a `main`.
+5. **Hostinger Web Apps**: conectar GitHub (`main`), Node 20, las seis variables, desplegar y
+   verificar en la URL temporal.
+6. **Dominio y SSL**; `NEXT_PUBLIC_SITE_URL` con el dominio (falta saber cuál es) y redesplegar.
+7. **Apagar Vercel** y **revocar el token de Baserow** que quedó guardado allá.
+
+Guía visual «modo pantalla» v1.0 en `docs/diseno/guia-visual.md` (22 oct). **HU-21** la aplica a la web pública y **HU-22** agrega el interruptor de modo claro / oscuro en `/admin/configuracion › Apariencia`: hechas y aprobadas por el dueño el 22 oct.
+
+Operación (21 oct): consulta diaria y copia de seguridad de Supabase con cron en atlasjm, para evitar la pausa del plan gratuito (`scripts/supabase-diario.py`, decisión 0009).
+
+Después del despliegue:
+- Recuperación de contraseña por correo (tarea en Notion).
+- **HU-17 Fotos de productos en Cloudinary**: hecha y probada por el dueño el 21 oct; falta migrar las fotos reales cuando se cargue el CSV.
+- **HU-18 Editar producto en pantalla completa**: hecha y aprobada por el dueño el 21 oct.
+- **HU-19 Columna Código y filtros del listado**: hecha y aprobada por el dueño el 21 oct.
+- **HU-20 Tamaño de la tabla y paginación**: hecha y aprobada por el dueño el 21 oct.
+- **Hecho el 26 oct (sin push):** HU-24 cinta en movimiento · HU-25 desplegable de categorías · HU-26 políticas editables (tabla `paginas`, decisión 0011) · HU-27 ficha técnica · HU-28 filtro dinámico (campo `tactil`) · HU-29 descripción ampliada. Migraciones aplicadas en Supabase con OK del dueño. **HU-30 productos sugeridos y vistos recientemente** construida (sin push, pendiente de su aprobación). Siguiente: **HU-31 barra de categorías**, **HU-32 barra superior** y **HU-33 página «Nosotros»** construidas el 26 oct (sin push, pendientes de su aprobación); video en el panel «Portátiles corporativos» de la portada (idea, HU por numerar); «Preguntas frecuentes» (HU nueva) y «Pegar ficha» en el formulario (ajuste de HU-27). Meta Pixel y aviso de cookies: **no por ahora** (decisión del dueño, 26 oct); la web no usa cookies de rastreo (decisión 0010).
+- **HU-23 Mejoras de la web pública** (lista del dueño, 22 oct; se documentan una a una como HU-23, HU-24… antes del código):
+  1. **Filtro dinámico para el cliente** en Productos.
+  2. **Mejorar la búsqueda de productos.**
+  3. **Cinta en movimiento** «Ventas Virtual Colombia · Equipos portátiles corporativos…» que se desplaza.
+  4. **Políticas** de devolución y garantía, y **estudiar el tratamiento de datos** (Ley 1581) para publicar la página.
+  5. Al dar clic en **Productos**, mostrar abajo las **categorías**: Portátiles usados, Portátiles nuevos, Impresoras, Accesorios, Partes.
+  6. **Subir dos banners más** en `/admin/banners` (los JPG están en `docs/diseno/banners/`; Banner 2 con fecha «Hasta» 31 oct).
+  7. «Aún me faltan»: el dueño trae más mejoras.
+- Pruebas automáticas (Fase 4): hoy hay pruebas en navegador documentadas en `sdlc/4-pruebas.md`.
+- Opcional: traer `.env.example` y `.nvmrc` de la rama `claude/nice-edison-vreamn`.
+
+## ✅ Hecho el 19 oct (panel nuevo)
+
+| Historia | Qué | Dónde |
+|---|---|---|
+| HU-10 | Panel lateral plegable, cinco módulos con dirección propia | `app/admin/AdminShell.js` |
+| HU-11 | Bandeja: visitas, clics a WhatsApp, más consultados, para revisar (decisión 0010) | `app/admin/page.js`, tabla `eventos` |
+| HU-12 | Productos: pestañas Listado y Carga CSV, filtros, menú Acciones | `app/admin/productos/` |
+| HU-13 | Banners, imagen por categoría y logo en Cloudinary (decisión 0007) | `app/admin/banners/` |
+| HU-14 | Categorías por palabra que agrupa; la web las lee de Supabase | `app/admin/categorias/` |
+| HU-15 | Configuración de la tienda y cambio de contraseña | `app/admin/configuracion/` |
+
+Vercel tiene las variables de Supabase y Cloudinary. Notion al día con git.
+
+## 🗺️ Camino 2 · Tienda completa → repo `ventas-virtual-eccomer-web` (decisión 0008)
 
 Administración, inventarios, categorías, configuración, pedidos y marca (Quiénes somos,
 políticas). El ecommerce con pago en línea queda **por ahora fuera**. No se programa hasta

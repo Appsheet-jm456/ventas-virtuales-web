@@ -1,6 +1,6 @@
 # Ventas Virtual — Tienda Web · Brief del proyecto
 
-`v1.2` · 13 oct 2026 · **Fase actual: 1 de 5 — Diseño** · Responsable: dueño de Ventas Virtual Colombia
+`v1.3` · 14 oct 2026 · **Fase actual: 1 de 5 — Diseño** · Responsable: dueño de Ventas Virtual Colombia
 
 ---
 
@@ -13,7 +13,7 @@ vez **vitrina de la marca** y **canal de ventas**, y se construye por **dos cami
 | Camino | Qué es | Estado | Cómo se cierra la venta |
 |---|---|---|---|
 | **1 · Landing** | El código de este repositorio: catálogo conectado a Baserow, producto con fotos y video, WhatsApp | **Ahora**: ya existe en Vercel (prototipo); se mejora y se pasa a Hostinger | Por **WhatsApp**, con el producto ya identificado |
-| **2 · Tienda completa (app)** | Administración, inventarios, categorías, configuración, pedidos y ecommerce | **Después**: se planifica en Notion | Por definir. El pago en línea y el flujo de pedido quedan **por ahora fuera** |
+| **2 · Tienda completa (app)** | Administración, inventarios, categorías, configuración, pedidos y ecommerce | **Después**: repo propio `ventas-virtual-eccomer-web` (decisión 0008) | Por definir. El pago en línea y el flujo de pedido quedan **por ahora fuera** |
 
 > No confundir los **caminos** (qué producto se entrega) con las **fases** SDLC (cómo se
 > construye). Cada camino recorre las cinco fases: Diseño, Especificaciones, Implementación,
@@ -108,7 +108,7 @@ Lo que existe y lo que falta, página por página. **Este mapa es la lista de tr
 - Inventario de Baserow al día.
 - Despliegue en Hostinger Web Apps con dominio propio.
 
-**Camino 2 — tienda completa (después):**
+**Camino 2 — tienda completa (después, en el repo `ventas-virtual-eccomer-web`):**
 
 - Páginas de marca: Quiénes somos y las cuatro políticas (privacidad, envíos, garantía, términos).
 - Administración completa: inventarios, categorías, configuración.
@@ -122,7 +122,7 @@ Lo que existe y lo que falta, página por página. **Este mapa es la lista de tr
 
 **Frontend** Next.js 14 (App Router) · React 18 · JavaScript
 
-**Datos** Baserow por API — la misma tabla de InventarIA (decisión 0003). *Camino 2: por decidir
+**Datos** Supabase Cloud (decisión 0009; antes Baserow, decisión 0003). *Camino 2: por decidir
 dónde se guardan los pedidos.*
 
 **Contacto** WhatsApp (`wa.me`) con mensaje prellenado
@@ -167,18 +167,18 @@ dónde se guardan los pedidos.*
 **Camino 1 — landing:**
 
 - [x] ¿A qué hosting se despliega? → **Hostinger Web Apps**, con el dominio comprado ahí.
-- [ ] ¿Cuál es el dominio exacto?
-- [ ] ¿Cuántos productos activos hay en Baserow y quién los actualiza de ahora en adelante?
-- [ ] ¿Quién usa el panel admin? ¿Una sola clave basta?
-- [ ] ¿Se miden visitas (Google Analytics o Meta Pixel)?
+- [x] ¿Cuál es el dominio exacto? → **ventasvirtualcolombia.com** y **ventasvirtualcolombia.shop**, ambos en Hostinger. (4 nov: el panel de Hostinger los mostraba «no está registrado», sin fecha de caducidad: confirmar que la compra esté pagada. Falta decidir cuál es el principal y cuál redirige.)
+- [x] ¿Cuántos productos activos hay y quién los actualiza de ahora en adelante? → Catálogo en Excel con **70 a 125 productos** (en tienda y en bodega). Lo mantiene **el encargado de actualizar listas y catálogos de la página web**. Se actualiza **a mano** en `/admin/productos` cuando llega un equipo suelto y **por CSV** cuando llega un lote. La frecuencia varía: un lote de 10 una semana, de 20 otra, o ninguno.
+- [x] ¿Quién usa el panel admin? ¿Una sola clave basta? → **No basta**: lo usarán **Dueños, Encargados de actualizar el catálogo, Vendedores y otros asignados**, cada uno con su usuario y su rol. Se especificó como **HU-34 · Usuarios y roles del panel** (módulo `/admin/configuracion/usuarios`); la matriz de permisos y el alcance del rol «Otros» siguen por confirmar con el dueño.
+- [x] ¿Se miden visitas (Google Analytics o Meta Pixel)? → **Métricas propias en Supabase**, sin cookies ni datos personales (decisión 0010).
 
 **Camino 2 — tienda completa (se responden después):**
 
-- [ ] ¿Quiénes somos: qué historia, años de experiencia, clientes y logros se cuentan?
-- [ ] ¿Las políticas ya existen por escrito o hay que redactarlas desde cero?
-- [ ] ¿Dónde se guardan los pedidos y el inventario? ¿Se sigue con Baserow?
-- [ ] ¿Qué hosting soporta la app completa? ¿Basta el plan actual?
-- [ ] Cuando llegue el ecommerce: ¿qué pasarela, qué transportadora y quién hace el alistamiento?
+- [ ] ¿Quiénes somos: qué historia, años de experiencia, clientes y logros se cuentan? → **En curso (4 nov):** el dueño armará un archivo con los datos completos del negocio (historia, años, clientes, logros). Con él se llena la página «Nosotros» (HU-33).
+- [ ] ¿Las políticas ya existen por escrito o hay que redactarlas desde cero? → **Parcial (4 nov):** se toman de la base del local que ya existe. **Garantías:** existe. **Devolución:** pendiente. **Privacidad y datos (Ley 1581):** pendiente del abogado. Los borradores de HU-26 siguen ocultos hasta tener los textos.
+- [x] ¿Dónde se guardan los pedidos y el inventario? ¿Se sigue con Baserow? → **Supabase** (ya no Baserow), alimentado desde **Contada**, el software contable del local (4 nov).
+- [x] ¿Qué hosting soporta la app completa? ¿Basta el plan actual? → **Hostinger y VPS** (4 nov). Por confirmar qué corre en cada uno (la landing en Web Apps; la tienda completa, probablemente en el VPS).
+- [ ] Cuando llegue el ecommerce: ¿qué pasarela, qué transportadora y quién hace el alistamiento? → **Alistamiento (4 nov):** lo hace la tienda; una persona con el **rol Despacho** empaca y lleva el paquete a la transportadora. **Faltan** la pasarela de pago y la transportadora.
 
 ## Próximo paso
 

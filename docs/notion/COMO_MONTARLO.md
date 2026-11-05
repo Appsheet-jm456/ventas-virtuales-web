@@ -23,7 +23,7 @@ entra.
 
 ```
 📄 Página padre (NOTION_PARENT_PAGE, compartida con Futur Green y ClaudePyme)
-└── 🛒 Ventas Virtual — Tienda Web    ← one-pager (docs/00-BRIEF.md)
+└── 🛒 Ventas Virtual — Tienda Web Landing ← one-pager (docs/00-BRIEF.md)
     ├── 🚦 Fases                       ← base de datos (fases.csv)
     ├── ✅ Tareas                      ← base de datos (tareas.csv)
     ├── 🗄️ Modelado de Datos           ← docs/notion_modelado_datos.md
@@ -74,7 +74,9 @@ Lo único que la API de Notion no permite crear son las **vistas**. Hacerlas a m
 | Las dos cosas | `--todo` |
 | Nueva versión del brief (con autorización del dueño) | `--version` |
 
-Siempre se puede ensayar primero agregando `--revisar`.
+Siempre se puede ensayar primero agregando `--revisar`: no escribe nada en Notion (desde el 19 oct
+toda escritura se bloquea en `api()` mientras está activo). Las búsquedas de subpáginas leen todos
+los bloques, no solo los primeros 100.
 
 **Antes de sincronizar las tareas**, comparar la base de Tareas en Notion con `tareas.csv` y
 traer a git lo que el dueño cambió allá, para no pisarlo.

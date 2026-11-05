@@ -1,0 +1,5 @@
+Nombre,Coincide con,Imagen,Orden,Visible,Línea en el Inicio,Título de la línea,Texto del botón
+Portátiles,portatil,,1,true,true,Portátiles corporativos,Más portátiles
+Torres tiny,torre,,2,true,false,,
+Partes,parte,,3,true,false,,
+Accesorios,accesorio,,4,true,false,,
