@@ -839,6 +839,62 @@ Como Superadmin quiero crear roles y definir qué puede hacer cada uno; y como q
 
 ---
 
+## BUG-3 · La caché de las páginas públicas no funciona
+
+**Nivel:** Alto · **Encontrado:** 5 nov 2026, prueba de carga en producción (puerta 3 de la EDT 5.2) · **Estado:** Pendiente
+
+### Pasos para reproducirlo
+
+1. `npm run build` → en la tabla de rutas, `/`, `/productos`, `/categorias`, `/nosotros`, `/producto/[codigo]` y
+   `/politicas/[slug]` salen como **ƒ (Dynamic)**, aunque todas declaran `export const revalidate = 60`.
+2. `curl -I https://ventasvirtualcolombia.com/` → `Cache-Control: private, no-cache, no-store` y
+   `x-hcdn-cache-status: DYNAMIC`: el CDN de Hostinger no guarda la página.
+3. Prueba de carga de 20 s al Inicio (autocannon, 5 nov):
+
+   | Simultáneos | Mediana | Peor (p99) | Páginas/s | Errores |
+   |---|---|---|---|---|
+   | 10 | 0,84 s | 1,79 s | ~11 | 0 |
+   | 25 | 1,57 s | 2,92 s | ~15 | 0 |
+   | 50 | 3,06 s | 7,12 s | ~14 | 0 |
+
+**Resultado esperado:** las páginas públicas se generan como máximo una vez por minuto y las demás visitas se
+responden desde caché (RN: «la web toma los cambios del panel en menos de un minuto»).
+**Resultado real:** cada visita regenera la página y consulta varias veces a Supabase (São Paulo, `sa-east-1`) desde
+Hostinger (Carolina del Norte). El rendimiento se estanca en ~15 páginas/s; por encima, las visitas hacen fila.
+
+### Causa
+
+`publicClient()` en `lib/supabase.js` envuelve `fetch` con `cache: "no-store"`. En Next.js 14 una sola lectura
+`no-store` durante el render vuelve dinámica la ruta entera y anula `revalidate`. Como `app/layout.js` lee la
+configuración con ese cliente (`getSite()`), todas las páginas públicas quedan dinámicas.
+
+### Plan de arreglo
+
+- Un cliente de **lectura con caché** para el render de páginas públicas (`next: { revalidate: 60 }` en lugar de
+  `no-store`), usado por `lib/configuracion.js`, `lib/inventory.js`, `lib/categorias.js`, `lib/banners.js`,
+  `lib/nosotros.js` y `lib/paginas.js` cuando leen para la web.
+- `publicClient()` **sin cambio** para lo que debe ser siempre fresco o escribe: `/api/eventos` (registra visitas),
+  `/api/products` (lo usa el panel y «Vistos recientemente») y todo `/api/admin/*` y el panel.
+- No cambia ninguna regla de RLS, columna, ni lo que ve el cliente (RN-04).
+
+### Criterios de aceptación
+
+- **Dado** `npm run build`, **entonces** las seis rutas públicas salen como ● o ○ (ISR), no ƒ.
+- **Dado** el sitio desplegado, **cuando** pido la misma página dos veces seguidas, **entonces** la segunda llega
+  desde caché (cabecera `x-nextjs-cache: HIT` o `s-maxage` en `Cache-Control`).
+- **Dado** un cambio en `/admin` (precio, banner, datos de la empresa), **entonces** se ve en la web en **≤ 60 s**,
+  sin redesplegar.
+- **Dado** el panel, **entonces** sigue mostrando datos al instante (no usa la caché).
+- **Dado** una visita a la web, **entonces** la Bandeja la sigue contando (`/api/eventos` intacto).
+- **Dado** la misma prueba de carga con 50 simultáneos, **entonces** la mediana baja de **1 s** y no hay errores;
+  se documenta la comparación en `sdlc/4-pruebas.md`.
+
+### Cómo volver atrás si algo sale mal
+
+El arreglo va en **un solo commit**. Si después del despliegue algo falla: `git revert <commit>` y push a `main`
+(Hostinger redespliega la versión anterior en ~2 min), o en hPanel › Despliegues volver a implementar el
+despliegue anterior. No hay migración de base de datos, así que no hay datos que restaurar.
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
