@@ -895,6 +895,62 @@ El arreglo va en **un solo commit**. Si después del despliegue algo falla: `git
 (Hostinger redespliega la versión anterior en ~2 min), o en hPanel › Despliegues volver a implementar el
 despliegue anterior. No hay migración de base de datos, así que no hay datos que restaurar.
 
+## BUG-4 · Next.js 14 con vulnerabilidades sin parche (alerta de Hostinger)
+
+**Nivel:** Alto · **Encontrado:** 13 nov 2026, alerta de vulnerabilidades en el panel de Hostinger; confirmado con `npm audit --omit=dev`
+(4 hallazgos: 1 crítico, 3 altos) · **Estado:** Pendiente (documentada; el dueño decide cuándo)
+
+### Qué pasa
+
+La web corre **Next.js 14.2.35**, la última 14. Esa línea ya no recibe parches: los avisos de seguridad nuevos se corrigen solo en
+**15.5.x** (hoy 15.5.29) o 16. `npm audit` lista, entre otros:
+
+| Gravedad | Aviso | ¿Nos afecta? |
+|---|---|---|
+| Crítica | Ejecución remota de código por el optimizador de imágenes (`/_next/image`) con archivos SVG | Poco: la web no usa `next/image`, no hay SVG en `public/` y las fotos salen directo de Cloudinary; pero el optimizador está encendido (`/_next/image` responde 400, no 404) |
+| Alta | Denegación de servicio con Server Components y Server Actions | Sí, sobre todo con mucho tráfico (ver BUG-3 y el plan de resistencia 5.2) |
+| Alta | Falsificación de peticiones desde el servidor (SSRF) en Server Actions / rewrites | Bajo: no hay `rewrites` y las acciones del panel exigen sesión |
+| Alta | `postcss` y `source-map-js` (lectura de archivos, bloqueo) | Solo en compilación, no en ejecución |
+
+No expone la base de datos ni las contraseñas: las llaves viven en variables de entorno del servidor y RLS sigue igual.
+
+### Plan
+
+1. **Mitigación inmediata (una línea, sin cambiar lo que ve el cliente):** `images: { unoptimized: true }` en `next.config.js` apaga el
+   optimizador y deja sin efecto el aviso crítico. Commit propio, push solo con OK del dueño.
+2. **Arreglo de fondo (HU nueva):** actualizar a **Next 15.5.29** y React 19. Cambios conocidos: `params`, `searchParams` y `cookies()`
+   pasan a ser asíncronos (`await`) en las páginas, rutas `app/api/*` y el panel; revisar `lib/supabase*.js`. Probar en el
+   puerto 3001 con la batería de Playwright de la prueba de punta a punta (44/44) y la del panel (HU-34, 143/143).
+3. Volver a pasar `npm audit --omit=dev` (meta: 0 críticas y 0 altas) y tomar la línea base de carga de BUG-3.
+4. Después, subir a Node 22 (aviso de `supabase-js`, ya anotado).
+
+### Criterios de aceptación
+
+- **Dado** `npm audit --omit=dev`, **entonces** no quedan vulnerabilidades críticas ni altas.
+- **Dado** `/_next/image?...` en producción, **entonces** no optimiza imágenes (respuesta de error o redirección a la original).
+- **Dado** la web actualizada, **entonces** pasan sin cambios las pruebas 44/44 (punta a punta) y 143/143 (panel), y las fotos de
+  Cloudinary se siguen viendo en Inicio, Productos y Ficha.
+- **Dado** el panel, **entonces** se puede crear y editar un producto, subir fotos y cambiar la configuración como antes.
+
+### Cómo volver atrás
+
+Cada paso va en su propio commit. Si algo falla tras desplegar: `git revert <commit>` y push a `main` (Hostinger redespliega en ~2 min),
+o en hPanel › Despliegues volver a implementar el anterior. No hay migración de base de datos.
+
+## BUG-5 · «Cloudinary no aceptó la imagen: Invalid api_key» en el panel de la web publicada
+
+**Nivel:** Medio · **Encontrado:** 13 nov 2026, al subir fotos en `/admin/productos` de la web publicada · **Estado:** Pendiente de confirmar
+
+**Causa:** en las variables de Hostinger, `CLOUDINARY_API_KEY` tenía el **secreto** de la llave (no los 15 dígitos de la llave). Cloudinary
+repite ese valor en el mensaje de error, por eso quedó visible en la captura. No era el peso de la foto. El dueño corrigió las variables
+en Hostinger y redesplegó el 13 nov.
+
+**Falta:**
+1. Que el dueño confirme que ya sube fotos en producción.
+2. **Regenerar el secreto de la llave «ApiWeb»** en Cloudinary (Settings › API Keys › Regenerate secret), porque el actual quedó expuesto,
+   y actualizarlo en Hostinger (redesplegar) y en `.env.local`. Nunca por el chat.
+3. Regla para el futuro: el error de Cloudinary se muestra al usuario tal cual; filtrar el texto para que no repita valores de llaves.
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |
