@@ -253,6 +253,38 @@
   .tp .trust-5 .trust-item:nth-child(2n) { border-right: none; }
   .tp .trust-5 .trust-item:last-child { grid-column: 1 / -1; border-bottom: 0; }
 }
+
+/* ================= Categorías a la izquierda del banner (ajuste de HU-38) ================= */
+.tp .hc-con-lateral { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 18px; align-items: start; }
+.tp .hc-col { min-width: 0; }
+.tp .cl {
+  position: relative; z-index: 5; background: var(--p-blanco); border: 1px solid var(--p-borde); border-radius: 16px;
+  padding: 14px 8px 8px; box-shadow: 0 8px 24px rgba(7, 31, 85, .07);
+}
+.tp .cl-titulo { margin: 0 10px 8px; font-size: 18px; font-weight: 800; color: var(--p-noche); }
+.tp .cl-lista { list-style: none; margin: 0; padding: 0; }
+.tp .cl-lista > li > a {
+  display: grid; grid-template-columns: 30px minmax(0, 1fr) 16px; align-items: center; gap: 10px; padding: 8px 10px;
+  border-radius: 10px; color: var(--p-noche); font-family: var(--tit); font-size: 14px; font-weight: 600; text-decoration: none;
+}
+.tp .cl-lista > li + li > a { border-top: 1px solid var(--p-celeste); }
+.tp .cl-ico { display: grid; place-items: center; color: var(--p-noche); }
+.tp .cl-nombre { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tp .cl-flecha { color: var(--muted); }
+.tp .cl-lista > li > a:hover, .tp .cl-lista > li > a:focus-visible, .tp .cl-marca:hover > a, .tp .cl-marca:focus-within > a { background: var(--p-celeste); color: var(--p-azul); }
+.tp .cl-lista > li > a:hover .cl-ico, .tp .cl-lista > li > a:hover .cl-flecha { color: var(--p-azul); }
+.tp .cl-marca { position: relative; }
+.tp .cl-marcas {
+  display: none; position: absolute; left: calc(100% + 4px); top: -8px; min-width: 210px; margin: 0; padding: 8px; list-style: none;
+  background: var(--p-blanco); border: 1px solid var(--p-borde); border-radius: 12px; box-shadow: 0 16px 34px rgba(7, 31, 85, .16);
+}
+.tp .cl-marca:hover .cl-marcas, .tp .cl-marca:focus-within .cl-marcas { display: block; }
+.tp .cl-marcas a { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 8px; color: var(--p-noche); font-size: 14px; font-weight: 600; text-decoration: none; }
+.tp .cl-marcas a:hover, .tp .cl-marcas a:focus-visible { background: var(--p-celeste); color: var(--p-azul); }
+@media (max-width: 1080px) {
+  .tp .hc-con-lateral { display: block; }
+  .tp .cl { display: none; }
+}
 .tp .brand-logo { height: 48px; }
 @media (max-width: 640px) { .tp .hd-wa small { color: var(--p-noche); } }
 

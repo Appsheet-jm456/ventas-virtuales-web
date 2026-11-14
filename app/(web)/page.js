@@ -4,7 +4,8 @@ import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
 import { getBannersPublicos } from "../../lib/banners";
 import { enCategoria, stockNum, precioNum } from "../../lib/productos";
-import { getCategoriasPublicas } from "../../lib/categorias";
+import { getCategoriasPublicas, getMarcasBarra } from "../../lib/categorias";
+import CategoriasLateral from "../components/CategoriasLateral";
 import HeroCarousel from "../components/HeroCarousel";
 import CategoryStrip from "../components/CategoryStrip";
 import ProductCard from "../components/ProductCard";
@@ -42,7 +43,7 @@ export default async function Home() {
     rows = [];
   }
 
-  const [categorias, site, banners] = await Promise.all([getCategoriasPublicas(rows), getSite(), getBannersPublicos()]);
+  const [categorias, site, banners, marcas] = await Promise.all([getCategoriasPublicas(rows), getSite(), getBannersPublicos(), getMarcasBarra()]);
   const disponibles = rows.filter((r) => enCategoria(r, LINEA.filtro) && stockNum(r) > 0);
   const linea = disponibles.slice(0, LINEA.max);
   const precios = disponibles.map(precioNum).filter((n) => n && n > 0);
@@ -50,8 +51,10 @@ export default async function Home() {
 
   return (
     <main>
-      <div className="wrap hc-wrap">
-        <HeroCarousel banners={banners} whatsapp={site.whatsapp} />
+      {/* Categorías a la izquierda del banner, como la imagen del cliente (ajuste de HU-38). */}
+      <div className={`wrap hc-wrap${categorias.length ? " hc-con-lateral" : ""}`}>
+        <CategoriasLateral categorias={categorias} marcas={marcas} />
+        <div className="hc-col"><HeroCarousel banners={banners} whatsapp={site.whatsapp} /></div>
       </div>
 
       {/* Franja de beneficios bajo el banner, como la imagen del cliente (HU-38). */}

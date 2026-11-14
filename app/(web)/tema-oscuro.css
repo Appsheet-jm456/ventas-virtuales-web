@@ -111,6 +111,14 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #051537; }
 .tp-oscuro .trust-5 .trust-ico { background: var(--p-pantalla); color: var(--p-amarillo); }
 .tp-oscuro .trust-5 .trust-item { border-color: var(--p-red); }
 
+/* Categorías a la izquierda del banner (ajuste de HU-38) en oscuro */
+.tp-oscuro .cl, .tp-oscuro .cl-marcas { background: var(--p-superficie); border-color: var(--p-red); box-shadow: none; }
+.tp-oscuro .cl-titulo, .tp-oscuro .cl-lista > li > a, .tp-oscuro .cl-ico, .tp-oscuro .cl-marcas a { color: #fff; }
+.tp-oscuro .cl-lista > li + li > a { border-color: rgba(255, 255, 255, .08); }
+.tp-oscuro .cl-flecha { color: var(--p-luna); }
+.tp-oscuro .cl-lista > li > a:hover, .tp-oscuro .cl-lista > li > a:focus-visible, .tp-oscuro .cl-marca:hover > a, .tp-oscuro .cl-marca:focus-within > a, .tp-oscuro .cl-marcas a:hover { background: rgba(255, 255, 255, .07); color: var(--p-amarillo); }
+.tp-oscuro .cl-lista > li > a:hover .cl-ico, .tp-oscuro .cl-lista > li > a:hover .cl-flecha { color: var(--p-amarillo); }
+
 /* ================= Portada ================= */
 .tp-oscuro .hc { background: var(--p-pantalla); border: 1px solid var(--p-red); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
 .tp-oscuro .hc-nav { background: rgba(5, 21, 55, .85); color: #fff; border: 1px solid var(--p-red); }
