@@ -981,6 +981,7 @@ Como cliente quiero encontrar rápido el buscador, las categorías, las ofertas 
 - Las categorías ya no van en la fila del menú: están en «Todas las categorías» y en «Ver categorías con fotos».
 - Dentro del menú, «Todas las categorías» va en azul corporativo y «Ofertas del mes» en amarillo con el «%» en rojo; en modo oscuro igual.
 - **Ajuste del dueño (14 nov, prototipo en el 3100):** columna **«Categorías» fija a la izquierda del banner del Inicio**, como la imagen: cada categoría de `/admin/categorias` con un icono de línea según su nombre y «›», y al final **«Por marca»**, que despliega las marcas al pasar el mouse o con el teclado. Solo en pantallas anchas (más de 1080 px); en celular y tableta las categorías siguen en «☰ Categorías». Para que aparezcan Workstation, Gamer, Monitores o All in One como en la imagen, el dueño las crea en `/admin/categorias` (los iconos ya están listos). Componente `app/components/CategoriasLateral.js`.
+- **Segundo ajuste del dueño (14 nov):** esa fila va **a todo el ancho de la pantalla**: la columna pegada al borde izquierdo y el banner hasta el borde derecho, **sin esquinas redondeadas** (también en celular, donde el banner ocupa todo el ancho). El resto de la página sigue en el ancho de 1200 px.
 
 ### Criterios de aceptación
 

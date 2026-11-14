@@ -51,8 +51,9 @@ export default async function Home() {
 
   return (
     <main>
-      {/* Categorías a la izquierda del banner, como la imagen del cliente (ajuste de HU-38). */}
-      <div className={`wrap hc-wrap${categorias.length ? " hc-con-lateral" : ""}`}>
+      {/* Categorías a la izquierda y banner hasta el borde derecho, a todo el ancho y sin esquinas
+          redondeadas (ajustes del dueño a HU-38, 14 nov). */}
+      <div className={categorias.length ? "hc-wrap hc-con-lateral" : "wrap hc-wrap"}>
         <CategoriasLateral categorias={categorias} marcas={marcas} />
         <div className="hc-col"><HeroCarousel banners={banners} whatsapp={site.whatsapp} /></div>
       </div>

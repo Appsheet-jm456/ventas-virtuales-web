@@ -113,6 +113,7 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #051537; }
 
 /* Categorías a la izquierda del banner (ajuste de HU-38) en oscuro */
 .tp-oscuro .cl, .tp-oscuro .cl-marcas { background: var(--p-superficie); border-color: var(--p-red); box-shadow: none; }
+.tp-oscuro .hc-con-lateral .hc { border: 0; box-shadow: none; }
 .tp-oscuro .cl-titulo, .tp-oscuro .cl-lista > li > a, .tp-oscuro .cl-ico, .tp-oscuro .cl-marcas a { color: #fff; }
 .tp-oscuro .cl-lista > li + li > a { border-color: rgba(255, 255, 255, .08); }
 .tp-oscuro .cl-flecha { color: var(--p-luna); }
