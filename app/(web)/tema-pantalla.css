@@ -305,6 +305,21 @@
 .tp .card-con-wa .card-wa { width: auto; margin: 0 14px 14px; padding: 11px 12px; font-size: 14px; border-radius: 10px; }
 .tp .ofertas-rayo { color: var(--p-amarillo); -webkit-text-stroke: .5px var(--p-noche); }
 .tp .ofertas-rail .card { height: 100%; }
+
+/* ================= Botón «📷 Más fotos» (HU-36) ================= */
+/* Junto a las miniaturas, de su misma altura; abre la carpeta de Drive en una pestaña nueva. */
+.tp .pp-thumbs { align-items: center; }
+.tp .pp-mas-fotos {
+  display: inline-flex; align-items: center; gap: 8px; height: 64px; padding: 0 18px; border-radius: 12px;
+  border: 2px solid var(--p-azul); background: var(--p-celeste); color: var(--p-azul);
+  font-family: var(--tit); font-weight: 800; font-size: 15px; text-decoration: none; white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.tp .pp-mas-fotos:hover, .tp .pp-mas-fotos:focus-visible { background: var(--p-azul); color: #fff; text-decoration: none; }
+.tp .pp-mas-ico { font-size: 22px; line-height: 1; }
+.tp .pp-mas-flecha { font-size: 14px; opacity: .8; }
+.tp .pp-empty-mas { margin-top: 14px; }
+@media (max-width: 640px) { .tp .pp-mas-fotos { height: 56px; padding: 0 14px; font-size: 14px; } }
 .tp .brand-logo { height: 48px; }
 @media (max-width: 640px) { .tp .hd-wa small { color: var(--p-noche); } }
 

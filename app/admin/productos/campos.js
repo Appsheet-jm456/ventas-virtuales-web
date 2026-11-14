@@ -17,6 +17,8 @@ export const FIELDS = [
   { key: "Precio antes", label: "Precio antes (opcional, para oferta)", ph: "2000000", num: true },
   { key: "Foto", label: "Fotos (la primera es la portada)", ph: "https://res.cloudinary.com/…", full: true, area: true },
   { key: "Video", label: "Video — URL", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
+  // Más fotos (HU-36): carpeta de Drive con fotos reales; botón «📷 Más fotos» en la ficha.
+  { key: "Más fotos", label: "📷 Más fotos — enlace de la carpeta de Drive", ph: "https://drive.google.com/drive/folders/…", full: true },
   // Descripción ampliada (HU-29): texto seguro, límites en lib/inventory.js (LARGOS).
   { key: "Resumen", label: "Resumen destacado", ph: "¡Llegó uno de los portátiles empresariales más confiables!…", full: true, area: true, max: 400 },
   { key: "Título descripción", label: "Título de la descripción", ph: "El compañero ideal para la productividad", full: true, max: 120 },

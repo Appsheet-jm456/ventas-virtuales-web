@@ -10,6 +10,7 @@ import FotosProducto, { listaDe } from "./FotosProducto";
 import FichaTecnica from "./FichaTecnica";
 import DescripcionAmpliada from "./DescripcionAmpliada";
 import { FIELDS, HIDDEN_VALUES, CLAVE_AVISO } from "./campos";
+import { validarMasFotos } from "../../../lib/mas-fotos";
 
 // Formulario de producto en página completa (HU-18), para crear y para editar. Secciones en dos
 // columnas: datos, especificaciones y fotos a la izquierda; estado, precio y stock a la derecha.
@@ -34,6 +35,7 @@ export default function ProductoForm({ inicial, id }) {
   const { token, logout } = useAdmin();
   const router = useRouter();
   const [fields, setFields] = useState(inicial);
+  const masFotos = validarMasFotos(fields["Más fotos"]);
   const [busy, setBusy] = useState(false);
   const [subiendo, setSubiendo] = useState(false);
   const [error, setError] = useState("");
@@ -156,6 +158,19 @@ export default function ProductoForm({ inicial, id }) {
               />
             </div>
             {campo("Video")}
+            {/* Más fotos (HU-36): pegar, cambiar o quitar el enlace de la carpeta de Drive. */}
+            <div className="field full">
+              <label htmlFor="campo-Mas-fotos">{CAMPO["Más fotos"].label}</label>
+              <div className="pf-mas-fotos">
+                <input id="campo-Mas-fotos" className="input" type="url" value={fields["Más fotos"]} placeholder={CAMPO["Más fotos"].ph}
+                  onChange={(e) => set("Más fotos", e.target.value)} disabled={busy} />
+                {masFotos.url && <a className="btn-ghost" href={masFotos.url} target="_blank" rel="noopener noreferrer">Abrir ↗</a>}
+                {fields["Más fotos"] && <button type="button" className="btn-ghost" onClick={() => set("Más fotos", "")} disabled={busy}>Quitar</button>}
+              </div>
+              {masFotos.error
+                ? <small className="form-error">{masFotos.error}</small>
+                : <small className="ct-hint">{masFotos.url ? "En la ficha aparece el botón «📷 Más fotos» que abre esta carpeta." : "Vacío: no aparece el botón. La carpeta debe estar compartida como «Cualquier persona con el enlace»."}</small>}
+            </div>
           </section>
           <section className="pr-card pf-sec" id="descripcion-ampliada">
             <h3>Descripción ampliada</h3>

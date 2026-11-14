@@ -5,6 +5,14 @@
 
 ---
 
+## 14 nov 2026 · Botón «📷 Más fotos» con la carpeta de Drive (HU-36)
+
+- Nuevo campo en el editor del producto para pegar, cambiar o quitar el enlace de Drive con las fotos reales (migración aplicada con OK del dueño).
+- En la ficha aparece el botón «📷 Más fotos» junto a las miniaturas y abre la carpeta en una pestaña nueva.
+- Se cargaron los enlaces de 54 portátiles usados desde el Excel. Falta la aprobación del dueño.
+
+---
+
 ## 14 nov 2026 · Ofertas y descuentos (HU-39)
 
 - Nuevo campo «Precio antes (opcional, para oferta)» en el editor de producto y en el CSV (migración aplicada con OK del dueño).

@@ -24,7 +24,19 @@ function VideoPlayer({ video }) {
   return <video className="pv-native" src={video.src} controls preload="metadata" playsInline />;
 }
 
-export default function Gallery({ images = [], videos = [], alt = "", sold = false }) {
+// Botón «📷 Más fotos» (HU-36): abre en una pestaña nueva la carpeta de Drive con las fotos reales.
+function MasFotos({ url }) {
+  return (
+    <a className="pp-mas-fotos" href={url} target="_blank" rel="noopener noreferrer" title="Fotos reales del equipo en Google Drive"
+      aria-label="Más fotos: fotos reales del equipo en Google Drive (se abre en una pestaña nueva)">
+      <span className="pp-mas-ico" aria-hidden="true">📷</span>
+      <span className="pp-mas-txt">Más fotos</span>
+      <span className="pp-mas-flecha" aria-hidden="true">↗</span>
+    </a>
+  );
+}
+
+export default function Gallery({ images = [], videos = [], alt = "", sold = false, masFotos = "" }) {
   const [broken, setBroken] = useState(() => new Set());
   const [current, setCurrent] = useState(0);
   // light = null | { type: "image" } | { type: "video", index }
@@ -64,14 +76,15 @@ export default function Gallery({ images = [], videos = [], alt = "", sold = fal
     return (
       <div className="pp-empty">
         {sold && <span className="pp-ribbon">Equipo agotado</span>}
-        📷 Pronto tendremos fotos de este producto.<br />Pídelas por WhatsApp.
+        📷 Pronto tendremos fotos de este producto.<br />{masFotos ? "Mientras tanto, mira las fotos reales:" : "Pídelas por WhatsApp."}
+        {masFotos && <div className="pp-empty-mas"><MasFotos url={masFotos} /></div>}
       </div>
     );
   }
 
   const idx = Math.min(current, Math.max(0, valid.length - 1));
   const mainUrl = valid[idx];
-  const showThumbs = valid.length + vids.length > 1;
+  const showThumbs = valid.length + vids.length > 1 || Boolean(masFotos);
 
   return (
     <div className={`pp${sold ? " sold" : ""}`}>
@@ -117,6 +130,7 @@ export default function Gallery({ images = [], videos = [], alt = "", sold = fal
               <span className="pp-play">▶</span>
             </button>
           ))}
+          {masFotos && <MasFotos url={masFotos} />}
         </div>
       )}
 

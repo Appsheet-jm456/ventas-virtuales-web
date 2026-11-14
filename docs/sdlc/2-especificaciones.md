@@ -903,7 +903,17 @@ Como cliente quiero ver las **fotos reales del equipo** que voy a comprar, y com
 4. La API pública entrega `fotos_reales_url` solo de productos publicados.
 5. Prueba Playwright (con y sin enlace, celular y escritorio) y `npm run build` sin errores.
 
-**Estado:** documentada el 14 nov 2026; **no se construye todavía**.
+### Construcción (14 nov 2026)
+
+- **Respuestas del dueño:** el botón dice **«📷 Más fotos»** (emoji + texto + enlace a Drive); se pone, **cambia o quita** desde el editor del producto; **sí** se cargan los enlaces del Excel.
+- La columna se llamó `fotos_reales_url` y se guarda en el campo «Más fotos». La migración `20261114180000_fotos_reales.sql` se **aplicó con OK del dueño**.
+- **Carga inicial:** 54 de los 55 equipos con carpeta en `Inventario_PU.xlsx` (el código BOD-001 ya no existe en la base). 53 de ellos están publicados.
+- **Panel:** en «Fotos y video», campo para pegar el enlace, con los botones **Abrir ↗** (para probarlo) y **Quitar**, y validación en vivo. Al guardar se valida otra vez en el servidor (`lib/mas-fotos.js`).
+- **Web:** el botón va junto a las miniaturas, con su misma altura. Si el producto no tiene fotos, aparece dentro del recuadro «Pronto tendremos fotos» («Mientras tanto, mira las fotos reales»). El enlace se valida otra vez al mostrarlo.
+- **CSV:** una celda «Más fotos» vacía no toca el enlace; para quitarlo se usa el panel.
+- Por ahora no se registra el toque como evento de métricas. Queda como mejora menor.
+
+**Estado:** construida el 14 nov 2026; falta la aprobación del dueño.
 
 ---
 
