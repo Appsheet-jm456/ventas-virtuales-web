@@ -912,6 +912,7 @@ Como cliente quiero ver las **fotos reales del equipo** que voy a comprar, y com
 - **Web:** el botón va junto a las miniaturas, con su misma altura. Si el producto no tiene fotos, aparece dentro del recuadro «Pronto tendremos fotos» («Mientras tanto, mira las fotos reales»). El enlace se valida otra vez al mostrarlo.
 - **CSV:** una celda «Más fotos» vacía no toca el enlace; para quitarlo se usa el panel.
 - Por ahora no se registra el toque como evento de métricas. Queda como mejora menor.
+- **Ajuste del dueño (14 nov):** el botón se achicó a un **cuadro del tamaño de una miniatura** (64 px), con el 📷 arriba, «Fotos» abajo y ↗ en la esquina. El texto accesible sigue siendo «Más fotos: fotos reales del equipo en Google Drive».
 
 **Estado:** construida el 14 nov 2026; falta la aprobación del dueño.
 

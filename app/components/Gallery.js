@@ -24,13 +24,14 @@ function VideoPlayer({ video }) {
   return <video className="pv-native" src={video.src} controls preload="metadata" playsInline />;
 }
 
-// Botón «📷 Más fotos» (HU-36): abre en una pestaña nueva la carpeta de Drive con las fotos reales.
+// Botón «📷 Fotos» (HU-36, más pequeño por pedido del dueño): cuadro del tamaño de una miniatura
+// que abre en una pestaña nueva la carpeta de Drive con las fotos reales.
 function MasFotos({ url }) {
   return (
     <a className="pp-mas-fotos" href={url} target="_blank" rel="noopener noreferrer" title="Fotos reales del equipo en Google Drive"
       aria-label="Más fotos: fotos reales del equipo en Google Drive (se abre en una pestaña nueva)">
       <span className="pp-mas-ico" aria-hidden="true">📷</span>
-      <span className="pp-mas-txt">Más fotos</span>
+      <span className="pp-mas-txt">Fotos</span>
       <span className="pp-mas-flecha" aria-hidden="true">↗</span>
     </a>
   );

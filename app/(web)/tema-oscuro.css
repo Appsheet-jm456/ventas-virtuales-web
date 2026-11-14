@@ -120,7 +120,7 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #051537; }
 .tp-oscuro .etq-nuevo { background: var(--p-azul); }
 
 /* «📷 Más fotos» (HU-36) en oscuro */
-.tp-oscuro .pp-mas-fotos { background: var(--p-superficie); border-color: var(--p-cian-claro); color: #fff; }
+.tp-oscuro .pp-mas-fotos { background: var(--p-superficie); border-color: var(--p-red); color: #fff; }
 .tp-oscuro .pp-mas-fotos:hover, .tp-oscuro .pp-mas-fotos:focus-visible { background: var(--p-amarillo); border-color: var(--p-amarillo); color: var(--p-noche); }
 
 /* ================= Portada ================= */

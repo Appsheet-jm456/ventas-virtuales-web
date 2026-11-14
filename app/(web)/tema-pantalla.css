@@ -306,20 +306,18 @@
 .tp .ofertas-rayo { color: var(--p-amarillo); -webkit-text-stroke: .5px var(--p-noche); }
 .tp .ofertas-rail .card { height: 100%; }
 
-/* ================= Botón «📷 Más fotos» (HU-36) ================= */
-/* Junto a las miniaturas, de su misma altura; abre la carpeta de Drive en una pestaña nueva. */
-.tp .pp-thumbs { align-items: center; }
+/* ================= Botón «📷 Fotos» (HU-36) ================= */
+/* Cuadro del mismo tamaño que una miniatura (64 px): emoji arriba, «Fotos» abajo y ↗ en la esquina. */
 .tp .pp-mas-fotos {
-  display: inline-flex; align-items: center; gap: 8px; height: 64px; padding: 0 18px; border-radius: 12px;
-  border: 2px solid var(--p-azul); background: var(--p-celeste); color: var(--p-azul);
-  font-family: var(--tit); font-weight: 800; font-size: 15px; text-decoration: none; white-space: nowrap;
-  transition: background .15s, color .15s;
+  position: relative; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  width: 64px; height: 64px; border-radius: 9px; border: 2px solid var(--p-celeste-2); background: var(--p-celeste);
+  color: var(--p-azul); font-family: var(--tit); font-weight: 700; font-size: 12px; line-height: 1; text-decoration: none;
+  transition: border-color .15s, background .15s, color .15s;
 }
-.tp .pp-mas-fotos:hover, .tp .pp-mas-fotos:focus-visible { background: var(--p-azul); color: #fff; text-decoration: none; }
-.tp .pp-mas-ico { font-size: 22px; line-height: 1; }
-.tp .pp-mas-flecha { font-size: 14px; opacity: .8; }
-.tp .pp-empty-mas { margin-top: 14px; }
-@media (max-width: 640px) { .tp .pp-mas-fotos { height: 56px; padding: 0 14px; font-size: 14px; } }
+.tp .pp-mas-fotos:hover, .tp .pp-mas-fotos:focus-visible { border-color: var(--p-azul); background: var(--p-azul); color: #fff; text-decoration: none; }
+.tp .pp-mas-ico { font-size: 20px; }
+.tp .pp-mas-flecha { position: absolute; top: 3px; right: 5px; font-size: 10px; opacity: .7; }
+.tp .pp-empty-mas { margin-top: 12px; display: flex; justify-content: center; }
 .tp .brand-logo { height: 48px; }
 @media (max-width: 640px) { .tp .hd-wa small { color: var(--p-noche); } }
 
