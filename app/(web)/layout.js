@@ -20,10 +20,6 @@ const titulos = Montserrat({ subsets: ["latin"], weight: ["600", "700", "800"], 
 const textos = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--f-txt", display: "swap" });
 
 const SALUDO = "Hola 👋, quiero información sobre sus computadores.";
-const COTIZAR = "Hola 👋, quiero solicitar una cotización.";
-// Menú (HU-38): Mayoristas y Soporte abren WhatsApp con el mensaje listo (decisión por defecto, 14 nov).
-const MAYORISTAS = "Hola 👋, quiero información de precios para mayoristas.";
-const SOPORTE = "Hola 👋, necesito soporte técnico con un equipo.";
 
 function WaIcon({ size = 24 }) {
   return (
@@ -49,7 +45,7 @@ export default async function WebLayout({ children }) {
   const direccion = [site.direccion, site.ciudad].filter(Boolean).join(", ");
   const visitanos = site.catalogo?.ubicacion_texto || site.ciudad || "";
   const mapa = site.catalogo?.ubicacion_mapa || (direccion ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(direccion)}` : "");
-  const menu = { categorias: categoriasBarra, marcas: marcasBarra, mayoristas: wa(MAYORISTAS), soporte: wa(SOPORTE) };
+  const menu = { categorias: categoriasBarra, marcas: marcasBarra };
   return (
     <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
         {site.catalogo?.cinta_visible !== false && <Cinta texto={site.catalogo?.cinta_texto} />}
@@ -73,11 +69,19 @@ export default async function WebLayout({ children }) {
               </button>
             </form>
 
-            {/* Encabezado como la imagen del cliente (HU-38): cotización por WhatsApp y dirección. */}
-            <a className="hd-info hd-wa" href={wa(COTIZAR)} target="_blank" rel="noopener noreferrer" aria-label={`Solicita tu cotización por WhatsApp al ${site.whatsappDisplay}`}>
-              <span className="hd-ico wa"><WaIcon size={24} /></span>
-              <span><small className="hd-pre">Solicita tu cotización<br />por WhatsApp</small><b>{site.whatsappDisplay}</b></span>
+            {/* Tres botones juntos (ajuste del dueño a HU-38): WhatsApp, Envíos y Visítanos. */}
+            <a className="hd-info hd-wa" href={wa(SALUDO)} target="_blank" rel="noopener noreferrer">
+              <span className="hd-ico wa"><WaIcon size={22} /></span>
+              <span><b>WhatsApp</b><small>{site.whatsappDisplay}</small></span>
             </a>
+            <div className="hd-info hd-ship hd-envios">
+              <span className="hd-ico">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M2 6h11v9H2zM13 9h4l3 3v3h-7z" /><circle cx="6" cy="17" r="2" /><circle cx="16.5" cy="17" r="2" />
+                </svg>
+              </span>
+              <span><b>Envíos</b><small>a todo el país</small></span>
+            </div>
             {visitanos && (
               <a className="hd-info hd-ship hd-visita" href={mapa || undefined} target="_blank" rel="noopener noreferrer">
                 <span className="hd-ico">

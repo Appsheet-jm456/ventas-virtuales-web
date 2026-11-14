@@ -7,8 +7,8 @@
 
 ## 14 nov 2026 · Encabezado y menú como la imagen del cliente (HU-38)
 
-- Encabezado: buscador «productos, marcas, modelos o referencias», «Solicita tu cotización por WhatsApp» con el número y «Visítanos en…» con el mapa.
-- Menú: «Todas las categorías», «% Ofertas del mes», Nuevos, Usados, Por marca, Mayoristas y Soporte (WhatsApp), y «Envíos a todo el país · 1–2 días hábiles».
+- Encabezado: buscador «productos, marcas, modelos o referencias». Toda la página a todo el ancho; banner sin esquinas; cinta en amarillo de ofertas.
+- Menú: «Todas las categorías», «% Ofertas del mes», Nuevos, Usados y Por marca. En el encabezado, tres botones juntos: WhatsApp, Envíos a todo el país y Visítanos.
 - Franja de beneficios bajo el banner: Compra segura, Garantía, Envíos nacionales, Factura electrónica (IVA 19 %) y Punto físico en Cali.
 - Columna «Categorías» a la izquierda del banner del Inicio, con «Por marca» desplegable (ajuste pedido por el dueño).
 - Construida y probada; falta la aprobación del dueño. «Ofertas del mes» filtra cuando llegue HU-39.

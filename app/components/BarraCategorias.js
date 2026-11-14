@@ -6,8 +6,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { norm } from "../../lib/productos";
 
 // Menú principal (HU-38, reemplaza la fila de categorías de HU-31): «☰ Todas las categorías»
-// (despliega la lista completa con imagen y conteo), «% Ofertas del mes», Nuevos, Usados,
-// «Por marca ▾», Mayoristas y Soporte; a la derecha, los envíos. En celular la fila se desliza
+// (despliega la lista completa con imagen y conteo), «% Ofertas del mes», Nuevos, Usados y
+// «Por marca ▾» (Mayoristas, Soporte y Envíos se quitaron por pedido del dueño). En celular la fila se desliza
 // y «☰» abre la lista de categorías a pantalla completa.
 
 const href = (c) => `/productos?categoria=${encodeURIComponent(c.filtro)}`;
@@ -50,7 +50,7 @@ const Flecha = () => (
 );
 
 // actual: qué está abierto en el catálogo { categoria, estado, marca, ofertas } o null fuera de /productos.
-export function BarraCategorias({ categorias = [], marcas = [], mayoristas = "", soporte = "", actual = null }) {
+export function BarraCategorias({ categorias = [], marcas = [], actual = null }) {
   const todas = useDesplegable();
   const porMarca = useDesplegable();
   const cerrar = () => { todas.setAbierto(false); porMarca.setAbierto(false); };
@@ -122,16 +122,8 @@ export function BarraCategorias({ categorias = [], marcas = [], mayoristas = "",
             </ul>
           </li>
         )}
-        {mayoristas && <li><a href={mayoristas} target="_blank" rel="noopener noreferrer">Mayoristas</a></li>}
-        {soporte && <li><a href={soporte} target="_blank" rel="noopener noreferrer">Soporte</a></li>}
       </ul>
 
-      <div className="bc-der bc-envios">
-        <span className="bc-envios-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><path d="M2 6h11v9H2zM13 9h4l3 3v3h-7z" /><circle cx="6" cy="17" r="2" /><circle cx="16.5" cy="17" r="2" /></svg>
-        </span>
-        <span><b>Envíos a todo el país</b><small>1 – 2 días hábiles</small></span>
-      </div>
       {todas.abierto && <div className="bc-fondo" aria-hidden="true" onClick={() => todas.setAbierto(false)} />}
     </div>
   );

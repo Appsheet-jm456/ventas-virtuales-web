@@ -101,13 +101,8 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #051537; }
 
 /* Encabezado y menú de HU-38 en oscuro */
 .tp-oscuro .hd-pre { color: var(--p-luna); }
-.tp-oscuro .hd-wa b, .tp-oscuro .hd-visita b { color: #fff; }
-.tp-oscuro .hd-visita { border-color: var(--p-red); }
-.tp-oscuro .hd-visita .hd-ico { background: none; border: 0; color: var(--p-cian-claro); }
+.tp-oscuro .hd-visita b { color: #fff; }
 .tp-oscuro .hd-nav .bc-fila a.bc-ofertas { background: var(--p-amarillo); color: var(--p-noche); }
-.tp-oscuro .bc-envios { background: var(--p-superficie); color: #fff; }
-.tp-oscuro .bc-envios-ico { color: var(--p-amarillo); }
-.tp-oscuro .bc-envios small { color: var(--p-luna); }
 .tp-oscuro .trust-5 .trust-ico { background: var(--p-pantalla); color: var(--p-amarillo); }
 .tp-oscuro .trust-5 .trust-item { border-color: var(--p-red); }
 

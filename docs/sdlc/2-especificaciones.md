@@ -973,7 +973,7 @@ Como cliente quiero encontrar rápido el buscador, las categorías, las ofertas 
 
 ### Decisiones al construir (14 nov 2026)
 
-- **Mayoristas** y **Soporte** abren WhatsApp con el mensaje listo («…precios para mayoristas», «…soporte técnico con un equipo»). Es la opción por defecto mientras el dueño no pida una página propia.
+- ~~Mayoristas y Soporte por WhatsApp~~: el dueño los quitó del menú (tercer ajuste, abajo).
 - **Por marca ▾** lista hasta 12 marcas con productos publicados, de la más a la menos frecuente, con su conteo (sin «Genérico»). En celular no aparece (la marca se filtra en el panel de filtros) porque el menú se desliza y el desplegable quedaría cortado.
 - **Nuevos / Usados** usan el filtro nuevo `?estado=nuevo|usado` del catálogo: el estado del producto («Nuevo», «Grado A»…) o, si está vacío, la categoría («Portátil nuevo», «Portátil usado»). «Semi nuevo» cuenta como usado.
 - **Ofertas del mes** apunta a `/productos?ofertas=si`; el filtro llega con HU-39 (mientras tanto muestra todo el catálogo).
@@ -981,7 +981,8 @@ Como cliente quiero encontrar rápido el buscador, las categorías, las ofertas 
 - Las categorías ya no van en la fila del menú: están en «Todas las categorías» y en «Ver categorías con fotos».
 - Dentro del menú, «Todas las categorías» va en azul corporativo y «Ofertas del mes» en amarillo con el «%» en rojo; en modo oscuro igual.
 - **Ajuste del dueño (14 nov, prototipo en el 3100):** columna **«Categorías» fija a la izquierda del banner del Inicio**, como la imagen: cada categoría de `/admin/categorias` con un icono de línea según su nombre y «›», y al final **«Por marca»**, que despliega las marcas al pasar el mouse o con el teclado. Solo en pantallas anchas (más de 1080 px); en celular y tableta las categorías siguen en «☰ Categorías». Para que aparezcan Workstation, Gamer, Monitores o All in One como en la imagen, el dueño las crea en `/admin/categorias` (los iconos ya están listos). Componente `app/components/CategoriasLateral.js`.
-- **Segundo ajuste del dueño (14 nov):** esa fila va **a todo el ancho de la pantalla**: la columna pegada al borde izquierdo y el banner hasta el borde derecho, **sin esquinas redondeadas** (también en celular, donde el banner ocupa todo el ancho). El resto de la página sigue en el ancho de 1200 px.
+- **Segundo ajuste del dueño (14 nov):** esa fila va **a todo el ancho de la pantalla**: la columna pegada al borde izquierdo y el banner hasta el borde derecho, **sin esquinas redondeadas** (también en celular, donde el banner ocupa todo el ancho). Después el dueño pidió **toda la página a todo el ancho**: el contenido usa la pantalla hasta 1920 px, con 24 px de margen (16 px en celular).
+- **Tercer ajuste del dueño (14 nov):** el encabezado queda con **tres botones juntos y sencillos**: «WhatsApp» con el número, «Envíos a todo el país» (sube del menú) y «Visítanos en…». Se **quitan Mayoristas y Soporte** del menú, que queda: Todas las categorías · Ofertas del mes · Nuevos · Usados · Por marca. La **cinta en movimiento** pasa a la paleta: amarillo de ofertas `#FFDA00` con texto azul oscuro (11,4) y separadores en azul corporativo.
 
 ### Criterios de aceptación
 
