@@ -33,7 +33,7 @@ export async function generateMetadata() {
 }
 
 // Color de la barra del navegador en celular: el azul pantalla de la guía visual (HU-21).
-export const viewport = { themeColor: "#060E27" };
+export const viewport = { themeColor: "#071F55" };  // azul oscuro de la guía v2.0 (HU-37)
 
 export default function RootLayout({ children }) {
   return (

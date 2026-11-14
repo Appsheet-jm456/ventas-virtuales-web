@@ -11,6 +11,7 @@ import Rail from "../../../components/Rail";
 import VistosRecientemente from "../../../components/VistosRecientemente";
 import { textoPlano } from "../../../../lib/texto-seguro";
 import TextoSeguro, { LineaSegura } from "../../../components/TextoSeguro";
+import { descuento } from "../../../../lib/productos";
 
 export const revalidate = 60;
 
@@ -105,6 +106,7 @@ export default async function ProductPage({ params }) {
     || f(r, "Descripción").slice(0, 60) || f(r, "Código");
   const sold = stockNum(r) <= 0;
   const precio = fmtPrecio(r);
+  const oferta = descuento(r);
   const msg = mensajeProducto(site.mensajeProducto, nombre, f(r, "Código"));
   const ficha = fichaDe(r.Ficha);
   const sugeridos = sugeridosDe(rows, r);
@@ -158,8 +160,15 @@ export default async function ProductPage({ params }) {
           <h1>{nombre}</h1>
           <div className="pd-code">Ref: {f(r, "Código")}</div>
 
+          {/* Oferta (HU-39): precio anterior tachado y «−X %». */}
+          {precio && oferta && (
+            <div className="pd-oferta">
+              <s className="precio-antes"><span className="sr-only">Antes: </span>{oferta.antes}</s>
+              <span className="etq-desc">−{oferta.pct} %</span>
+            </div>
+          )}
           {precio
-            ? <div className="pd-price">{precio}</div>
+            ? <div className="pd-price">{oferta && <span className="sr-only">Ahora: </span>}{precio}</div>
             : <div className="pd-price tbd">Precio: consultar por WhatsApp</div>}
           <div className="pd-disp">
             {sold

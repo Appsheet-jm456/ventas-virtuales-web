@@ -5,6 +5,34 @@
 
 ---
 
+## 14 nov 2026 · Ofertas y descuentos (HU-39)
+
+- Nuevo campo «Precio antes (opcional, para oferta)» en el editor de producto y en el CSV (migración aplicada con OK del dueño).
+- Si es mayor que el precio: etiqueta roja «−X %» y precio anterior tachado en la tarjeta y en la ficha; el producto aparece en «⚡ Ofertas destacadas» del Inicio (con botón «Consultar por WhatsApp») y en «Ofertas del mes» (`/productos?ofertas=si`).
+- Etiqueta azul «NUEVO» en los equipos nuevos sin descuento.
+- Primera oferta real: Asus ROG Flow Z13 (BOD-027), −10 %. Falta la aprobación del dueño.
+
+---
+
+## 14 nov 2026 · Encabezado y menú como la imagen del cliente (HU-38)
+
+- Encabezado: buscador «productos, marcas, modelos o referencias». Toda la página a todo el ancho; banner sin esquinas; cinta en amarillo de ofertas.
+- Menú: «Todas las categorías», «% Ofertas del mes», Nuevos, Usados y Por marca. En el encabezado, tres botones juntos: WhatsApp, Envíos a todo el país y Visítanos.
+- Franja de beneficios bajo el banner: Compra segura, Garantía, Envíos nacionales, Factura electrónica (IVA 19 %) y Punto físico en Cali.
+- Columna «Categorías» a la izquierda del banner del Inicio, con «Por marca» desplegable (ajuste pedido por el dueño).
+- Aprobada por el dueño el 14 nov.
+
+---
+
+## 14 nov 2026 · Paleta del cliente y guía visual v2.0 (HU-37)
+
+- La web pública usa la paleta que eligió el cliente: blanco, azules claros, azul corporativo `#0865D9`, azul oscuro `#071F55`, amarillo de ofertas `#FFDA00`, verde de WhatsApp `#128C26` y rojo de descuentos `#EF172D`.
+- Encabezado y menú en blanco con el logo para fondo claro; sin la constelación. El modo oscuro se adaptó a los tonos del azul oscuro.
+- El panel `/admin` no cambió. Para volver al diseño anterior existe la etiqueta git `v1.1-antes-rediseno`.
+- Construida, probada y aprobada por el dueño el 14 nov.
+
+---
+
 ## 4 nov 2026 · Usuarios, roles y permisos del panel (HU-34)
 
 El panel ahora tiene usuarios con rol. El Superadmin crea roles y define qué puede cada uno; se agregan personas con un enlace de activación por WhatsApp, y cada quien ve solo sus módulos. Se cierra el hueco por el que cualquier cuenta del panel podía cambiar todo. La copia diaria ahora incluye las políticas y los usuarios (BUG-1). Aprobada por el dueño el 4 nov.

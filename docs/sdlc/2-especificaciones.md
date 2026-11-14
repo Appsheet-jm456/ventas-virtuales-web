@@ -839,6 +839,307 @@ Como Superadmin quiero crear roles y definir qué puede hacer cada uno; y como q
 
 ---
 
+## HU-35 · Banner que lleva a un producto: elegirlo en una lista en vez de escribir la dirección
+
+Como dueño quiero que, al crear un banner en `/admin/banners`, pueda **elegir un producto** de una lista y que al tocar el banner el cliente llegue a la ficha de ese producto, sin tener que conocer ni escribir la dirección.
+
+**Hoy (14 nov):** el campo «Al tocarlo, abre» es texto libre (`/productos?categoria=portatil`). Para llevar a un equipo hay que escribir a mano `/producto/{código}` (la ficha ya existe en `app/(web)/producto/[codigo]/page.js`); es fácil equivocarse de código o de ruta, y el banner de «Portátil Asus ROG» terminó abriendo toda la categoría.
+
+### Panel y datos (backend)
+
+- Junto al campo «Al tocarlo, abre», un botón **«Elegir producto»** abre un buscador (por código, marca, modelo o texto) que lista los productos con su foto, código, nombre y precio.
+- Al elegir uno, el campo se llena solo con **`/producto/{código}`** y debajo se muestra el producto elegido (foto + nombre) con una **✕ para quitarlo**.
+- El campo sigue aceptando a mano una página (`/productos?…`), una URL `https://` o `wa:`; elegir producto es un atajo, no lo reemplaza.
+- Sin tablas ni migraciones: se guarda en `enlace` del banner como hoy. Lee `productos` con el permiso que ya tiene el módulo.
+- Si el producto elegido se **oculta o se borra** después, el panel avisa en la lista de banners («el producto ya no está publicado») y la web **no muestra** un enlace roto (el banner queda sin enlace).
+
+### Web pública (frontend)
+
+- Dado un banner con enlace de producto, al tocarlo se abre la ficha `/producto/{código}`; si el producto ya no está publicado, el banner se ve pero no abre nada.
+
+### Criterios de aceptación
+
+1. Elegir un producto llena `/producto/{código}` y al tocar el banner en la web abre esa ficha.
+2. Quitar el producto vacía el campo; escribir a mano sigue funcionando.
+3. Producto oculto o borrado: aviso en el panel y sin enlace roto en la web.
+4. Prueba Playwright del flujo completo (elegir → guardar → tocar en la web) y `npm run build` sin errores.
+
+**Estado:** documentada el 14 nov 2026; **no se construye todavía** (decisión del dueño: «la hacemos después»).
+
+---
+
+## HU-36 · Botón «Ver más fotos» con el enlace de Drive (fotos reales del equipo)
+
+Como cliente quiero ver las **fotos reales del equipo** que voy a comprar, y como dueño quiero poner el enlace de la carpeta de Drive con esas fotos en cada producto.
+
+**Dónde va:** en la ficha del producto (`/producto/{código}`), en la fila de miniaturas debajo de la foto principal, en el espacio libre a la derecha de la última miniatura (el que el dueño marcó en rojo el 14 nov).
+
+### Web pública (frontend)
+
+- Dado un producto con enlace de fotos reales, entonces en la fila de miniaturas aparece un botón con **icono de foto 📷** y el texto **«Ver más fotos»** (tamaño de miniatura o pastilla, mismo estilo de la ficha).
+- Al tocarlo, abre el enlace de Drive en una **pestaña nueva** (`target="_blank"` con `rel="noopener noreferrer"`).
+- Dado un producto **sin** enlace, el botón no aparece y la fila queda igual que hoy.
+- Celular: el botón baja a una segunda línea si no cabe, sin scroll horizontal. Modo claro y oscuro con contraste AA; con texto accesible («Ver más fotos reales del equipo, se abre en una pestaña nueva»).
+- Se registra el toque como evento de métricas (como los demás botones de la ficha).
+
+### Panel y datos (backend)
+
+- Columna nueva **`fotos_reales_url`** (texto, opcional) en la tabla `productos` — **migración nueva**, aplicada solo con OK del dueño; agregarla a la **lista blanca de columnas públicas** (RN-04, `lib/inventory.js`).
+- En el editor del producto (`/admin/productos/[id]` y «Nuevo producto»), campo **«Fotos reales del equipo (enlace de Drive)»** con ayuda: «Pega el enlace de la carpeta; debe estar compartida como “cualquier persona con el enlace”».
+- Validación al guardar: solo `https://` y dominios de Drive (`drive.google.com`, `drive.app.goo.gl`, `photos.app.goo.gl`); se rechaza cualquier otra cosa para no abrir enlaces ajenos desde la tienda. Máximo 300 caracteres.
+- La carga por CSV acepta la columna `fotos_reales_url` (HU de carga existente).
+
+### Preguntas para el dueño (antes de construir)
+
+1. Los **79 portátiles usados** ya traen su enlace de Drive en `Inventario_PU.xlsx` (`docs/carga-portatiles-usados/`): ¿los cargamos todos de una vez en la columna nueva?
+2. Las carpetas de Drive deben estar compartidas «con el enlace»; ¿quién las revisa?
+3. ¿El botón dice «Ver más fotos» o «Fotos reales del equipo»?
+
+### Criterios de aceptación
+
+1. Producto con enlace: botón visible con icono, abre Drive en pestaña nueva.
+2. Producto sin enlace: no hay botón.
+3. Enlace que no es de Drive: el panel lo rechaza con mensaje claro.
+4. La API pública entrega `fotos_reales_url` solo de productos publicados.
+5. Prueba Playwright (con y sin enlace, celular y escritorio) y `npm run build` sin errores.
+
+**Estado:** documentada el 14 nov 2026; **no se construye todavía**.
+
+---
+
+## Rediseño «estilo Mercado Libre» con la paleta del cliente (HU-37, HU-38, HU-39)
+
+**Origen (14 nov 2026):** el cliente mandó la imagen «Guía de Implementación · Página Web, Ventas Virtual Colombia (Estilo Mercado Libre)» con una paleta de nueve colores. **Decisiones del dueño:** cambian la **paleta** de toda la web pública, el **encabezado y el menú** como en la imagen y las **ofertas y descuentos**. Se **mantiene el modo oscuro** (HU-22), adaptado a la paleta nueva. **El diseño del panel `/admin` no cambia**; lo único que se le agrega es el campo de precio de oferta de HU-39. Orden: HU-37 → HU-38 → HU-39. Cada bloque se sube con push a la rama de trabajo y pasa a `main` (Hostinger) solo con el OK del dueño.
+
+## HU-37 · Paleta del cliente y guía visual v2.0
+
+Como dueño quiero que la web use la paleta que eligió el cliente, para que se vea moderna, clara y confiable como una tienda grande.
+
+### Paleta (medida con la fórmula WCAG)
+
+| Nombre | Hex | Uso | Contraste |
+|---|---|---|---|
+| Blanco principal | `#FFFFFF` | Fondo base | — |
+| Azul muy claro | `#EAF5FF` | Fondos suaves y franjas | azul oscuro sobre él: 14,2 |
+| Fondo secundario | `#D5E9FA` | Secciones, tarjetas, hover | azul oscuro sobre él: 12,6 |
+| Azul corporativo | `#0865D9` | Botones, enlaces, botón «Todas las categorías» | blanco sobre él: 5,4 ✅ |
+| Azul oscuro | `#071F55` | Títulos, precios, pie de página | sobre blanco: 15,7 ✅ |
+| Amarillo ofertas | `#FFDA00` | «Ofertas del mes», botón principal | azul oscuro sobre él: 11,4 ✅ |
+| WhatsApp | `#128C26` | Solo botones de WhatsApp | blanco sobre él: 4,37 ⚠️ |
+| Descuentos | `#EF172D` | Etiqueta −X %, agotado | blanco sobre él: 4,35 ⚠️ |
+| Bordes suaves | `#E3EBF5` | Bordes y divisores | — |
+
+⚠️ El blanco sobre el verde y sobre el rojo queda un poco por debajo de 4,5. Solo cumple como **texto grande** (negrita de 19 px o más, o 24 px normal). Botones y etiquetas van en negrita grande. Si un texto chico no alcanza, se usa un tono un poco más oscuro, **solo con el OK del dueño**.
+
+### Web pública (frontend)
+
+- `docs/diseno/guia-visual.md` pasa a **v2.0** con la paleta, las proporciones (blanco y azules claros de fondo, azul corporativo para la acción, amarillo y rojo solo en ofertas), la tabla de contraste y la tipografía. Montserrat Bold, SemiBold, Medium y Regular en títulos, botones y menús; Inter sigue en los textos salvo que el dueño pida lo contrario. La v1.1 queda como historial.
+- **Modo claro** (`app/(web)/tema-pantalla.css`): fondo blanco, franjas `#EAF5FF`, tarjetas con borde `#E3EBF5`, títulos y precios en `#071F55`, enlaces y botones en `#0865D9`, WhatsApp en `#128C26`.
+- **Modo oscuro** (`app/(web)/tema-oscuro.css`): base en el azul oscuro `#071F55` y sus tonos; amarillo para la acción; azul corporativo aclarado para los enlaces; contraste verificado (≥ 4,5).
+- Los colores fijos repetidos en el CSS público (`#F5C518`, `#25D366`, `#0B1F4D`…) pasan a variables, para que un cambio de paleta se haga en un solo lugar.
+- La constelación sale del encabezado. Por defecto también sale del pie y de los banners (la imagen no la usa), salvo que el dueño decida dejarla.
+
+### Panel y datos (backend)
+
+- Sin cambios en el panel ni en la base. El interruptor «Modo oscuro» de Configuración › Apariencia sigue igual.
+
+### Criterios de aceptación
+
+1. Las páginas Inicio, Productos, Ficha, Categorías, Políticas y Nosotros usan solo colores de la paleta, en modo claro y en modo oscuro.
+2. Todo texto cumple contraste ≥ 4,5, o ≥ 3 si es texto grande (script de contraste).
+3. El panel `/admin` se ve igual que antes.
+4. `npm run build` sin errores; capturas Playwright a 1440 px y a 390 px en los dos modos.
+
+## HU-38 · Encabezado y menú como la imagen del cliente
+
+Como cliente quiero encontrar rápido el buscador, las categorías, las ofertas y el WhatsApp desde la parte de arriba de cualquier página.
+
+### Web pública (frontend)
+
+- **Encabezado blanco:** logo · buscador ancho («Buscar productos, marcas, modelos o referencias…») con botón azul y lupa · bloque «Solicita tu cotización por WhatsApp» con el número · bloque «Visítanos en {dirección}» con icono de ubicación. El número y la dirección salen de `getSite()`.
+- **Menú:** botón azul «☰ Todas las categorías ▾» que abre el desplegable con las categorías del panel y sus iconos (reusa los datos de `BarraCategorias`) · píldora amarilla «% Ofertas del mes» (lleva a `/productos?ofertas=si`, HU-39) · Nuevos · Usados · Por marca ▾ · Mayoristas · Soporte · a la derecha, «Envíos a todo el país · 1–2 días hábiles».
+- **Franja de beneficios** debajo del banner del Inicio: Compra segura · Garantía · Envíos nacionales · Factura electrónica (IVA 19 %) · Punto físico en Cali. Reemplaza la franja «Por qué comprar con nosotros».
+- **Celular:** el menú se pliega en el botón ☰, el buscador baja a su propia línea y no hay scroll horizontal. Se puede usar con teclado; el desplegable cierra con Esc.
+- Se mantienen la cinta en movimiento (HU-24) y la barra superior (HU-32).
+
+### Panel y datos (backend)
+
+- Sin tablas nuevas. Los textos del menú y de la franja salen de constantes en el código y de `configuracion` (WhatsApp, dirección). Si el dueño quiere editarlos desde el panel, será otra HU.
+
+### Preguntas para el dueño
+
+1. ¿A dónde llevan «Mayoristas» y «Soporte»? (¿WhatsApp con mensaje listo?, ¿página nueva?)
+2. ¿Qué marcas van en «Por marca ▾»? (sugerido: las marcas con productos publicados)
+
+### Decisiones al construir (14 nov 2026)
+
+- ~~Mayoristas y Soporte por WhatsApp~~: el dueño los quitó del menú (tercer ajuste, abajo).
+- **Por marca ▾** lista hasta 12 marcas con productos publicados, de la más a la menos frecuente, con su conteo (sin «Genérico»). En celular no aparece (la marca se filtra en el panel de filtros) porque el menú se desliza y el desplegable quedaría cortado.
+- **Nuevos / Usados** usan el filtro nuevo `?estado=nuevo|usado` del catálogo: el estado del producto («Nuevo», «Grado A»…) o, si está vacío, la categoría («Portátil nuevo», «Portátil usado»). «Semi nuevo» cuenta como usado.
+- **Ofertas del mes** apunta a `/productos?ofertas=si`; el filtro llega con HU-39 (mientras tanto muestra todo el catálogo).
+- **«Visítanos en…»** usa el texto de ubicación de Configuración › Barra superior y abre el mapa. Para que diga «CC La Pasarela, Local 2-107, Cali» como en la imagen, el dueño cambia ese texto en el panel (sin código).
+- Las categorías ya no van en la fila del menú: están en «Todas las categorías» y en «Ver categorías con fotos».
+- Dentro del menú, «Todas las categorías» va en azul corporativo y «Ofertas del mes» en amarillo con el «%» en rojo; en modo oscuro igual.
+- **Ajuste del dueño (14 nov, prototipo en el 3100):** columna **«Categorías» fija a la izquierda del banner del Inicio**, como la imagen: cada categoría de `/admin/categorias` con un icono de línea según su nombre y «›», y al final **«Por marca»**, que despliega las marcas al pasar el mouse o con el teclado. Solo en pantallas anchas (más de 1080 px); en celular y tableta las categorías siguen en «☰ Categorías». Para que aparezcan Workstation, Gamer, Monitores o All in One como en la imagen, el dueño las crea en `/admin/categorias` (los iconos ya están listos). Componente `app/components/CategoriasLateral.js`.
+- **Segundo ajuste del dueño (14 nov):** esa fila va **a todo el ancho de la pantalla**: la columna pegada al borde izquierdo y el banner hasta el borde derecho, **sin esquinas redondeadas** (también en celular, donde el banner ocupa todo el ancho). Después el dueño pidió **toda la página a todo el ancho**: el contenido usa la pantalla hasta 1920 px, con 24 px de margen (16 px en celular).
+- **Tercer ajuste del dueño (14 nov):** el encabezado queda con **tres botones juntos y sencillos**: «WhatsApp» con el número, «Envíos a todo el país» (sube del menú) y «Visítanos en…». Se **quitan Mayoristas y Soporte** del menú, que queda: Todas las categorías · Ofertas del mes · Nuevos · Usados · Por marca. La **cinta en movimiento** pasa a la paleta: amarillo de ofertas `#FFDA00` con texto azul oscuro (11,4) y separadores en azul corporativo.
+
+### Criterios de aceptación
+
+1. El encabezado y el menú se ven como la imagen en escritorio y se pliegan bien en celular.
+2. «Todas las categorías» abre y cierra con clic, toque y teclado.
+3. Los enlaces del menú llevan a filtros que existen (Nuevos, Usados, marca, ofertas).
+4. Prueba Playwright de navegación y `npm run build` sin errores.
+
+## HU-39 · Ofertas y descuentos
+
+Como cliente quiero ver qué equipos están en oferta y cuánto me ahorro; como dueño quiero marcar un producto en oferta poniendo su precio anterior.
+
+### Web pública (frontend)
+
+- **Etiqueta roja «−X %»** en la tarjeta y en la ficha cuando `precio_antes > precio` (X redondeado). El **precio anterior se muestra tachado** junto al precio actual.
+- **Etiqueta azul «NUEVO»** cuando el estado del producto es Nuevo. Si un producto tiene descuento y además es nuevo, se muestra solo la etiqueta de descuento.
+- En el Inicio, carrusel **«⚡ Ofertas destacadas»** con «Ver más ofertas ›». Las tarjetas siguen la imagen: foto, nombre, procesador, RAM, disco, pantalla y botón verde «Consultar por WhatsApp». Si no hay ofertas, la sección no aparece.
+- **`/productos?ofertas=si`** muestra solo los productos en oferta: es el destino de «Ofertas del mes» (HU-38) y de «Ver más ofertas».
+
+### Panel y datos (backend)
+
+- **Migración nueva:** columna `precio_antes numeric(12,0)` (opcional, ≥ 0) en `productos`, aplicada **solo con OK del dueño**. Se agrega a la **lista blanca pública** (RN-04, `lib/inventory.js`).
+- **Único cambio en `/admin`:** campo «Precio antes (opcional, para oferta)» en el editor de producto. Al guardar se valida que, si viene, sea mayor que el precio. La carga CSV acepta la columna `precio_antes`. El diseño del panel no cambia.
+- El modo demo trae uno o dos productos de ejemplo con oferta.
+
+### Criterios de aceptación
+
+1. Un producto con `precio_antes` mayor que el precio muestra −X % y el precio tachado; sin `precio_antes`, no muestra nada de eso.
+2. `?ofertas=si` filtra bien y el carrusel del Inicio solo aparece si hay ofertas.
+3. El panel rechaza un `precio_antes` menor o igual al precio.
+4. La API pública solo entrega columnas de la lista blanca.
+5. Prueba Playwright (con y sin oferta) y `npm run build` sin errores; las pruebas 44/44 y 143/143 siguen pasando.
+
+### Construcción (14 nov 2026)
+
+- Migración `20261114120000_precio_antes.sql` **aplicada con OK del dueño** (registrada en `supabase_migrations`). Para probar, el dueño autorizó llenar el **Asus ROG Flow Z13 (BOD-027)**: precio $5.400.000, antes $6.000.000 → **−10 %**, igual que su banner de Black Friday.
+- La web publicada (main) no lee la columna: la oferta solo se ve en el servidor de prueba hasta pasar a main.
+- CSV: celda «Precio antes» vacía no toca la oferta que ya tiene el producto; **0 la quita**.
+- Con «Ocultar precios» (Configuración), también se oculta el precio anterior.
+- El modo demo trae dos ofertas de ejemplo (Dell Latitude 7420 y Lenovo M720q).
+
+**Estado de HU-37, HU-38 y HU-39:** HU-37 y HU-38 hechas y aprobadas el 14 nov 2026; HU-39 construida, falta la aprobación del dueño.
+
+---
+
+## BUG-3 · La caché de las páginas públicas no funciona
+
+**Nivel:** Alto · **Encontrado:** 5 nov 2026, prueba de carga en producción (puerta 3 de la EDT 5.2) · **Estado:** Pendiente
+
+### Pasos para reproducirlo
+
+1. `npm run build` → en la tabla de rutas, `/`, `/productos`, `/categorias`, `/nosotros`, `/producto/[codigo]` y
+   `/politicas/[slug]` salen como **ƒ (Dynamic)**, aunque todas declaran `export const revalidate = 60`.
+2. `curl -I https://ventasvirtualcolombia.com/` → `Cache-Control: private, no-cache, no-store` y
+   `x-hcdn-cache-status: DYNAMIC`: el CDN de Hostinger no guarda la página.
+3. Prueba de carga de 20 s al Inicio (autocannon, 5 nov):
+
+   | Simultáneos | Mediana | Peor (p99) | Páginas/s | Errores |
+   |---|---|---|---|---|
+   | 10 | 0,84 s | 1,79 s | ~11 | 0 |
+   | 25 | 1,57 s | 2,92 s | ~15 | 0 |
+   | 50 | 3,06 s | 7,12 s | ~14 | 0 |
+
+**Resultado esperado:** las páginas públicas se generan como máximo una vez por minuto y las demás visitas se
+responden desde caché (RN: «la web toma los cambios del panel en menos de un minuto»).
+**Resultado real:** cada visita regenera la página y consulta varias veces a Supabase (São Paulo, `sa-east-1`) desde
+Hostinger (Carolina del Norte). El rendimiento se estanca en ~15 páginas/s; por encima, las visitas hacen fila.
+
+### Causa
+
+`publicClient()` en `lib/supabase.js` envuelve `fetch` con `cache: "no-store"`. En Next.js 14 una sola lectura
+`no-store` durante el render vuelve dinámica la ruta entera y anula `revalidate`. Como `app/layout.js` lee la
+configuración con ese cliente (`getSite()`), todas las páginas públicas quedan dinámicas.
+
+### Plan de arreglo
+
+- Un cliente de **lectura con caché** para el render de páginas públicas (`next: { revalidate: 60 }` en lugar de
+  `no-store`), usado por `lib/configuracion.js`, `lib/inventory.js`, `lib/categorias.js`, `lib/banners.js`,
+  `lib/nosotros.js` y `lib/paginas.js` cuando leen para la web.
+- `publicClient()` **sin cambio** para lo que debe ser siempre fresco o escribe: `/api/eventos` (registra visitas),
+  `/api/products` (lo usa el panel y «Vistos recientemente») y todo `/api/admin/*` y el panel.
+- No cambia ninguna regla de RLS, columna, ni lo que ve el cliente (RN-04).
+
+### Criterios de aceptación
+
+- **Dado** `npm run build`, **entonces** las seis rutas públicas salen como ● o ○ (ISR), no ƒ.
+- **Dado** el sitio desplegado, **cuando** pido la misma página dos veces seguidas, **entonces** la segunda llega
+  desde caché (cabecera `x-nextjs-cache: HIT` o `s-maxage` en `Cache-Control`).
+- **Dado** un cambio en `/admin` (precio, banner, datos de la empresa), **entonces** se ve en la web en **≤ 60 s**,
+  sin redesplegar.
+- **Dado** el panel, **entonces** sigue mostrando datos al instante (no usa la caché).
+- **Dado** una visita a la web, **entonces** la Bandeja la sigue contando (`/api/eventos` intacto).
+- **Dado** la misma prueba de carga con 50 simultáneos, **entonces** la mediana baja de **1 s** y no hay errores;
+  se documenta la comparación en `sdlc/4-pruebas.md`.
+
+### Cómo volver atrás si algo sale mal
+
+El arreglo va en **un solo commit**. Si después del despliegue algo falla: `git revert <commit>` y push a `main`
+(Hostinger redespliega la versión anterior en ~2 min), o en hPanel › Despliegues volver a implementar el
+despliegue anterior. No hay migración de base de datos, así que no hay datos que restaurar.
+
+## BUG-4 · Next.js 14 con vulnerabilidades sin parche (alerta de Hostinger)
+
+**Nivel:** Alto · **Encontrado:** 13 nov 2026, alerta de vulnerabilidades en el panel de Hostinger; confirmado con `npm audit --omit=dev`
+(4 hallazgos: 1 crítico, 3 altos) · **Estado:** Pendiente (documentada; el dueño decide cuándo)
+
+### Qué pasa
+
+La web corre **Next.js 14.2.35**, la última 14. Esa línea ya no recibe parches: los avisos de seguridad nuevos se corrigen solo en
+**15.5.x** (hoy 15.5.29) o 16. `npm audit` lista, entre otros:
+
+| Gravedad | Aviso | ¿Nos afecta? |
+|---|---|---|
+| Crítica | Ejecución remota de código por el optimizador de imágenes (`/_next/image`) con archivos SVG | Poco: la web no usa `next/image`, no hay SVG en `public/` y las fotos salen directo de Cloudinary; pero el optimizador está encendido (`/_next/image` responde 400, no 404) |
+| Alta | Denegación de servicio con Server Components y Server Actions | Sí, sobre todo con mucho tráfico (ver BUG-3 y el plan de resistencia 5.2) |
+| Alta | Falsificación de peticiones desde el servidor (SSRF) en Server Actions / rewrites | Bajo: no hay `rewrites` y las acciones del panel exigen sesión |
+| Alta | `postcss` y `source-map-js` (lectura de archivos, bloqueo) | Solo en compilación, no en ejecución |
+
+No expone la base de datos ni las contraseñas: las llaves viven en variables de entorno del servidor y RLS sigue igual.
+
+### Plan
+
+1. **Mitigación inmediata (una línea, sin cambiar lo que ve el cliente):** `images: { unoptimized: true }` en `next.config.js` apaga el
+   optimizador y deja sin efecto el aviso crítico. Commit propio, push solo con OK del dueño.
+2. **Arreglo de fondo (HU nueva):** actualizar a **Next 15.5.29** y React 19. Cambios conocidos: `params`, `searchParams` y `cookies()`
+   pasan a ser asíncronos (`await`) en las páginas, rutas `app/api/*` y el panel; revisar `lib/supabase*.js`. Probar en el
+   puerto 3001 con la batería de Playwright de la prueba de punta a punta (44/44) y la del panel (HU-34, 143/143).
+3. Volver a pasar `npm audit --omit=dev` (meta: 0 críticas y 0 altas) y tomar la línea base de carga de BUG-3.
+4. Después, subir a Node 22 (aviso de `supabase-js`, ya anotado).
+
+### Criterios de aceptación
+
+- **Dado** `npm audit --omit=dev`, **entonces** no quedan vulnerabilidades críticas ni altas.
+- **Dado** `/_next/image?...` en producción, **entonces** no optimiza imágenes (respuesta de error o redirección a la original).
+- **Dado** la web actualizada, **entonces** pasan sin cambios las pruebas 44/44 (punta a punta) y 143/143 (panel), y las fotos de
+  Cloudinary se siguen viendo en Inicio, Productos y Ficha.
+- **Dado** el panel, **entonces** se puede crear y editar un producto, subir fotos y cambiar la configuración como antes.
+
+### Cómo volver atrás
+
+Cada paso va en su propio commit. Si algo falla tras desplegar: `git revert <commit>` y push a `main` (Hostinger redespliega en ~2 min),
+o en hPanel › Despliegues volver a implementar el anterior. No hay migración de base de datos.
+
+## BUG-5 · «Cloudinary no aceptó la imagen: Invalid api_key» en el panel de la web publicada
+
+**Nivel:** Medio · **Encontrado:** 13 nov 2026, al subir fotos en `/admin/productos` de la web publicada · **Estado:** Pendiente de confirmar
+
+**Causa:** en las variables de Hostinger, `CLOUDINARY_API_KEY` tenía el **secreto** de la llave (no los 15 dígitos de la llave). Cloudinary
+repite ese valor en el mensaje de error, por eso quedó visible en la captura. No era el peso de la foto. El dueño corrigió las variables
+en Hostinger y redesplegó el 13 nov.
+
+**Falta:**
+1. Que el dueño confirme que ya sube fotos en producción.
+2. **Regenerar el secreto de la llave «ApiWeb»** en Cloudinary (Settings › API Keys › Regenerate secret), porque el actual quedó expuesto,
+   y actualizarlo en Hostinger (redesplegar) y en `.env.local`. Nunca por el chat.
+3. Regla para el futuro: el error de Cloudinary se muestra al usuario tal cual; filtrar el texto para que no repita valores de llaves.
+
 ## Lo que aporta el dueño
 
 | Qué | Formato | Dónde se pone |

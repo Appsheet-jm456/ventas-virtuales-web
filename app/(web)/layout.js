@@ -3,12 +3,11 @@ import Link from "next/link";
 import { Inter, Montserrat } from "next/font/google";
 import { waLink } from "../../lib/site";
 import { getSite } from "../../lib/configuracion";
-import { getCategoriasBarra } from "../../lib/categorias";
+import { getCategoriasBarra, getMarcasBarra } from "../../lib/categorias";
 import { getPaginasSoporte } from "../../lib/paginas";
 import { getNosotrosPublico } from "../../lib/nosotros";
 import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
-import Constelacion from "../components/Constelacion";
 import Cinta from "../components/Cinta";
 import BarraSuperior from "../components/BarraSuperior";
 import BarraCategoriasActiva, { BarraCategorias } from "../components/BarraCategorias";
@@ -35,28 +34,34 @@ function WaIcon({ size = 24 }) {
 // "tp-oscuro" el modo oscuro que el dueño enciende en /admin/configuracion (HU-22).
 export default async function WebLayout({ children }) {
   const site = await getSite();
-  const [categoriasBarra, soporte, nosotros] = await Promise.all([
+  const [categoriasBarra, soporte, nosotros, marcasBarra] = await Promise.all([
     getCategoriasBarra({ mostrarAgotados: site.catalogo?.mostrar_agotados !== false }),
     getPaginasSoporte(),
     getNosotrosPublico(),
+    getMarcasBarra(),
   ]);
   const wa = (texto) => waLink(texto, site.whatsapp);
+  // «Visítanos en…» del encabezado: el texto de ubicación de la barra superior y su mapa.
+  const direccion = [site.direccion, site.ciudad].filter(Boolean).join(", ");
+  const visitanos = site.catalogo?.ubicacion_texto || site.ciudad || "";
+  const mapa = site.catalogo?.ubicacion_mapa || (direccion ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(direccion)}` : "");
+  const menu = { categorias: categoriasBarra, marcas: marcasBarra };
   return (
     <div className={`tp${site.catalogo?.modo_oscuro ? " tp-oscuro" : ""} ${titulos.variable} ${textos.variable}`}>
         {site.catalogo?.cinta_visible !== false && <Cinta texto={site.catalogo?.cinta_texto} />}
         <BarraSuperior site={site} hayNosotros={Boolean(nosotros)} />
         <header className="site-header">
-          {/* Zona del logo, buscador, WhatsApp y envíos: la pantalla con su constelación (HU-21). */}
+          {/* Zona del logo, buscador, WhatsApp y envíos: blanca en modo claro (guía v2.0, HU-37). */}
           <div className="hd-zona">
-          <Constelacion semilla={12} puntos={28} ancho={1600} alto={120} />
           <div className="wrap hd-top">
             <Link href="/" className="brand" aria-label={site.nombre}>
-              <Brand site={site} />
+              {/* Encabezado blanco: logo para fondo claro; en modo oscuro, el de fondo oscuro. */}
+              <Brand site={site.catalogo?.modo_oscuro ? site : { ...site, logo: site.logoClaro }} />
             </Link>
 
             {/* Buscador (HU-01): un formulario normal, funciona aun sin JavaScript. */}
             <form className="hd-search" action="/productos" role="search">
-              <input name="q" type="search" placeholder="Buscar productos" aria-label="Buscar productos" />
+              <input name="q" type="search" placeholder="Buscar productos, marcas, modelos o referencias…" aria-label="Buscar productos" />
               <button type="submit" aria-label="Buscar">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
                   <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
@@ -64,26 +69,34 @@ export default async function WebLayout({ children }) {
               </button>
             </form>
 
+            {/* Tres botones juntos (ajuste del dueño a HU-38): WhatsApp, Envíos y Visítanos. */}
             <a className="hd-info hd-wa" href={wa(SALUDO)} target="_blank" rel="noopener noreferrer">
               <span className="hd-ico wa"><WaIcon size={22} /></span>
               <span><b>WhatsApp</b><small>{site.whatsappDisplay}</small></span>
             </a>
-            <div className="hd-info hd-ship">
+            <div className="hd-info hd-ship hd-envios">
               <span className="hd-ico">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M2 6h11v9H2zM13 9h4l3 3v3h-7z" /><circle cx="6" cy="17" r="2" fill="#fff" /><circle cx="16.5" cy="17" r="2" fill="#fff" />
+                  <path d="M2 6h11v9H2zM13 9h4l3 3v3h-7z" /><circle cx="6" cy="17" r="2" /><circle cx="16.5" cy="17" r="2" />
                 </svg>
               </span>
               <span><b>Envíos</b><small>a todo el país</small></span>
             </div>
+            {visitanos && (
+              <a className="hd-info hd-ship hd-visita" href={mapa || undefined} target="_blank" rel="noopener noreferrer">
+                <span className="hd-ico">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
+                </span>
+                <span><small className="hd-pre">Visítanos en</small><b>{visitanos}</b></span>
+              </a>
+            )}
           </div>
           </div>
           <nav className="hd-nav" aria-label="Principal">
-            {/* Barra de categorías (HU-31): lee la categoría activa de la dirección; mientras
-                carga se dibuja igual, sin marcar ninguna. Inicio se alcanza con el logo y
-                Contacto está en la barra superior (HU-32). */}
-            <Suspense fallback={<BarraCategorias categorias={categoriasBarra} />}>
-              <BarraCategoriasActiva categorias={categoriasBarra} />
+            {/* Menú principal (HU-38): lee de la dirección qué está abierto; mientras carga se dibuja
+                igual, sin marcar nada. Inicio se alcanza con el logo y Contacto está en la barra superior. */}
+            <Suspense fallback={<BarraCategorias {...menu} />}>
+              <BarraCategoriasActiva {...menu} />
             </Suspense>
           </nav>
         </header>
@@ -92,7 +105,6 @@ export default async function WebLayout({ children }) {
         {children}
 
         <footer className="site-footer" id="contacto">
-          <Constelacion semilla={21} puntos={30} ancho={1400} alto={420} />
           <div className="wrap footer-grid">
             <div>
               <Brand variant="footer" site={site} />
