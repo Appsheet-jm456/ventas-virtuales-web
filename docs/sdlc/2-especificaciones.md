@@ -1016,7 +1016,15 @@ Como cliente quiero ver qué equipos están en oferta y cuánto me ahorro; como 
 4. La API pública solo entrega columnas de la lista blanca.
 5. Prueba Playwright (con y sin oferta) y `npm run build` sin errores; las pruebas 44/44 y 143/143 siguen pasando.
 
-**Estado de HU-37, HU-38 y HU-39:** documentadas el 14 nov 2026; se construyen en ese orden.
+### Construcción (14 nov 2026)
+
+- Migración `20261114120000_precio_antes.sql` **aplicada con OK del dueño** (registrada en `supabase_migrations`). Para probar, el dueño autorizó llenar el **Asus ROG Flow Z13 (BOD-027)**: precio $5.400.000, antes $6.000.000 → **−10 %**, igual que su banner de Black Friday.
+- La web publicada (main) no lee la columna: la oferta solo se ve en el servidor de prueba hasta pasar a main.
+- CSV: celda «Precio antes» vacía no toca la oferta que ya tiene el producto; **0 la quita**.
+- Con «Ocultar precios» (Configuración), también se oculta el precio anterior.
+- El modo demo trae dos ofertas de ejemplo (Dell Latitude 7420 y Lenovo M720q).
+
+**Estado de HU-37, HU-38 y HU-39:** HU-37 y HU-38 hechas y aprobadas el 14 nov 2026; HU-39 construida, falta la aprobación del dueño.
 
 ---
 

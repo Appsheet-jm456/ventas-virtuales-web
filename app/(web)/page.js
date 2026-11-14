@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getPublicInventory } from "../../lib/inventory";
 import { waLink } from "../../lib/site";
-import { getSite } from "../../lib/configuracion";
+import { getSite, mensajeProducto } from "../../lib/configuracion";
 import { getBannersPublicos } from "../../lib/banners";
-import { enCategoria, stockNum, precioNum } from "../../lib/productos";
+import { enCategoria, stockNum, precioNum, descuento, nombreProducto } from "../../lib/productos";
 import { getCategoriasPublicas, getMarcasBarra } from "../../lib/categorias";
 import CategoriasLateral from "../components/CategoriasLateral";
 import HeroCarousel from "../components/HeroCarousel";
@@ -48,6 +48,9 @@ export default async function Home() {
   const linea = disponibles.slice(0, LINEA.max);
   const precios = disponibles.map(precioNum).filter((n) => n && n > 0);
   const desde = precios.length ? Math.min(...precios) : null;
+  // Ofertas destacadas (HU-39): disponibles con descuento, el mayor primero.
+  const ofertas = rows.filter((r) => stockNum(r) > 0 && descuento(r))
+    .sort((a, b) => descuento(b).pct - descuento(a).pct).slice(0, 12);
 
   return (
     <main>
@@ -85,6 +88,21 @@ export default async function Home() {
             <Link className="sec-more" href="/categorias">Ver todas →</Link>
           </div>
           <CategoryStrip categorias={categorias} />
+        </section>
+      )}
+
+      {/* Ofertas destacadas (HU-39): solo si hay productos con «Precio antes» mayor que el precio. */}
+      {ofertas.length > 0 && (
+        <section className="wrap home-sec ofertas-sec">
+          <div className="sec-head">
+            <h2 className="section-title"><span className="ofertas-rayo" aria-hidden="true">⚡</span> Ofertas destacadas</h2>
+            <Link className="sec-more" href="/productos?ofertas=si">Ver más ofertas ›</Link>
+          </div>
+          <Rail className="ofertas-rail" label="ofertas">
+            {ofertas.map((r) => (
+              <ProductCard key={r["Código"]} r={r} wa={waLink(mensajeProducto(site.mensajeProducto, nombreProducto(r), r["Código"]), site.whatsapp)} />
+            ))}
+          </Rail>
         </section>
       )}
 

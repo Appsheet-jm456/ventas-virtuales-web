@@ -52,7 +52,7 @@ export default function Catalog({ rows = [], demo = false, categoriasAdmin = [],
 
   return (
     <section className="catalog wrap" id="catalogo">
-      <h1 className="section-title">{catActiva ? catActiva.nombre : "Productos"}</h1>
+      <h1 className="section-title">{catActiva ? catActiva.nombre : aplicado.ofertas ? "Ofertas del mes" : aplicado.estado === "nuevo" ? "Equipos nuevos" : aplicado.estado === "usado" ? "Equipos usados" : "Productos"}</h1>
       <p className="section-sub">Equipos corporativos con garantía. Precios e inventario sujetos a cambios.</p>
 
       {demo && (

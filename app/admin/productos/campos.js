@@ -13,6 +13,8 @@ export const FIELDS = [
   { key: "Estado", label: "Estado", ph: "Grado A" },
   { key: "Precio", label: "Precio", ph: "1800000", num: true },
   { key: "Stock", label: "Stock", ph: "1", num: true },
+  // Ofertas (HU-39): mayor que el precio = «−X %» y precio tachado en la web. Vacío = sin oferta.
+  { key: "Precio antes", label: "Precio antes (opcional, para oferta)", ph: "2000000", num: true },
   { key: "Foto", label: "Fotos (la primera es la portada)", ph: "https://res.cloudinary.com/…", full: true, area: true },
   { key: "Video", label: "Video — URL", ph: "https://drive.google.com/file/d/…/view", full: true, area: true },
   // Descripción ampliada (HU-29): texto seguro, límites en lib/inventory.js (LARGOS).

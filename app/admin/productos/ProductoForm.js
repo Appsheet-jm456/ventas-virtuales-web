@@ -24,6 +24,11 @@ const pesos = (v) => {
   const n = Number(String(v || "").replace(/\D/g, ""));
   return n > 0 ? `$${n.toLocaleString("es-CO")}` : "";
 };
+// Descuento que verá el cliente (HU-39): solo si «Precio antes» es mayor que el precio.
+const descuentoForm = (fields) => {
+  const p = Number(String(fields["Precio"] || "").replace(/\D/g, "")), a = Number(String(fields["Precio antes"] || "").replace(/\D/g, ""));
+  return p > 0 && a > p ? Math.round((1 - p / a) * 100) : 0;
+};
 
 export default function ProductoForm({ inicial, id }) {
   const { token, logout } = useAdmin();
@@ -194,6 +199,15 @@ export default function ProductoForm({ inicial, id }) {
                 <input id="campo-Precio" className="input" inputMode="numeric" value={fields["Precio"]} placeholder={CAMPO.Precio.ph} onChange={(e) => set("Precio", e.target.value)} />
               </div>
               {pesos(fields["Precio"]) && <small className="ct-hint">Se verá como {pesos(fields["Precio"])}</small>}
+            </div>
+            {/* Ofertas (HU-39): si es mayor que el precio, la web muestra «−X %» y el precio tachado. */}
+            <div className="field">
+              <label htmlFor="campo-Precio-antes">{CAMPO["Precio antes"].label}</label>
+              <div className="pf-precio">
+                <span aria-hidden="true">$</span>
+                <input id="campo-Precio-antes" className="input" inputMode="numeric" value={fields["Precio antes"]} placeholder={CAMPO["Precio antes"].ph} onChange={(e) => set("Precio antes", e.target.value)} />
+              </div>
+              {descuentoForm(fields) && <small className="ct-hint">En la web: −{descuentoForm(fields)} % y {pesos(fields["Precio antes"])} tachado</small>}
             </div>
             {campo("Stock")}
           </section>

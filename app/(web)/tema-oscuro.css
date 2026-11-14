@@ -115,6 +115,10 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #051537; }
 .tp-oscuro .cl-lista > li > a:hover, .tp-oscuro .cl-lista > li > a:focus-visible, .tp-oscuro .cl-marca:hover > a, .tp-oscuro .cl-marca:focus-within > a, .tp-oscuro .cl-marcas a:hover { background: rgba(255, 255, 255, .07); color: var(--p-amarillo); }
 .tp-oscuro .cl-lista > li > a:hover .cl-ico, .tp-oscuro .cl-lista > li > a:hover .cl-flecha { color: var(--p-amarillo); }
 
+/* Ofertas (HU-39) en oscuro */
+.tp-oscuro .precio-antes { color: var(--p-luna); }
+.tp-oscuro .etq-nuevo { background: var(--p-azul); }
+
 /* ================= Portada ================= */
 .tp-oscuro .hc { background: var(--p-pantalla); border: 1px solid var(--p-red); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
 .tp-oscuro .hc-nav { background: rgba(5, 21, 55, .85); color: #fff; border: 1px solid var(--p-red); }

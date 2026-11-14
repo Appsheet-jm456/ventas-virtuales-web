@@ -286,6 +286,25 @@
   .tp .hc-con-lateral { display: block; }
   .tp .cl { display: none; }
 }
+
+/* ================= Ofertas y descuentos (HU-39) ================= */
+/* Etiquetas en negrita de 13 px o más: blanco sobre rojo (4,35) y sobre azul (5,4). */
+.tp .etq-desc, .tp .etq-nuevo { display: inline-block; font-family: var(--tit); font-weight: 800; color: #fff; border-radius: 8px; letter-spacing: .02em; }
+.tp .etq-desc { background: var(--p-rojo); }
+.tp .etq-nuevo { background: var(--p-azul); }
+.tp .etq-card { position: absolute; top: 12px; left: 12px; z-index: 2; padding: 5px 10px; font-size: 14px; box-shadow: 0 2px 8px rgba(7, 31, 85, .2); }
+.tp .precio-antes { color: var(--muted); font-size: 13.5px; font-weight: 600; text-decoration-thickness: 1.5px; }
+.tp .card-antes { display: block; margin-top: 8px; }
+.tp .card-antes + .card-bottom { margin-top: 2px; }
+.tp .pd-oferta { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.tp .pd-oferta .precio-antes { font-size: 18px; }
+.tp .pd-oferta .etq-desc { padding: 4px 12px; font-size: 16px; }
+.tp .pd-oferta + .pd-price { margin-top: 2px; }
+.tp .card-con-wa { display: flex; flex-direction: column; }
+.tp .card-con-wa .card-enlace { display: flex; flex-direction: column; flex: 1; color: inherit; text-decoration: none; }
+.tp .card-con-wa .card-wa { width: auto; margin: 0 14px 14px; padding: 11px 12px; font-size: 14px; border-radius: 10px; }
+.tp .ofertas-rayo { color: var(--p-amarillo); -webkit-text-stroke: .5px var(--p-noche); }
+.tp .ofertas-rail .card { height: 100%; }
 .tp .brand-logo { height: 48px; }
 @media (max-width: 640px) { .tp .hd-wa small { color: var(--p-noche); } }
 
