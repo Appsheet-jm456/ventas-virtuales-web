@@ -839,6 +839,74 @@ Como Superadmin quiero crear roles y definir qué puede hacer cada uno; y como q
 
 ---
 
+## HU-35 · Banner que lleva a un producto: elegirlo en una lista en vez de escribir la dirección
+
+Como dueño quiero que, al crear un banner en `/admin/banners`, pueda **elegir un producto** de una lista y que al tocar el banner el cliente llegue a la ficha de ese producto, sin tener que conocer ni escribir la dirección.
+
+**Hoy (14 nov):** el campo «Al tocarlo, abre» es texto libre (`/productos?categoria=portatil`). Para llevar a un equipo hay que escribir a mano `/producto/{código}` (la ficha ya existe en `app/(web)/producto/[codigo]/page.js`); es fácil equivocarse de código o de ruta, y el banner de «Portátil Asus ROG» terminó abriendo toda la categoría.
+
+### Panel y datos (backend)
+
+- Junto al campo «Al tocarlo, abre», un botón **«Elegir producto»** abre un buscador (por código, marca, modelo o texto) que lista los productos con su foto, código, nombre y precio.
+- Al elegir uno, el campo se llena solo con **`/producto/{código}`** y debajo se muestra el producto elegido (foto + nombre) con una **✕ para quitarlo**.
+- El campo sigue aceptando a mano una página (`/productos?…`), una URL `https://` o `wa:`; elegir producto es un atajo, no lo reemplaza.
+- Sin tablas ni migraciones: se guarda en `enlace` del banner como hoy. Lee `productos` con el permiso que ya tiene el módulo.
+- Si el producto elegido se **oculta o se borra** después, el panel avisa en la lista de banners («el producto ya no está publicado») y la web **no muestra** un enlace roto (el banner queda sin enlace).
+
+### Web pública (frontend)
+
+- Dado un banner con enlace de producto, al tocarlo se abre la ficha `/producto/{código}`; si el producto ya no está publicado, el banner se ve pero no abre nada.
+
+### Criterios de aceptación
+
+1. Elegir un producto llena `/producto/{código}` y al tocar el banner en la web abre esa ficha.
+2. Quitar el producto vacía el campo; escribir a mano sigue funcionando.
+3. Producto oculto o borrado: aviso en el panel y sin enlace roto en la web.
+4. Prueba Playwright del flujo completo (elegir → guardar → tocar en la web) y `npm run build` sin errores.
+
+**Estado:** documentada el 14 nov 2026; **no se construye todavía** (decisión del dueño: «la hacemos después»).
+
+---
+
+## HU-36 · Botón «Ver más fotos» con el enlace de Drive (fotos reales del equipo)
+
+Como cliente quiero ver las **fotos reales del equipo** que voy a comprar, y como dueño quiero poner el enlace de la carpeta de Drive con esas fotos en cada producto.
+
+**Dónde va:** en la ficha del producto (`/producto/{código}`), en la fila de miniaturas debajo de la foto principal, en el espacio libre a la derecha de la última miniatura (el que el dueño marcó en rojo el 14 nov).
+
+### Web pública (frontend)
+
+- Dado un producto con enlace de fotos reales, entonces en la fila de miniaturas aparece un botón con **icono de foto 📷** y el texto **«Ver más fotos»** (tamaño de miniatura o pastilla, mismo estilo de la ficha).
+- Al tocarlo, abre el enlace de Drive en una **pestaña nueva** (`target="_blank"` con `rel="noopener noreferrer"`).
+- Dado un producto **sin** enlace, el botón no aparece y la fila queda igual que hoy.
+- Celular: el botón baja a una segunda línea si no cabe, sin scroll horizontal. Modo claro y oscuro con contraste AA; con texto accesible («Ver más fotos reales del equipo, se abre en una pestaña nueva»).
+- Se registra el toque como evento de métricas (como los demás botones de la ficha).
+
+### Panel y datos (backend)
+
+- Columna nueva **`fotos_reales_url`** (texto, opcional) en la tabla `productos` — **migración nueva**, aplicada solo con OK del dueño; agregarla a la **lista blanca de columnas públicas** (RN-04, `lib/inventory.js`).
+- En el editor del producto (`/admin/productos/[id]` y «Nuevo producto»), campo **«Fotos reales del equipo (enlace de Drive)»** con ayuda: «Pega el enlace de la carpeta; debe estar compartida como “cualquier persona con el enlace”».
+- Validación al guardar: solo `https://` y dominios de Drive (`drive.google.com`, `drive.app.goo.gl`, `photos.app.goo.gl`); se rechaza cualquier otra cosa para no abrir enlaces ajenos desde la tienda. Máximo 300 caracteres.
+- La carga por CSV acepta la columna `fotos_reales_url` (HU de carga existente).
+
+### Preguntas para el dueño (antes de construir)
+
+1. Los **79 portátiles usados** ya traen su enlace de Drive en `Inventario_PU.xlsx` (`docs/carga-portatiles-usados/`): ¿los cargamos todos de una vez en la columna nueva?
+2. Las carpetas de Drive deben estar compartidas «con el enlace»; ¿quién las revisa?
+3. ¿El botón dice «Ver más fotos» o «Fotos reales del equipo»?
+
+### Criterios de aceptación
+
+1. Producto con enlace: botón visible con icono, abre Drive en pestaña nueva.
+2. Producto sin enlace: no hay botón.
+3. Enlace que no es de Drive: el panel lo rechaza con mensaje claro.
+4. La API pública entrega `fotos_reales_url` solo de productos publicados.
+5. Prueba Playwright (con y sin enlace, celular y escritorio) y `npm run build` sin errores.
+
+**Estado:** documentada el 14 nov 2026; **no se construye todavía**.
+
+---
+
 ## BUG-3 · La caché de las páginas públicas no funciona
 
 **Nivel:** Alto · **Encontrado:** 5 nov 2026, prueba de carga en producción (puerta 3 de la EDT 5.2) · **Estado:** Pendiente
