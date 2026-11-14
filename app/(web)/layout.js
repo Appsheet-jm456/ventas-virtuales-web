@@ -8,7 +8,6 @@ import { getPaginasSoporte } from "../../lib/paginas";
 import { getNosotrosPublico } from "../../lib/nosotros";
 import Brand from "../components/Brand";
 import Medidor from "../components/Medidor";
-import Constelacion from "../components/Constelacion";
 import Cinta from "../components/Cinta";
 import BarraSuperior from "../components/BarraSuperior";
 import BarraCategoriasActiva, { BarraCategorias } from "../components/BarraCategorias";
@@ -46,12 +45,12 @@ export default async function WebLayout({ children }) {
         {site.catalogo?.cinta_visible !== false && <Cinta texto={site.catalogo?.cinta_texto} />}
         <BarraSuperior site={site} hayNosotros={Boolean(nosotros)} />
         <header className="site-header">
-          {/* Zona del logo, buscador, WhatsApp y envíos: la pantalla con su constelación (HU-21). */}
+          {/* Zona del logo, buscador, WhatsApp y envíos: blanca en modo claro (guía v2.0, HU-37). */}
           <div className="hd-zona">
-          <Constelacion semilla={12} puntos={28} ancho={1600} alto={120} />
           <div className="wrap hd-top">
             <Link href="/" className="brand" aria-label={site.nombre}>
-              <Brand site={site} />
+              {/* Encabezado blanco: logo para fondo claro; en modo oscuro, el de fondo oscuro. */}
+              <Brand site={site.catalogo?.modo_oscuro ? site : { ...site, logo: site.logoClaro }} />
             </Link>
 
             {/* Buscador (HU-01): un formulario normal, funciona aun sin JavaScript. */}
@@ -92,7 +91,6 @@ export default async function WebLayout({ children }) {
         {children}
 
         <footer className="site-footer" id="contacto">
-          <Constelacion semilla={21} puntos={30} ancho={1400} alto={420} />
           <div className="wrap footer-grid">
             <div>
               <Brand variant="footer" site={site} />

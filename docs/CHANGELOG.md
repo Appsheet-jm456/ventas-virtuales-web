@@ -5,6 +5,15 @@
 
 ---
 
+## 14 nov 2026 · Paleta del cliente y guía visual v2.0 (HU-37)
+
+- La web pública usa la paleta que eligió el cliente: blanco, azules claros, azul corporativo `#0865D9`, azul oscuro `#071F55`, amarillo de ofertas `#FFDA00`, verde de WhatsApp `#128C26` y rojo de descuentos `#EF172D`.
+- Encabezado y menú en blanco con el logo para fondo claro; sin la constelación. El modo oscuro se adaptó a los tonos del azul oscuro.
+- El panel `/admin` no cambió. Para volver al diseño anterior existe la etiqueta git `v1.1-antes-rediseno`.
+- Construida y probada (build, capturas en escritorio y celular, modo claro y oscuro). Falta la aprobación del dueño.
+
+---
+
 ## 4 nov 2026 · Usuarios, roles y permisos del panel (HU-34)
 
 El panel ahora tiene usuarios con rol. El Superadmin crea roles y define qué puede cada uno; se agregan personas con un enlace de activación por WhatsApp, y cada quien ve solo sus módulos. Se cierra el hueco por el que cualquier cuenta del panel podía cambiar todo. La copia diaria ahora incluye las políticas y los usuarios (BUG-1). Aprobada por el dueño el 4 nov.

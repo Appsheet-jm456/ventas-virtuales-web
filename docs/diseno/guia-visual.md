@@ -1,5 +1,59 @@
 # Guía visual · Ventas Virtual Colombia
 
+> **Estado:** `v2.0` · 14 nov 2026 (HU-37). Paleta elegida por el cliente con su guía «estilo
+> Mercado Libre». Reemplaza la v1.1 («modo pantalla»), que queda abajo como historial.
+> Si hay que volver al diseño anterior: etiqueta git `v1.1-antes-rediseno`.
+
+---
+
+## v2.0 · Paleta del cliente
+
+| Nombre | Hex | Uso |
+|---|---|---|
+| Blanco principal | `#FFFFFF` | Fondo base, encabezado y menú |
+| Azul muy claro | `#EAF5FF` | Fondos suaves, franjas, recuadro de iconos |
+| Fondo secundario | `#D5E9FA` | Secciones, hover, elemento activo |
+| Azul corporativo | `#0865D9` | Botones de acción, enlaces, «Todas las categorías», borde al pasar el mouse |
+| Azul oscuro | `#071F55` | Títulos, precios, barra superior, cinta, pie de página; texto sobre amarillo |
+| Amarillo ofertas | `#FFDA00` | Botón principal («Más portátiles»), ofertas, precios en modo oscuro |
+| WhatsApp | `#128C26` | Solo botones de WhatsApp (texto blanco en negrita) |
+| Descuentos | `#EF172D` | Etiqueta de descuento y «Agotado» (texto blanco en negrita) |
+| Bordes suaves | `#E3EBF5` | Bordes de tarjetas, buscador y divisores |
+
+**Proporción:** blanco y azules claros de fondo; azul corporativo para la acción; azul oscuro
+para el texto fuerte; amarillo y rojo solo en ofertas.
+
+### Contraste (WCAG, mínimo 4,5 para texto; 3 para texto grande)
+
+| Combinación | Contraste | Regla |
+|---|---|---|
+| Azul oscuro sobre blanco | 15,7 | Títulos y precios |
+| Azul oscuro sobre amarillo | 11,4 | Texto de los botones amarillos |
+| Blanco sobre azul corporativo | 5,4 | Botones azules |
+| Azul corporativo sobre blanco / sobre azul muy claro | 5,4 / 4,9 | Enlaces |
+| Blanco sobre WhatsApp `#128C26` | 4,37 | ⚠️ Solo texto grande o en negrita de botón |
+| Blanco sobre descuento `#EF172D` | 4,35 | ⚠️ Solo texto grande o en negrita de etiqueta |
+| Amarillo como texto sobre blanco | 1,4 | **No** |
+
+### Modo oscuro (HU-22, adaptado)
+
+Base en los tonos del azul oscuro: fondo `#051537`, encabezado, franjas y pie `#071F55`,
+tarjetas `#0B2A6B`, bordes `#1E4597`. Amarillo para la acción y los precios (9,8 sobre las
+tarjetas); enlaces `#7AB6FF` (6,4); texto secundario `#B8CBEA` (8,2). Las fotos siguen en un
+recuadro claro (`#EAF5FF`).
+
+### Cambios respecto a la v1.1
+
+- El encabezado y el menú pasan a **blanco** con el logo para fondo claro (`logo-claro.png`); en modo oscuro siguen oscuros con el logo para fondo oscuro.
+- **Se quita la constelación** del encabezado, del pie y del panel «Portátiles corporativos».
+- Tipografía sin cambios: Montserrat en títulos, botones y menú; Inter en los textos.
+- Las variables viven en `app/(web)/tema-pantalla.css` (claro) y `app/(web)/tema-oscuro.css` (oscuro).
+
+---
+
+# Historial · v1.1 «modo pantalla» (22 oct 2026)
+
+
 > **Estado:** `v1.1` · 22 oct 2026. v1.0 aprobada por el dueño; v1.1 por su ajuste tras ver HU-21:
 > marco oscuro (encabezado y pie) y contenido en blanco.
 > Fuente: el logo (carpeta de Canva «Ventas Virtual Colombia Landig») y la fachada de la tienda.
