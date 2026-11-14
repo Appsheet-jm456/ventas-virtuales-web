@@ -22,6 +22,15 @@ const LINEA = {
   promo: { linea1: "Portátiles", linea2: "corporativos", linea3: "nuevos y usados", nota: "Con garantía" },
 };
 
+// Beneficios de la franja bajo el banner (HU-38). El punto físico usa el texto de ubicación del panel.
+const BENEFICIOS = (site) => [
+  { titulo: "Compra segura", texto: "Asesoría especializada", icono: <><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z" /><path d="m8.5 12 2.5 2.5 4.5-5" /></> },
+  { titulo: "Garantía", texto: "Seguridad y respaldo", icono: <><circle cx="12" cy="9" r="6" /><path d="m9 14.5-1.5 6.5L12 19l4.5 2-1.5-6.5" /><path d="m9.8 9 1.6 1.6 2.8-3" /></> },
+  { titulo: "Envíos nacionales", texto: "1 – 2 días hábiles", icono: <><path d="M2 6h11v9H2zM13 9h4l3 3v3h-7z" /><circle cx="6" cy="17" r="2" /><circle cx="16.5" cy="17" r="2" /></> },
+  { titulo: "Factura electrónica", texto: "IVA 19 %", icono: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 10h18M7 15h4" /></> },
+  { titulo: "Punto físico en Cali", texto: site.catalogo?.ubicacion_texto || site.ciudad || "Tienda física", icono: <><path d="M3 10 5 4h14l2 6" /><path d="M4 10v10h16V10" /><path d="M3 10c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3" /><path d="M10 20v-5h4v5" /></> },
+];
+
 export default async function Home() {
   let rows = [];
   let demo = false;
@@ -44,6 +53,18 @@ export default async function Home() {
       <div className="wrap hc-wrap">
         <HeroCarousel banners={banners} whatsapp={site.whatsapp} />
       </div>
+
+      {/* Franja de beneficios bajo el banner, como la imagen del cliente (HU-38). */}
+      <section className="trust" aria-label="Por qué comprar con nosotros">
+        <div className="wrap trust-in trust-5">
+          {BENEFICIOS(site).map((b) => (
+            <div className="trust-item" key={b.titulo}>
+              <span className="trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{b.icono}</svg></span>
+              <div><b>{b.titulo}</b><small>{b.texto}</small></div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {demo && (
         <div className="wrap home-demo">
@@ -83,15 +104,6 @@ export default async function Home() {
           </div>
         </section>
       )}
-
-      <section className="trust" aria-label="Por qué comprar con nosotros">
-        <div className="wrap trust-in">
-          <div className="trust-item"><span className="trust-ico" aria-hidden="true">🛡️</span><div><b>Garantía</b><small>En todos nuestros equipos</small></div></div>
-          <div className="trust-item"><span className="trust-ico" aria-hidden="true">🚚</span><div><b>Envíos nacionales</b><small>A todo el país</small></div></div>
-          <div className="trust-item"><span className="trust-ico" aria-hidden="true">📍</span><div><b>Tienda física</b><small>{site.ciudad}</small></div></div>
-          <div className="trust-item"><span className="trust-ico" aria-hidden="true">💬</span><div><b>Asesoría directa</b><small>Por WhatsApp</small></div></div>
-        </div>
-      </section>
 
       <section className="cta-band">
         <div className="wrap cta-in">

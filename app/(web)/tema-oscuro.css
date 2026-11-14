@@ -82,9 +82,10 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #051537; }
 @media (max-width: 640px) { .tp-oscuro .hd-wa small { color: #fff; } }
 
 /* Barra de categorías (HU-31) en oscuro */
-.tp-oscuro .bc-pildora { background: var(--p-amarillo); color: var(--p-noche); }
-.tp-oscuro .bc-ham { background: var(--p-noche); color: #fff; }
-.tp-oscuro .bc-pildora:hover, .tp-oscuro .bc-todas.abierto .bc-pildora { background: var(--p-amarillo-hover); }
+/* «Todas las categorías» en azul corporativo: el amarillo queda para «Ofertas del mes» (HU-38). */
+.tp-oscuro .bc-pildora { background: var(--p-azul); color: #fff; }
+.tp-oscuro .bc-ham { background: rgba(255, 255, 255, .18); color: #fff; }
+.tp-oscuro .bc-pildora:hover, .tp-oscuro .bc-todas.abierto .bc-pildora { background: #0A56B8; }
 .tp-oscuro .hd-nav .bc-fila a, .tp-oscuro .hd-nav .bc-todos, .tp-oscuro .bc-mas > button, .tp-oscuro .hd-nav .bc-mas-lista a { color: #DCE4F5; }
 .tp-oscuro .hd-nav .bc-fila a:hover, .tp-oscuro .hd-nav .bc-todos:hover, .tp-oscuro .bc-mas > button:hover, .tp-oscuro .bc-mas.abierto > button { color: var(--p-amarillo); background: none; }
 .tp-oscuro .hd-nav .bc a.activa, .tp-oscuro .bc-mas > button.activa { color: var(--p-amarillo); box-shadow: inset 0 -3px 0 var(--p-amarillo); }
@@ -97,6 +98,18 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #051537; }
 .tp-oscuro .hd-nav .bc-panel-pie a { color: var(--p-cian-claro); }
 .tp-oscuro .hd-nav .bc-panel-pie a:hover { color: var(--p-amarillo); background: rgba(255, 255, 255, .05); }
 .tp-oscuro .bc-cerrar, .tp-oscuro .bc-panel-cab { color: #fff; }
+
+/* Encabezado y menú de HU-38 en oscuro */
+.tp-oscuro .hd-pre { color: var(--p-luna); }
+.tp-oscuro .hd-wa b, .tp-oscuro .hd-visita b { color: #fff; }
+.tp-oscuro .hd-visita { border-color: var(--p-red); }
+.tp-oscuro .hd-visita .hd-ico { background: none; border: 0; color: var(--p-cian-claro); }
+.tp-oscuro .hd-nav .bc-fila a.bc-ofertas { background: var(--p-amarillo); color: var(--p-noche); }
+.tp-oscuro .bc-envios { background: var(--p-superficie); color: #fff; }
+.tp-oscuro .bc-envios-ico { color: var(--p-amarillo); }
+.tp-oscuro .bc-envios small { color: var(--p-luna); }
+.tp-oscuro .trust-5 .trust-ico { background: var(--p-pantalla); color: var(--p-amarillo); }
+.tp-oscuro .trust-5 .trust-item { border-color: var(--p-red); }
 
 /* ================= Portada ================= */
 .tp-oscuro .hc { background: var(--p-pantalla); border: 1px solid var(--p-red); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }

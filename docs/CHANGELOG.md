@@ -5,12 +5,21 @@
 
 ---
 
+## 14 nov 2026 · Encabezado y menú como la imagen del cliente (HU-38)
+
+- Encabezado: buscador «productos, marcas, modelos o referencias», «Solicita tu cotización por WhatsApp» con el número y «Visítanos en…» con el mapa.
+- Menú: «Todas las categorías», «% Ofertas del mes», Nuevos, Usados, Por marca, Mayoristas y Soporte (WhatsApp), y «Envíos a todo el país · 1–2 días hábiles».
+- Franja de beneficios bajo el banner: Compra segura, Garantía, Envíos nacionales, Factura electrónica (IVA 19 %) y Punto físico en Cali.
+- Construida y probada; falta la aprobación del dueño. «Ofertas del mes» filtra cuando llegue HU-39.
+
+---
+
 ## 14 nov 2026 · Paleta del cliente y guía visual v2.0 (HU-37)
 
 - La web pública usa la paleta que eligió el cliente: blanco, azules claros, azul corporativo `#0865D9`, azul oscuro `#071F55`, amarillo de ofertas `#FFDA00`, verde de WhatsApp `#128C26` y rojo de descuentos `#EF172D`.
 - Encabezado y menú en blanco con el logo para fondo claro; sin la constelación. El modo oscuro se adaptó a los tonos del azul oscuro.
 - El panel `/admin` no cambió. Para volver al diseño anterior existe la etiqueta git `v1.1-antes-rediseno`.
-- Construida y probada (build, capturas en escritorio y celular, modo claro y oscuro). Falta la aprobación del dueño.
+- Construida, probada y aprobada por el dueño el 14 nov.
 
 ---
 

@@ -206,6 +206,53 @@
   .tp:has(.bc-todas.abierto) .wa-float { display: none; }
 }
 
+
+/* ================= Encabezado y menú como la imagen del cliente (HU-38) ================= */
+.tp .hd-pre { display: block; font-size: 12px; line-height: 1.25; color: var(--muted); font-weight: 500; }
+.tp .hd-wa b { font-size: 18px; font-weight: 800; color: var(--p-noche); letter-spacing: .01em; }
+.tp .hd-ico.wa { width: 44px; height: 44px; border-radius: 50%; }
+.tp .hd-visita { padding-left: 14px; border-left: 1px solid var(--p-borde); }
+.tp .hd-visita b { font-size: 13.5px; max-width: 190px; white-space: normal; line-height: 1.25; }
+.tp .hd-visita .hd-ico { background: none; border: 0; color: var(--p-azul); width: 30px; }
+.tp .bc-pildora { padding-right: 14px; }
+.tp .bc-pildora-flecha { display: inline-grid; margin-left: -2px; }
+.tp .bc-fila { overflow: visible; gap: 2px; }
+.tp .hd-nav .bc-fila a, .tp .bc-mas > button { text-transform: none; letter-spacing: 0; font-size: 14.5px; padding: 14px 12px; }
+.tp .hd-nav .bc-fila a.bc-ofertas {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 8px 0 2px; padding: 6px 16px 6px 6px; border-radius: 999px;
+  background: var(--p-amarillo); color: var(--p-noche); font-weight: 800; box-shadow: none;
+}
+.tp .hd-nav .bc-fila a.bc-ofertas:hover, .tp .hd-nav .bc-fila a.bc-ofertas.activa { background: var(--p-amarillo-hover); color: var(--p-noche); box-shadow: inset 0 0 0 2px var(--p-noche); }
+.tp .bc-ofertas-ico { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--p-rojo); color: #fff; font-size: 14px; font-weight: 800; }
+.tp .bc-fila .bc-mas-lista { left: 0; right: auto; }
+.tp .hd-nav .bc-mas-lista a { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-transform: none; letter-spacing: 0; font-size: 14px; }
+.tp .bc-envios { gap: 10px; padding: 7px 14px; margin: 6px 0; border-radius: 12px; background: var(--p-celeste); color: var(--p-noche); line-height: 1.2; white-space: nowrap; }
+.tp .bc-envios-ico { color: var(--p-azul); display: grid; }
+.tp .bc-envios b { display: block; font-family: var(--tit); font-size: 13px; }
+.tp .bc-envios small { color: var(--muted); font-size: 12px; }
+.tp .trust { padding-top: 22px; }
+.tp .trust-in.trust-5 { grid-template-columns: repeat(5, 1fr); }
+.tp .trust-5 .trust-ico { background: var(--p-celeste); color: var(--p-azul); }
+@media (max-width: 1180px) { .tp .bc-envios { display: none; } }
+@media (max-width: 1080px) {
+  .tp .trust-in.trust-5 { grid-template-columns: repeat(3, 1fr); }
+  .tp .trust-5 .trust-item { border-bottom: 1px solid var(--border); }
+  .tp .trust-5 .trust-item:nth-child(3n) { border-right: none; }
+}
+@media (max-width: 860px) {
+  .tp .hd-nav .bc-fila a, .tp .bc-mas > button { font-size: 13.5px; padding: 12px 10px; }
+  .tp .bc-fila { overflow-x: auto; }
+  .tp .bc-pildora-flecha { display: none; }
+}
+@media (max-width: 640px) {
+  .tp .hd-wa .hd-pre { display: none; }
+  .tp .hd-wa b { display: block; font-size: 14px; }
+  .tp .hd-ico.wa { width: 38px; height: 38px; }
+  .tp .trust-in.trust-5 { grid-template-columns: 1fr 1fr; }
+  .tp .trust-5 .trust-item:nth-child(3n) { border-right: 1px solid var(--border); }
+  .tp .trust-5 .trust-item:nth-child(2n) { border-right: none; }
+  .tp .trust-5 .trust-item:last-child { grid-column: 1 / -1; border-bottom: 0; }
+}
 .tp .brand-logo { height: 48px; }
 @media (max-width: 640px) { .tp .hd-wa small { color: var(--p-noche); } }
 

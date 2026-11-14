@@ -971,6 +971,16 @@ Como cliente quiero encontrar rápido el buscador, las categorías, las ofertas 
 1. ¿A dónde llevan «Mayoristas» y «Soporte»? (¿WhatsApp con mensaje listo?, ¿página nueva?)
 2. ¿Qué marcas van en «Por marca ▾»? (sugerido: las marcas con productos publicados)
 
+### Decisiones al construir (14 nov 2026)
+
+- **Mayoristas** y **Soporte** abren WhatsApp con el mensaje listo («…precios para mayoristas», «…soporte técnico con un equipo»). Es la opción por defecto mientras el dueño no pida una página propia.
+- **Por marca ▾** lista hasta 12 marcas con productos publicados, de la más a la menos frecuente, con su conteo (sin «Genérico»). En celular no aparece (la marca se filtra en el panel de filtros) porque el menú se desliza y el desplegable quedaría cortado.
+- **Nuevos / Usados** usan el filtro nuevo `?estado=nuevo|usado` del catálogo: el estado del producto («Nuevo», «Grado A»…) o, si está vacío, la categoría («Portátil nuevo», «Portátil usado»). «Semi nuevo» cuenta como usado.
+- **Ofertas del mes** apunta a `/productos?ofertas=si`; el filtro llega con HU-39 (mientras tanto muestra todo el catálogo).
+- **«Visítanos en…»** usa el texto de ubicación de Configuración › Barra superior y abre el mapa. Para que diga «CC La Pasarela, Local 2-107, Cali» como en la imagen, el dueño cambia ese texto en el panel (sin código).
+- Las categorías ya no van en la fila del menú: están en «Todas las categorías» y en «Ver categorías con fotos».
+- Dentro del menú, «Todas las categorías» va en azul corporativo y «Ofertas del mes» en amarillo con el «%» en rojo; en modo oscuro igual.
+
 ### Criterios de aceptación
 
 1. El encabezado y el menú se ven como la imagen en escritorio y se pliegan bien en celular.
