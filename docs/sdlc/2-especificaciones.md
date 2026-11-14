@@ -907,6 +907,106 @@ Como cliente quiero ver las **fotos reales del equipo** que voy a comprar, y com
 
 ---
 
+## Rediseño «estilo Mercado Libre» con la paleta del cliente (HU-37, HU-38, HU-39)
+
+**Origen (14 nov 2026):** el cliente mandó la imagen «Guía de Implementación · Página Web, Ventas Virtual Colombia (Estilo Mercado Libre)» con una paleta de nueve colores. **Decisiones del dueño:** cambian la **paleta** de toda la web pública, el **encabezado y el menú** como en la imagen y las **ofertas y descuentos**. Se **mantiene el modo oscuro** (HU-22), adaptado a la paleta nueva. **El diseño del panel `/admin` no cambia**; lo único que se le agrega es el campo de precio de oferta de HU-39. Orden: HU-37 → HU-38 → HU-39. Cada bloque se sube con push a la rama de trabajo y pasa a `main` (Hostinger) solo con el OK del dueño.
+
+## HU-37 · Paleta del cliente y guía visual v2.0
+
+Como dueño quiero que la web use la paleta que eligió el cliente, para que se vea moderna, clara y confiable como una tienda grande.
+
+### Paleta (medida con la fórmula WCAG)
+
+| Nombre | Hex | Uso | Contraste |
+|---|---|---|---|
+| Blanco principal | `#FFFFFF` | Fondo base | — |
+| Azul muy claro | `#EAF5FF` | Fondos suaves y franjas | azul oscuro sobre él: 14,2 |
+| Fondo secundario | `#D5E9FA` | Secciones, tarjetas, hover | azul oscuro sobre él: 12,6 |
+| Azul corporativo | `#0865D9` | Botones, enlaces, botón «Todas las categorías» | blanco sobre él: 5,4 ✅ |
+| Azul oscuro | `#071F55` | Títulos, precios, pie de página | sobre blanco: 15,7 ✅ |
+| Amarillo ofertas | `#FFDA00` | «Ofertas del mes», botón principal | azul oscuro sobre él: 11,4 ✅ |
+| WhatsApp | `#128C26` | Solo botones de WhatsApp | blanco sobre él: 4,37 ⚠️ |
+| Descuentos | `#EF172D` | Etiqueta −X %, agotado | blanco sobre él: 4,35 ⚠️ |
+| Bordes suaves | `#E3EBF5` | Bordes y divisores | — |
+
+⚠️ El blanco sobre el verde y sobre el rojo queda un poco por debajo de 4,5. Solo cumple como **texto grande** (negrita de 19 px o más, o 24 px normal). Botones y etiquetas van en negrita grande. Si un texto chico no alcanza, se usa un tono un poco más oscuro, **solo con el OK del dueño**.
+
+### Web pública (frontend)
+
+- `docs/diseno/guia-visual.md` pasa a **v2.0** con la paleta, las proporciones (blanco y azules claros de fondo, azul corporativo para la acción, amarillo y rojo solo en ofertas), la tabla de contraste y la tipografía. Montserrat Bold, SemiBold, Medium y Regular en títulos, botones y menús; Inter sigue en los textos salvo que el dueño pida lo contrario. La v1.1 queda como historial.
+- **Modo claro** (`app/(web)/tema-pantalla.css`): fondo blanco, franjas `#EAF5FF`, tarjetas con borde `#E3EBF5`, títulos y precios en `#071F55`, enlaces y botones en `#0865D9`, WhatsApp en `#128C26`.
+- **Modo oscuro** (`app/(web)/tema-oscuro.css`): base en el azul oscuro `#071F55` y sus tonos; amarillo para la acción; azul corporativo aclarado para los enlaces; contraste verificado (≥ 4,5).
+- Los colores fijos repetidos en el CSS público (`#F5C518`, `#25D366`, `#0B1F4D`…) pasan a variables, para que un cambio de paleta se haga en un solo lugar.
+- La constelación sale del encabezado. Por defecto también sale del pie y de los banners (la imagen no la usa), salvo que el dueño decida dejarla.
+
+### Panel y datos (backend)
+
+- Sin cambios en el panel ni en la base. El interruptor «Modo oscuro» de Configuración › Apariencia sigue igual.
+
+### Criterios de aceptación
+
+1. Las páginas Inicio, Productos, Ficha, Categorías, Políticas y Nosotros usan solo colores de la paleta, en modo claro y en modo oscuro.
+2. Todo texto cumple contraste ≥ 4,5, o ≥ 3 si es texto grande (script de contraste).
+3. El panel `/admin` se ve igual que antes.
+4. `npm run build` sin errores; capturas Playwright a 1440 px y a 390 px en los dos modos.
+
+## HU-38 · Encabezado y menú como la imagen del cliente
+
+Como cliente quiero encontrar rápido el buscador, las categorías, las ofertas y el WhatsApp desde la parte de arriba de cualquier página.
+
+### Web pública (frontend)
+
+- **Encabezado blanco:** logo · buscador ancho («Buscar productos, marcas, modelos o referencias…») con botón azul y lupa · bloque «Solicita tu cotización por WhatsApp» con el número · bloque «Visítanos en {dirección}» con icono de ubicación. El número y la dirección salen de `getSite()`.
+- **Menú:** botón azul «☰ Todas las categorías ▾» que abre el desplegable con las categorías del panel y sus iconos (reusa los datos de `BarraCategorias`) · píldora amarilla «% Ofertas del mes» (lleva a `/productos?ofertas=si`, HU-39) · Nuevos · Usados · Por marca ▾ · Mayoristas · Soporte · a la derecha, «Envíos a todo el país · 1–2 días hábiles».
+- **Franja de beneficios** debajo del banner del Inicio: Compra segura · Garantía · Envíos nacionales · Factura electrónica (IVA 19 %) · Punto físico en Cali. Reemplaza la franja «Por qué comprar con nosotros».
+- **Celular:** el menú se pliega en el botón ☰, el buscador baja a su propia línea y no hay scroll horizontal. Se puede usar con teclado; el desplegable cierra con Esc.
+- Se mantienen la cinta en movimiento (HU-24) y la barra superior (HU-32).
+
+### Panel y datos (backend)
+
+- Sin tablas nuevas. Los textos del menú y de la franja salen de constantes en el código y de `configuracion` (WhatsApp, dirección). Si el dueño quiere editarlos desde el panel, será otra HU.
+
+### Preguntas para el dueño
+
+1. ¿A dónde llevan «Mayoristas» y «Soporte»? (¿WhatsApp con mensaje listo?, ¿página nueva?)
+2. ¿Qué marcas van en «Por marca ▾»? (sugerido: las marcas con productos publicados)
+
+### Criterios de aceptación
+
+1. El encabezado y el menú se ven como la imagen en escritorio y se pliegan bien en celular.
+2. «Todas las categorías» abre y cierra con clic, toque y teclado.
+3. Los enlaces del menú llevan a filtros que existen (Nuevos, Usados, marca, ofertas).
+4. Prueba Playwright de navegación y `npm run build` sin errores.
+
+## HU-39 · Ofertas y descuentos
+
+Como cliente quiero ver qué equipos están en oferta y cuánto me ahorro; como dueño quiero marcar un producto en oferta poniendo su precio anterior.
+
+### Web pública (frontend)
+
+- **Etiqueta roja «−X %»** en la tarjeta y en la ficha cuando `precio_antes > precio` (X redondeado). El **precio anterior se muestra tachado** junto al precio actual.
+- **Etiqueta azul «NUEVO»** cuando el estado del producto es Nuevo. Si un producto tiene descuento y además es nuevo, se muestra solo la etiqueta de descuento.
+- En el Inicio, carrusel **«⚡ Ofertas destacadas»** con «Ver más ofertas ›». Las tarjetas siguen la imagen: foto, nombre, procesador, RAM, disco, pantalla y botón verde «Consultar por WhatsApp». Si no hay ofertas, la sección no aparece.
+- **`/productos?ofertas=si`** muestra solo los productos en oferta: es el destino de «Ofertas del mes» (HU-38) y de «Ver más ofertas».
+
+### Panel y datos (backend)
+
+- **Migración nueva:** columna `precio_antes numeric(12,0)` (opcional, ≥ 0) en `productos`, aplicada **solo con OK del dueño**. Se agrega a la **lista blanca pública** (RN-04, `lib/inventory.js`).
+- **Único cambio en `/admin`:** campo «Precio antes (opcional, para oferta)» en el editor de producto. Al guardar se valida que, si viene, sea mayor que el precio. La carga CSV acepta la columna `precio_antes`. El diseño del panel no cambia.
+- El modo demo trae uno o dos productos de ejemplo con oferta.
+
+### Criterios de aceptación
+
+1. Un producto con `precio_antes` mayor que el precio muestra −X % y el precio tachado; sin `precio_antes`, no muestra nada de eso.
+2. `?ofertas=si` filtra bien y el carrusel del Inicio solo aparece si hay ofertas.
+3. El panel rechaza un `precio_antes` menor o igual al precio.
+4. La API pública solo entrega columnas de la lista blanca.
+5. Prueba Playwright (con y sin oferta) y `npm run build` sin errores; las pruebas 44/44 y 143/143 siguen pasando.
+
+**Estado de HU-37, HU-38 y HU-39:** documentadas el 14 nov 2026; se construyen en ese orden.
+
+---
+
 ## BUG-3 · La caché de las páginas públicas no funciona
 
 **Nivel:** Alto · **Encontrado:** 5 nov 2026, prueba de carga en producción (puerta 3 de la EDT 5.2) · **Estado:** Pendiente
