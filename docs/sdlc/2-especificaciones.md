@@ -903,7 +903,57 @@ Como cliente quiero ver las **fotos reales del equipo** que voy a comprar, y com
 4. La API pública entrega `fotos_reales_url` solo de productos publicados.
 5. Prueba Playwright (con y sin enlace, celular y escritorio) y `npm run build` sin errores.
 
-**Estado:** documentada el 14 nov 2026; **no se construye todavía**.
+### Construcción (14 nov 2026)
+
+- **Respuestas del dueño:** el botón dice **«📷 Más fotos»** (emoji + texto + enlace a Drive); se pone, **cambia o quita** desde el editor del producto; **sí** se cargan los enlaces del Excel.
+- La columna se llamó `fotos_reales_url` y se guarda en el campo «Más fotos». La migración `20261114180000_fotos_reales.sql` se **aplicó con OK del dueño**.
+- **Carga inicial:** 54 de los 55 equipos con carpeta en `Inventario_PU.xlsx` (el código BOD-001 ya no existe en la base). 53 de ellos están publicados.
+- **Panel:** en «Fotos y video», campo para pegar el enlace, con los botones **Abrir ↗** (para probarlo) y **Quitar**, y validación en vivo. Al guardar se valida otra vez en el servidor (`lib/mas-fotos.js`).
+- **Web:** el botón va junto a las miniaturas, con su misma altura. Si el producto no tiene fotos, aparece dentro del recuadro «Pronto tendremos fotos» («Mientras tanto, mira las fotos reales»). El enlace se valida otra vez al mostrarlo.
+- **CSV:** una celda «Más fotos» vacía no toca el enlace; para quitarlo se usa el panel.
+- Por ahora no se registra el toque como evento de métricas. Queda como mejora menor.
+- **Ajuste del dueño (14 nov):** el botón se achicó a un **cuadro del tamaño de una miniatura** (64 px), con el 📷 arriba, «Fotos» abajo y ↗ en la esquina. El texto accesible sigue siendo «Más fotos: fotos reales del equipo en Google Drive».
+
+**Estado:** construida el 14 nov 2026; falta la aprobación del dueño.
+
+---
+
+## HU-40 · Videos de TikTok en la ficha del producto
+
+Como dueño quiero pegar el enlace de un video de TikTok en un producto y que el cliente lo vea en la ficha, **sin descargarlo ni subirlo**: el video se sigue reproduciendo desde los servidores de TikTok.
+
+**Origen (14 nov 2026):** pregunta del dueño. Hoy el campo «Video» solo entiende Google Drive (y YouTube).
+
+### Web pública (frontend)
+
+- El video de TikTok sale como una **miniatura más** junto a las fotos, con su portada, el ▶ y una marca «TikTok». Al tocarla se abre el visor con el **reproductor oficial de TikTok** (`tiktok.com/player/v1/{id}`), en **formato vertical 9:16**.
+- **Privacidad (decisión 0010, sin cookies de rastreo):** el reproductor de TikTok **solo se carga cuando el cliente toca ▶**. Antes de eso solo se muestra la portada, que se obtiene en el servidor con el oEmbed público de TikTok.
+- Si el producto no tiene fotos y solo tiene el video de TikTok, se muestra la portada con ▶ (no el reproductor directo).
+- Si TikTok no responde o el video ya no es público, la miniatura sale con fondo de marca y ▶; al tocarla, TikTok muestra su propio aviso.
+
+### Panel y datos (backend)
+
+- **Sin migración:** se usa el campo «Video» existente (uno o varios enlaces, separados por coma o salto de línea).
+- Se aceptan `https://www.tiktok.com/@usuario/video/{id}` y los enlaces cortos de la app (`vt.tiktok.com/…`, `vm.tiktok.com/…`), que el servidor convierte al enlace completo.
+- En el editor, la ayuda del campo «Video» dice qué enlaces se aceptan (Google Drive, YouTube o TikTok público).
+
+### Criterios de aceptación
+
+1. Un enlace completo o corto de TikTok muestra la miniatura con ▶ y, al tocarla, el reproductor vertical.
+2. Antes de tocar ▶ no se carga nada de `tiktok.com` en el navegador (solo la imagen de portada).
+3. Drive y YouTube siguen funcionando igual.
+4. El modo demo trae un producto de ejemplo con video de TikTok.
+5. `npm run build` sin errores y prueba de humo 50/50.
+
+### Construcción (14–15 nov 2026)
+
+- `lib/tiktok.js` reconoce el enlace completo, lo convierte en el reproductor `tiktok.com/player/v1/{id}` (vertical) y, en el servidor, expande los enlaces cortos `vt.`/`vm.tiktok.com`. `parseVideos` (`lib/images.js`) agrega TikTok sin tocar Drive ni YouTube.
+- **Portada:** el oEmbed público de TikTok **ya no entrega la imagen de portada** (14 nov). La miniatura usa entonces un diseño con la estética de TikTok (fondo negro con los acentos cian y rojo, ▶ y la marca «TikTok»). Si TikTok vuelve a entregar la portada, se usa sola.
+- **Privacidad verificada:** antes de tocar ▶ el navegador hace **0 peticiones** a tiktok.com; al tocar, se carga el reproductor oficial en el visor vertical.
+- Modo demo: el HP EliteBook 840 G5 (PU-003) trae como ejemplo el video de muestra de la documentación de TikTok.
+- No se pudo probar un enlace corto real (falta un video de la tienda); la expansión queda cubierta por el código y conviene confirmarla con el primer enlace del dueño.
+
+**Estado:** construida el 15 nov 2026; falta la aprobación del dueño.
 
 ---
 

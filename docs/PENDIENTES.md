@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 4 de noviembre de 2026 · **Camino 1 (landing)** · **HU-34 usuarios y roles** aprobada por el dueño y con push (prueba 143/143, migración aplicada). Para que el módulo Usuarios funcione en Vercel, agregar `SUPABASE_SECRET_KEY`. **BUG-1** cerrado: la línea `--si-falta` ya está en el crontab; aún no se ha visto recuperar sola una copia tras un apagado real, así que conviene mirar `diario.log` después del próximo. Los 5 borradores de políticas siguen **ocultos**. Dominios en Hostinger: confirmar que estén pagados (aparecían «no está registrado»).
+> **Última sesión:** 14 de noviembre de 2026 · **Rediseño estilo Mercado Libre publicado**: HU-37 (paleta del cliente y guía v2.0), HU-38 (encabezado, menú, columna de categorías, página a todo el ancho) y HU-39 (ofertas: «Precio antes», −X %, NUEVO, Ofertas destacadas) aprobadas por el dueño y unidas a `main` con el PR #3. Migración `precio_antes` aplicada. Para volver atrás: etiqueta `v1.1-antes-rediseno`. Prueba de humo en `scripts/prueba-humo.cjs` (50/50). Siguen documentadas sin construir HU-35 (banner → producto) y HU-36 (fotos reales en Drive). Pendiente: el texto «Visítanos en…» se cambia en Configuración › Barra superior; la ficha en celular queda pegada al borde (viene de antes).
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---

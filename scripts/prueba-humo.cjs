@@ -13,7 +13,7 @@ const B = process.env.B || 'http://localhost:3100';
   // API pública: solo columnas permitidas (RN-04)
   const api = await (await fetch(B + '/api/products')).json();
   const rows = api.rows || api;
-  const PERM = ["Código","Categoría","Descripción","Marca","Modelo","Procesador","Generación","RAM","Almacenamiento","Estado","Precio","Stock","Foto","Video","Ficha","Resumen","Título descripción","Descripción larga","Táctil","Precio antes"];
+  const PERM = ["Código","Categoría","Descripción","Marca","Modelo","Procesador","Generación","RAM","Almacenamiento","Estado","Precio","Stock","Foto","Video","Ficha","Resumen","Título descripción","Descripción larga","Táctil","Precio antes","Más fotos"];
   const extra = [...new Set(rows.flatMap(r => Object.keys(r)))].filter(k => !PERM.includes(k));
   ok('API pública sin columnas privadas', extra.length === 0, extra.join(','));
   ok('API pública con productos', rows.length > 0, rows.length + ' filas');

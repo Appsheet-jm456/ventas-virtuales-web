@@ -12,6 +12,8 @@ import VistosRecientemente from "../../../components/VistosRecientemente";
 import { textoPlano } from "../../../../lib/texto-seguro";
 import TextoSeguro, { LineaSegura } from "../../../components/TextoSeguro";
 import { descuento } from "../../../../lib/productos";
+import { validarMasFotos } from "../../../../lib/mas-fotos";
+import { resolverVideos, conPortadasTikTok } from "../../../../lib/tiktok";
 
 export const revalidate = 60;
 
@@ -107,6 +109,8 @@ export default async function ProductPage({ params }) {
   const sold = stockNum(r) <= 0;
   const precio = fmtPrecio(r);
   const oferta = descuento(r);
+  // Videos (HU-40): enlaces cortos de TikTok a completos y portada, todo en el servidor.
+  const videos = await conPortadasTikTok(parseVideos({ Video: await resolverVideos(f(r, "Video")) }));
   const msg = mensajeProducto(site.mensajeProducto, nombre, f(r, "Código"));
   const ficha = fichaDe(r.Ficha);
   const sugeridos = sugeridosDe(rows, r);
@@ -140,7 +144,7 @@ export default async function ProductPage({ params }) {
         {/* Izquierda: fotos y, debajo, el resumen con los datos clave (ajuste del 26 oct: llena el
             espacio bajo la galería y aligera la columna derecha). En celular va después del botón. */}
         <div className="pd-izq">
-          <Gallery images={parseImages(r)} videos={parseVideos(r)} alt={nombre} sold={sold} />
+          <Gallery images={parseImages(r)} videos={videos} alt={nombre} sold={sold} masFotos={validarMasFotos(f(r, "Más fotos")).url} />
           {(resumen || datos.length > 0) && (
             <div className="pd-resumen-caja">
               {resumen && <p className="pd-resumen"><LineaSegura texto={resumen} /></p>}
