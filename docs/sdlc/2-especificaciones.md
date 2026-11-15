@@ -918,6 +918,45 @@ Como cliente quiero ver las **fotos reales del equipo** que voy a comprar, y com
 
 ---
 
+## HU-40 · Videos de TikTok en la ficha del producto
+
+Como dueño quiero pegar el enlace de un video de TikTok en un producto y que el cliente lo vea en la ficha, **sin descargarlo ni subirlo**: el video se sigue reproduciendo desde los servidores de TikTok.
+
+**Origen (14 nov 2026):** pregunta del dueño. Hoy el campo «Video» solo entiende Google Drive (y YouTube).
+
+### Web pública (frontend)
+
+- El video de TikTok sale como una **miniatura más** junto a las fotos, con su portada, el ▶ y una marca «TikTok». Al tocarla se abre el visor con el **reproductor oficial de TikTok** (`tiktok.com/player/v1/{id}`), en **formato vertical 9:16**.
+- **Privacidad (decisión 0010, sin cookies de rastreo):** el reproductor de TikTok **solo se carga cuando el cliente toca ▶**. Antes de eso solo se muestra la portada, que se obtiene en el servidor con el oEmbed público de TikTok.
+- Si el producto no tiene fotos y solo tiene el video de TikTok, se muestra la portada con ▶ (no el reproductor directo).
+- Si TikTok no responde o el video ya no es público, la miniatura sale con fondo de marca y ▶; al tocarla, TikTok muestra su propio aviso.
+
+### Panel y datos (backend)
+
+- **Sin migración:** se usa el campo «Video» existente (uno o varios enlaces, separados por coma o salto de línea).
+- Se aceptan `https://www.tiktok.com/@usuario/video/{id}` y los enlaces cortos de la app (`vt.tiktok.com/…`, `vm.tiktok.com/…`), que el servidor convierte al enlace completo.
+- En el editor, la ayuda del campo «Video» dice qué enlaces se aceptan (Google Drive, YouTube o TikTok público).
+
+### Criterios de aceptación
+
+1. Un enlace completo o corto de TikTok muestra la miniatura con ▶ y, al tocarla, el reproductor vertical.
+2. Antes de tocar ▶ no se carga nada de `tiktok.com` en el navegador (solo la imagen de portada).
+3. Drive y YouTube siguen funcionando igual.
+4. El modo demo trae un producto de ejemplo con video de TikTok.
+5. `npm run build` sin errores y prueba de humo 50/50.
+
+### Construcción (14–15 nov 2026)
+
+- `lib/tiktok.js` reconoce el enlace completo, lo convierte en el reproductor `tiktok.com/player/v1/{id}` (vertical) y, en el servidor, expande los enlaces cortos `vt.`/`vm.tiktok.com`. `parseVideos` (`lib/images.js`) agrega TikTok sin tocar Drive ni YouTube.
+- **Portada:** el oEmbed público de TikTok **ya no entrega la imagen de portada** (14 nov). La miniatura usa entonces un diseño con la estética de TikTok (fondo negro con los acentos cian y rojo, ▶ y la marca «TikTok»). Si TikTok vuelve a entregar la portada, se usa sola.
+- **Privacidad verificada:** antes de tocar ▶ el navegador hace **0 peticiones** a tiktok.com; al tocar, se carga el reproductor oficial en el visor vertical.
+- Modo demo: el HP EliteBook 840 G5 (PU-003) trae como ejemplo el video de muestra de la documentación de TikTok.
+- No se pudo probar un enlace corto real (falta un video de la tienda); la expansión queda cubierta por el código y conviene confirmarla con el primer enlace del dueño.
+
+**Estado:** construida el 15 nov 2026; falta la aprobación del dueño.
+
+---
+
 ## Rediseño «estilo Mercado Libre» con la paleta del cliente (HU-37, HU-38, HU-39)
 
 **Origen (14 nov 2026):** el cliente mandó la imagen «Guía de Implementación · Página Web, Ventas Virtual Colombia (Estilo Mercado Libre)» con una paleta de nueve colores. **Decisiones del dueño:** cambian la **paleta** de toda la web pública, el **encabezado y el menú** como en la imagen y las **ofertas y descuentos**. Se **mantiene el modo oscuro** (HU-22), adaptado a la paleta nueva. **El diseño del panel `/admin` no cambia**; lo único que se le agrega es el campo de precio de oferta de HU-39. Orden: HU-37 → HU-38 → HU-39. Cada bloque se sube con push a la rama de trabajo y pasa a `main` (Hostinger) solo con el OK del dueño.

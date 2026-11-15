@@ -10,10 +10,10 @@ import { useState, useEffect, useCallback } from "react";
 function VideoPlayer({ video }) {
   if (video.kind === "iframe") {
     return (
-      <div className="pv-frame">
+      <div className={`pv-frame${video.vertical ? " pv-vertical" : ""}`}>
         <iframe
           src={video.src}
-          title="Video del producto"
+          title={video.red === "tiktok" ? "Video de TikTok del producto" : "Video del producto"}
           loading="lazy"
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
           allowFullScreen
@@ -99,7 +99,15 @@ export default function Gallery({ images = [], videos = [], alt = "", sold = fal
         // Solo hay video: muéstralo directo.
         <div className="pp-video-only">
           {sold && <span className="pp-ribbon">Equipo agotado</span>}
-          <VideoPlayer video={vids[0]} />
+          {vids[0].red === "tiktok"
+            ? (
+              <button type="button" className="pp-tiktok-portada" onClick={() => setLight({ type: "video", index: 0 })} aria-label="Ver video de TikTok">
+                {vids[0].thumb && <img src={vids[0].thumb} alt="" loading="lazy" />}
+                <span className="pp-play">▶</span>
+                <span className="pp-vid-marca">TikTok</span>
+              </button>
+            )
+            : <VideoPlayer video={vids[0]} />}
         </div>
       )}
 
@@ -123,12 +131,13 @@ export default function Gallery({ images = [], videos = [], alt = "", sold = fal
               type="button"
               className="pp-thumb pp-thumb-vid"
               onClick={() => setLight({ type: "video", index: i })}
-              aria-label={`Ver video ${i + 1}`}
+              aria-label={v.red === "tiktok" ? `Ver video ${i + 1} de TikTok` : `Ver video ${i + 1}`}
             >
               {v.thumb
                 ? <img src={v.thumb} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} />
-                : <span className="pp-vid-bg" />}
+                : <span className={`pp-vid-bg${v.red === "tiktok" ? " pp-vid-tiktok" : ""}`} />}
               <span className="pp-play">▶</span>
+              {v.red === "tiktok" && <span className="pp-vid-marca" aria-hidden="true">TikTok</span>}
             </button>
           ))}
           {masFotos && <MasFotos url={masFotos} />}
@@ -160,7 +169,7 @@ export default function Gallery({ images = [], videos = [], alt = "", sold = fal
       {light?.type === "video" && vids[light.index] && (
         <div className="pp-light" onClick={() => setLight(null)}>
           <button className="pp-close" type="button" onClick={() => setLight(null)} aria-label="Cerrar">✕</button>
-          <div className="pp-video-wrap" onClick={(e) => e.stopPropagation()}>
+          <div className={`pp-video-wrap${vids[light.index].vertical ? " vertical" : ""}`} onClick={(e) => e.stopPropagation()}>
             <VideoPlayer video={vids[light.index]} />
           </div>
         </div>
