@@ -5,6 +5,15 @@
 
 ---
 
+## 25 nov 2026 · Web más rápida (BUG-3) y fotos del celular sin error (BUG-7)
+
+- La web pública guarda cada página 60 segundos: ya no consulta la base de datos en cada visita. Lo que se guarda en el panel se ve en la siguiente visita.
+- Al subir fotos en el panel, si pesan más del máximo o vienen en otro formato, el navegador las achica y las pasa a JPG solas. Si es HEIC del iPhone y no abre, un mensaje explica qué hacer. El logo no se toca.
+- Los errores de Cloudinary ya no muestran llaves en pantalla.
+- Probado y aprobado por el dueño; publicado el 25 nov. Volver atrás: etiqueta `v1.3-antes-bug3-bug7`.
+
+---
+
 ## 15 nov 2026 · Videos de TikTok en la ficha (HU-40)
 
 - En el campo «Video» del producto ahora se puede pegar un enlace de TikTok (completo o corto de la app). El video se reproduce desde TikTok, sin descargarlo.
