@@ -1,6 +1,6 @@
 # 📌 Dónde retomar
 
-> **Última sesión:** 14 de noviembre de 2026 · **Rediseño estilo Mercado Libre publicado**: HU-37 (paleta del cliente y guía v2.0), HU-38 (encabezado, menú, columna de categorías, página a todo el ancho) y HU-39 (ofertas: «Precio antes», −X %, NUEVO, Ofertas destacadas) aprobadas por el dueño y unidas a `main` con el PR #3. Migración `precio_antes` aplicada. Para volver atrás: etiqueta `v1.1-antes-rediseno`. Prueba de humo en `scripts/prueba-humo.cjs` (50/50). Siguen documentadas sin construir HU-35 (banner → producto) y HU-36 (fotos reales en Drive). Pendiente: el texto «Visítanos en…» se cambia en Configuración › Barra superior; la ficha en celular queda pegada al borde (viene de antes).
+> **Última sesión:** 15 de noviembre de 2026 · Publicados en `main`: rediseño HU-37/38/39 (PR #3) y **HU-36 botón «📷 Fotos» con Drive + HU-40 videos de TikTok** (PR #4, `b206ad4`). Migraciones `precio_antes` y `fotos_reales_url` aplicadas; 54 enlaces de Drive cargados. Volver atrás: etiquetas `v1.1-antes-rediseno` y `v1.2-antes-hu36-hu40`. Prueba de humo `scripts/prueba-humo.cjs` (50/50 en producción). Pendientes: HU-35 (banner → producto) sin construir; probar un enlace corto real de TikTok; «Visítanos en…» se cambia en Configuración › Barra superior; ficha en celular pegada al borde (viene de antes).
 > Entorno: [ENTORNO_LOCAL.md](./ENTORNO_LOCAL.md) · Fases: [sdlc/](./sdlc/) · Tareas: [notion/tareas.csv](./notion/tareas.csv)
 
 ---
