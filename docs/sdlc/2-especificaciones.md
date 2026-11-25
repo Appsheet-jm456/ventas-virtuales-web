@@ -1080,7 +1080,7 @@ Como cliente quiero ver qué equipos están en oferta y cuánto me ahorro; como 
 
 ## BUG-3 · La caché de las páginas públicas no funciona
 
-**Nivel:** Alto · **Encontrado:** 5 nov 2026, prueba de carga en producción (puerta 3 de la EDT 5.2) · **Estado:** Pendiente
+**Nivel:** Alto · **Encontrado:** 5 nov 2026, prueba de carga en producción (puerta 3 de la EDT 5.2) · **Estado:** Hecha (aprobada por el dueño y publicada el 25 nov)
 
 ### Pasos para reproducirlo
 
@@ -1133,6 +1133,25 @@ configuración con ese cliente (`getSite()`), todas las páginas públicas queda
 El arreglo va en **un solo commit**. Si después del despliegue algo falla: `git revert <commit>` y push a `main`
 (Hostinger redespliega la versión anterior en ~2 min), o en hPanel › Despliegues volver a implementar el
 despliegue anterior. No hay migración de base de datos, así que no hay datos que restaurar.
+
+### Construcción (25 nov 2026)
+
+El 25 nov el dueño reportó la web lenta: Inicio 0,8–2,5 s, ficha 3,7 s, `/api/products` 17,8 s una vez y una
+conexión TLS fallida; Hostinger seguía marcando `DYNAMIC`.
+
+- `lib/supabase.js`: nuevo `webClient()` que lee con `next: { revalidate: 60, tags: ["web"] }`. Lo usan
+  `configuracion`, `inventory` (catálogo público), `categorias`, `banners`, `nosotros` y `paginas`.
+  `publicClient()` queda solo para `/api/eventos` (escribe), y el panel sigue con `userClient()` (siempre fresco).
+- `lib/refrescar.js`: `conRefresco()` envuelve el `POST` de `/api/admin`, `banners`, `categorias`, `cloudinary`,
+  `configuracion`, `csv`, `nosotros` y `paginas`; si la respuesta es correcta borra la etiqueta «web», así lo
+  guardado en el panel se ve en la siguiente visita (mejor que el «≤ 60 s» pedido).
+- `/producto/[codigo]` y `/politicas/[slug]`: `generateStaticParams()` vacío; sin él Next 14 no guarda las rutas con
+  parámetro.
+- Build: `/`, `/productos`, `/categorias`, `/nosotros` salen ○ y la ficha y las políticas ●.
+- Prueba local (3100, `bug3-refresco.mjs` en el scratchpad, usuario QA temporal): **6/6**. Página desde caché (`HIT`,
+  `s-maxage=60`), un cambio directo en la base no se ve al instante, crear y quitar una categoría en el panel se ve
+  enseguida, `/api/eventos` responde 204. Inicio local 0,01 s.
+- Falta: OK del dueño, PR a `main` y repetir la prueba de carga en producción (`sdlc/4-pruebas.md`).
 
 ## BUG-4 · Next.js 14 con vulnerabilidades sin parche (alerta de Hostinger)
 
@@ -1189,6 +1208,38 @@ en Hostinger y redesplegó el 13 nov.
 2. **Regenerar el secreto de la llave «ApiWeb»** en Cloudinary (Settings › API Keys › Regenerate secret), porque el actual quedó expuesto,
    y actualizarlo en Hostinger (redesplegar) y en `.env.local`. Nunca por el chat.
 3. Regla para el futuro: el error de Cloudinary se muestra al usuario tal cual; filtrar el texto para que no repita valores de llaves.
+
+## BUG-7 · Fotos de celular rechazadas al subirlas en el panel
+
+**Nivel:** Medio · **Encontrado:** 25 nov 2026, el dueño subía fotos en `/admin/productos` · **Estado:** Hecha (aprobada por el dueño y publicada el 25 nov)
+
+**Qué pasó:** salió un error al subir una foto. Ese día sí llegaron 8 fotos a Cloudinary y quedaron guardadas en
+100-101-1148, 100-102-1156-1 y 100-101-1029-2, todas entre 1,7 y 1,9 MB: justo debajo del tope.
+**Causa:** `SubirImagen.js` rechazaba fotos de más de 2 MB (producto, banners) o 3 MB (Nosotros), y formatos
+distintos de JPG, PNG o WebP. Una foto de celular pesa 3 a 8 MB, y el iPhone guarda en HEIC.
+
+### Arreglo
+
+- Si la foto pesa más del máximo o su formato no se acepta, el navegador la abre, la achica (lado mayor 2000 px;
+  si aún pesa mucho, 1600 o 1200 px), la pasa a JPG (calidad 0,85 → 0,65) y la sube. Las partes transparentes
+  quedan blancas. Las fotos que ya cumplen suben tal cual.
+- El logo no se convierte (debe conservar el fondo transparente).
+- HEIC que el navegador no abre: mensaje claro con la salida (iPhone › Cámara › Formatos › «Más compatible»).
+- El selector de archivos acepta cualquier imagen; los textos de ayuda dicen «si pesa más de 2 MB se achica sola».
+- Punto 3 de BUG-5: el error de Cloudinary se muestra con los valores largos tapados (`…`), para no repetir llaves.
+
+### Criterios de aceptación
+
+- **Dado** una foto de celular de más de 2 MB, **cuando** la subo a un producto, **entonces** sube sin error como JPG
+  de ≤ 2 MB y ≤ 2000 px.
+- **Dado** una foto que ya cumple, **entonces** sube igual que antes, sin tocarla.
+- **Dado** el logo, **entonces** no se convierte.
+
+### Prueba (25 nov)
+
+Playwright en 3100 (`bug7-foto.mjs` en el scratchpad), producto oculto `QA-BUG7` y usuario QA temporales, borrados al
+final junto con sus fotos de Cloudinary: **4/4**. Foto de 11,4 MB (4032×3024) → JPG 2000×1500 de 1,13 MB; foto de
+1,07 MB (1600×1200) llegó sin cambios.
 
 ## Lo que aporta el dueño
 

@@ -3,6 +3,7 @@
 import { userClient } from "../../../../lib/supabase";
 import { exigir } from "../../../../lib/permisos";
 import { analizarCsv } from "../../../../lib/csv";
+import { conRefresco } from "../../../../lib/refrescar";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,7 @@ async function codigosExistentes(cliente) {
   return mapa;
 }
 
-export async function POST(request) {
+async function manejar(request) {
   const a = await exigir(request, "productos", "editar");
   if (a.respuesta) return a.respuesta;
   const { token } = a;
@@ -55,3 +56,6 @@ export async function POST(request) {
     return Response.json({ error: String(err?.message || err) }, { status: 200 });
   }
 }
+
+// BUG-3: al guardar, la web pública muestra el cambio en la siguiente visita.
+export const POST = conRefresco(manejar);

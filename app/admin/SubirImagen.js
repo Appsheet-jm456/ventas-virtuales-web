@@ -11,7 +11,7 @@ import { useAdmin } from "./AdminShell";
 export const REGLAS = {
   banner: {
     destino: "banner", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 2, proporcion: 1600 / 500, minAncho: 1200,
-    ayuda: "1600×500 px (proporción 16:5) · JPG, PNG o WebP · hasta 2 MB",
+    ayuda: "1600×500 px (proporción 16:5) · JPG, PNG o WebP · si pesa más de 2 MB se achica sola",
   },
   bannerMovil: {
     destino: "banner-movil", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 2, proporcion: 1, minAncho: 600,
@@ -23,11 +23,11 @@ export const REGLAS = {
   },
   producto: {
     destino: "producto", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 2, minAncho: 400,
-    ayuda: "JPG, PNG o WebP · al menos 400 px de ancho (mejor 800 o más) · hasta 2 MB cada una",
+    ayuda: "JPG, PNG o WebP · al menos 400 px de ancho (mejor 800 o más) · si pesa más de 2 MB se achica sola",
   },
   nosotros: {
     destino: "nosotros", formatos: ["image/jpeg", "image/png", "image/webp"], maxMB: 3, minAncho: 600,
-    ayuda: "Horizontal o cuadrada, 1200 px de ancho o más · JPG, PNG o WebP · hasta 3 MB",
+    ayuda: "Horizontal o cuadrada, 1200 px de ancho o más · JPG, PNG o WebP · si pesa más de 3 MB se achica sola",
   },
   logo: {
     destino: "logo", formatos: ["image/png", "image/svg+xml", "image/webp", "image/jpeg"], maxMB: 1,
@@ -46,6 +46,59 @@ function medir(file) {
     img.src = url;
   });
 }
+
+// BUG-7: las fotos de celular suelen pesar 3 a 8 MB o venir en otro formato. Si la foto pesa más del
+// máximo o su formato no se acepta, el navegador la achica (lado mayor 2000 px) y la pasa a JPG antes
+// de revisarla. El logo no se toca, para no perder el fondo transparente.
+const LADO_MAX = 2000;
+
+function aJpg(file, maxBytes) {
+  return new Promise((ok, mal) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      mal(new Error(/heic|heif/i.test(file.type + file.name)
+        ? "La foto está en formato HEIC (iPhone) y este navegador no la puede abrir. En el iPhone: Ajustes › Cámara › Formatos › «Más compatible», o envíala por WhatsApp y descárgala de ahí."
+        : "No se pudo leer la imagen. ¿Está dañada?"));
+    };
+    img.onload = async () => {
+      URL.revokeObjectURL(url);
+      let blob = null;
+      // Primero baja la calidad; si aún pesa más del máximo, achica más la foto.
+      for (const lado of [LADO_MAX, 1600, 1200]) {
+        const escala = Math.min(1, lado / Math.max(img.naturalWidth, img.naturalHeight));
+        const lienzo = document.createElement("canvas");
+        lienzo.width = Math.round(img.naturalWidth * escala);
+        lienzo.height = Math.round(img.naturalHeight * escala);
+        const ctx = lienzo.getContext("2d");
+        ctx.fillStyle = "#fff"; // las partes transparentes de un PNG quedan blancas, no negras
+        ctx.fillRect(0, 0, lienzo.width, lienzo.height);
+        ctx.drawImage(img, 0, 0, lienzo.width, lienzo.height);
+        for (const calidad of [0.85, 0.75, 0.65]) {
+          blob = await new Promise((r) => lienzo.toBlob(r, "image/jpeg", calidad));
+          if (blob && blob.size <= maxBytes) break;
+        }
+        if (blob && blob.size <= maxBytes) break;
+      }
+      if (!blob) return mal(new Error("No se pudo convertir la imagen."));
+      ok(new File([blob], file.name.replace(/\.[^.]+$/, "") + ".jpg", { type: "image/jpeg" }));
+    };
+    img.src = url;
+  });
+}
+
+async function preparar(file, r) {
+  if (r.destino === "logo" || file.type === "image/svg+xml") return file;
+  const pesada = file.size > r.maxMB * 1024 * 1024;
+  const otroFormato = !r.formatos.includes(file.type);
+  if (!pesada && !otroFormato) return file;
+  if (otroFormato && file.type && !file.type.startsWith("image/")) return file; // la revisión dirá que no es imagen
+  return aJpg(file, r.maxMB * 1024 * 1024);
+}
+
+// BUG-5: Cloudinary repite en sus errores el valor de la llave; se tapa antes de mostrarlo.
+const sinLlaves = (texto) => String(texto || "").replace(/[A-Za-z0-9_-]{15,}/g, "…");
 
 // Devuelve el problema de la imagen en palabras, o "".
 async function revisar(file, r) {
@@ -82,7 +135,8 @@ export default function SubirImagen({ reglas, onSubida, onSubiendo, texto = "Sub
   const [estado, setEstado] = useState({ subiendo: false, error: "" });
 
   // Sube una sola imagen y devuelve su URL.
-  async function subirUna(file) {
+  async function subirUna(original) {
+    const file = await preparar(original, reglas).catch((e) => { throw new Error(`${original.name}: ${e.message}`); });
     const problema = await revisar(file, reglas);
     if (problema) throw new Error(`${file.name}: ${problema}`);
     const res = await fetch("/api/admin/cloudinary", {
@@ -98,7 +152,7 @@ export default function SubirImagen({ reglas, onSubida, onSubiendo, texto = "Sub
     for (const k of ["api_key", "timestamp", "signature", "folder", "allowed_formats"]) datos.append(k, f[k]);
     const sub = await fetch(`https://api.cloudinary.com/v1_1/${f.cloud_name}/image/upload`, { method: "POST", body: datos });
     const r = await sub.json();
-    if (!sub.ok || !r.secure_url) throw new Error("Cloudinary no aceptó la imagen: " + (r.error?.message || sub.status));
+    if (!sub.ok || !r.secure_url) throw new Error("Cloudinary no aceptó la imagen: " + sinLlaves(r.error?.message || sub.status));
     return r.secure_url;
   }
 
@@ -129,7 +183,7 @@ export default function SubirImagen({ reglas, onSubida, onSubiendo, texto = "Sub
         ref={input}
         id={id}
         type="file"
-        accept={reglas.formatos.join(",")}
+        accept={reglas.destino === "logo" ? reglas.formatos.join(",") : "image/*"}
         multiple={multiple}
         hidden
         onChange={(e) => { const archivos = [...(e.target.files || [])]; e.target.value = ""; subir(archivos); }}
