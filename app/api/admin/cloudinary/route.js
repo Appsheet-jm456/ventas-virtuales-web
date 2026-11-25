@@ -8,6 +8,7 @@ import { tienePermiso } from "../../../../lib/modulos";
 import { cloudinaryConfigurado, firmaSubida, borrarImagen, esImagenPropia, imagenEnUso, subirDesdeUrl } from "../../../../lib/cloudinary";
 import { updateRow } from "../../../../lib/inventory";
 import { driveDirect } from "../../../../lib/images";
+import { conRefresco } from "../../../../lib/refrescar";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -21,7 +22,7 @@ const PERMISO_DESTINO = {
   logo: "configuracion", nosotros: "politicas",
 };
 
-export async function POST(request) {
+async function manejar(request) {
   const a = await exigir(request, null);
   if (a.respuesta) return a.respuesta;
   const { token, acceso } = a;
@@ -84,3 +85,6 @@ export async function POST(request) {
   if (!firma) return Response.json({ error: "Destino de imagen no reconocido o falta el código del producto." }, { status: 400 });
   return Response.json(firma);
 }
+
+// BUG-3: al guardar, la web pública muestra el cambio en la siguiente visita.
+export const POST = conRefresco(manejar);

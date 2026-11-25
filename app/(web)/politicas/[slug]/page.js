@@ -7,6 +7,11 @@ import PoliticaVista from "../../../components/PoliticaVista";
 
 export const revalidate = 60;
 
+// BUG-3: lista vacía = ninguna se arma al compilar, pero cada una se guarda 60 s tras la primera visita.
+export async function generateStaticParams() {
+  return [];
+}
+
 // Páginas de políticas (HU-26): las crea y edita el dueño en /admin/politicas. Una página oculta
 // o inexistente responde «no encontrada».
 export async function generateMetadata({ params }) {

@@ -6,10 +6,11 @@ import { tienePermiso } from "../../../../lib/modulos";
 import {
   listarCategorias, crearCategoria, actualizarCategoria, intercambiarOrden, quitarCategoria,
 } from "../../../../lib/categorias";
+import { conRefresco } from "../../../../lib/refrescar";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request) {
+async function manejar(request) {
   const a = await exigir(request, "categorias");
   if (a.respuesta) return a.respuesta;
   const { token, acceso } = a;
@@ -52,3 +53,6 @@ export async function POST(request) {
     return Response.json({ error: msg });
   }
 }
+
+// BUG-3: al guardar, la web pública muestra el cambio en la siguiente visita.
+export const POST = conRefresco(manejar);

@@ -4,10 +4,11 @@
 import { exigir, sinPermiso } from "../../../../lib/permisos";
 import { tienePermiso } from "../../../../lib/modulos";
 import { listarPaginas, crearPagina, actualizarPagina, borrarPagina, moverPagina } from "../../../../lib/paginas";
+import { conRefresco } from "../../../../lib/refrescar";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request) {
+async function manejar(request) {
   const a = await exigir(request, "politicas");
   if (a.respuesta) return a.respuesta;
   const { token, acceso } = a;
@@ -38,3 +39,6 @@ export async function POST(request) {
     return Response.json({ error: String(err?.message || err) }, { status: 200 });
   }
 }
+
+// BUG-3: al guardar, la web pública muestra el cambio en la siguiente visita.
+export const POST = conRefresco(manejar);

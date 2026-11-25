@@ -17,6 +17,11 @@ import { resolverVideos, conPortadasTikTok } from "../../../../lib/tiktok";
 
 export const revalidate = 60;
 
+// BUG-3: lista vacía = ninguna se arma al compilar, pero cada una se guarda 60 s tras la primera visita.
+export async function generateStaticParams() {
+  return [];
+}
+
 const f = (r, k) => (r?.[k] ?? "").toString().trim();
 const stockNum = (r) => parseInt(f(r, "Stock") || "0", 10) || 0;
 
