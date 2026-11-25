@@ -165,6 +165,8 @@ html:has(.tp-oscuro), html:has(.tp-oscuro) body { background: #051537; }
 .tp-oscuro .card-img { margin: 10px 10px 0; border-radius: 12px; background: var(--p-claro); }
 .tp-oscuro .card-img .noimg { color: #8A97B0; }
 .tp-oscuro .card-cat { color: var(--p-luna); }
+.tp-oscuro .card-cat-nombre { color: var(--p-cian-claro); }
+.tp-oscuro .card-grado { background: var(--p-pantalla); border-color: var(--p-red); color: #fff; }
 .tp-oscuro .card-title { color: #fff; }
 .tp-oscuro .card-specs { color: var(--p-luna); }
 .tp-oscuro .card-price { color: var(--p-amarillo); }
