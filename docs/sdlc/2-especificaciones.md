@@ -1080,7 +1080,7 @@ Como cliente quiero ver qué equipos están en oferta y cuánto me ahorro; como 
 
 ## BUG-3 · La caché de las páginas públicas no funciona
 
-**Nivel:** Alto · **Encontrado:** 5 nov 2026, prueba de carga en producción (puerta 3 de la EDT 5.2) · **Estado:** En curso (construido el 25 nov, sin push)
+**Nivel:** Alto · **Encontrado:** 5 nov 2026, prueba de carga en producción (puerta 3 de la EDT 5.2) · **Estado:** Hecha (aprobada por el dueño y publicada el 25 nov)
 
 ### Pasos para reproducirlo
 
@@ -1211,7 +1211,7 @@ en Hostinger y redesplegó el 13 nov.
 
 ## BUG-7 · Fotos de celular rechazadas al subirlas en el panel
 
-**Nivel:** Medio · **Encontrado:** 25 nov 2026, el dueño subía fotos en `/admin/productos` · **Estado:** En curso (construido el 25 nov, sin push)
+**Nivel:** Medio · **Encontrado:** 25 nov 2026, el dueño subía fotos en `/admin/productos` · **Estado:** Hecha (aprobada por el dueño y publicada el 25 nov)
 
 **Qué pasó:** salió un error al subir una foto. Ese día sí llegaron 8 fotos a Cloudinary y quedaron guardadas en
 100-101-1148, 100-102-1156-1 y 100-101-1029-2, todas entre 1,7 y 1,9 MB: justo debajo del tope.
