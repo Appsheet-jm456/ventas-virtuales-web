@@ -65,3 +65,8 @@ Antes del arreglo de **BUG-3** (páginas dinámicas, sin caché):
 | 50 | 3,06 s | 7,12 s | ~14 |
 
 Sin carga, cada página tarda 0,6–0,9 s. Repetir con los mismos parámetros después del arreglo.
+
+Medición sin carga del 25 nov, antes del arreglo (producción): Inicio 0,8–2,5 s, `/admin` 0,5–1,5 s, ficha 3,7 s,
+`/api/products` hasta 17,8 s una vez, y una conexión fallida en ~25 pedidos. Después del arreglo, en local (3100):
+Inicio, Productos y Categorías 0,01 s desde caché (`x-nextjs-cache: HIT`). La prueba de carga en producción se repite
+al pasar a `main`.
