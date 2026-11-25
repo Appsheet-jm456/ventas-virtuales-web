@@ -19,6 +19,9 @@ export default function ProductCard({ r, wa = "" }) {
   const precio = fmtPrecio(r);
   const oferta = precio ? descuento(r) : null;
   const href = `/producto/${encodeURIComponent(f(r, "Código"))}`;
+  const estado = f(r, "Estado");
+  const etiquetaNuevo = !sold && !oferta && esNuevo(r);
+  const grado = etiquetaNuevo && /^nuev/i.test(estado) ? "" : estado;
 
   const cuerpo = (
     <>
@@ -33,7 +36,12 @@ export default function ProductCard({ r, wa = "" }) {
           : <span className="noimg">💻</span>}
       </div>
       <div className="card-body">
-        <span className="card-cat">{f(r, "Categoría") || "Producto"}{f(r, "Estado") ? ` · ${f(r, "Estado")}` : ""}</span>
+        {/* HU-41: categoría destacada y el grado como pastilla aparte (sin repetir «Nuevo» si ya
+            está la etiqueta NUEVO de la foto). */}
+        <span className="card-cat">
+          <span className="card-cat-nombre">{f(r, "Categoría") || "Producto"}</span>
+          {grado && <span className="card-grado">{grado}</span>}
+        </span>
         <span className="card-title">{nombre}</span>
         {specs && <span className="card-specs">{specs}</span>}
         {oferta && <s className="precio-antes card-antes"><span className="sr-only">Antes: </span>{oferta.antes}</s>}

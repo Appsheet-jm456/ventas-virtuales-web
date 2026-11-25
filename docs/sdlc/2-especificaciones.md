@@ -918,6 +918,36 @@ Como cliente quiero ver las **fotos reales del equipo** que voy a comprar, y com
 
 ---
 
+## HU-41 · Categoría y grado más visibles en la tarjeta del producto
+
+Como cliente quiero ver de un vistazo **qué tipo de equipo es** (Torre Tiny, Portátil usado…) y **su grado** (A, B, Nuevo) en cada tarjeta del catálogo, sin tener que leer la línea gris pequeña.
+
+**Origen (25 nov 2026):** el dueño marcó en las tarjetas de Torre Tiny que la línea «TORRE TINY · GRADO A» se pierde: va en gris, 11,5 px, encima del nombre. Pidió que resalte más.
+
+### Web pública (frontend)
+
+- La línea de categoría pasa de texto gris pequeño a **etiqueta destacada**: la **categoría** en azul corporativo `#0865D9`, Montserrat, más grande (13,5 px en escritorio y 12,5 px en celular), en negrita.
+- El **grado** va aparte como una **pastilla** al lado: «Grado A» en azul muy claro con texto azul oscuro y «Grado B» igual; «Nuevo» no se repite si ya está la etiqueta «NUEVO» de HU-39.
+- El nombre del equipo (por ejemplo «HP 600 / 800 G3») se mantiene debajo, igual que hoy.
+- Aplica a todas las tarjetas: catálogo, Inicio («Portátiles corporativos», «Ofertas destacadas»), sugeridos y vistos recientemente.
+- Modo oscuro: la categoría en el azul claro de enlaces `#7AB6FF` y la pastilla en la superficie oscura.
+- Contraste: azul corporativo sobre blanco 5,4; azul oscuro sobre azul muy claro 14,2.
+
+### Panel y datos (backend)
+
+- Sin cambios: la categoría y el estado ya existen en cada producto.
+
+### Criterios de aceptación
+
+1. En una tarjeta de Torre Tiny Grado A, «Torre Tiny» se lee en azul y más grande que hoy, y «Grado A» aparece como pastilla.
+2. Una tarjeta sin estado muestra solo la categoría, sin pastilla vacía.
+3. Se ve bien en escritorio y celular, en modo claro y oscuro, sin romper la altura de las tarjetas.
+4. `npm run build` sin errores y prueba de humo sin fallas.
+
+**Estado:** construida el 25 nov 2026 en el servidor de prueba (3100): build sin errores, prueba de humo 56/56, capturas en escritorio, celular y modo oscuro. Falta la aprobación del dueño para pasar a main.
+
+---
+
 ## HU-40 · Videos de TikTok en la ficha del producto
 
 Como dueño quiero pegar el enlace de un video de TikTok en un producto y que el cliente lo vea en la ficha, **sin descargarlo ni subirlo**: el video se sigue reproduciendo desde los servidores de TikTok.

@@ -336,6 +336,16 @@
 .tp .pp-tiktok-portada img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .tp .pp-tiktok-portada .pp-vid-marca { bottom: 12px; font-size: 13px; padding: 3px 10px; }
 .tp .pp-tiktok-portada .pp-play { width: 64px; height: 64px; font-size: 24px; }
+
+/* ================= Categoría y grado destacados en la tarjeta (HU-41) ================= */
+/* Categoría en azul corporativo, más grande; el grado como pastilla aparte. */
+.tp .card-cat { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; text-transform: none; letter-spacing: 0; }
+.tp .card-cat-nombre { color: var(--p-azul); font-family: var(--tit); font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
+.tp .card-grado {
+  display: inline-block; padding: 3px 9px; border-radius: 999px; background: var(--p-celeste); border: 1px solid var(--p-celeste-2);
+  color: var(--p-noche); font-family: var(--tit); font-size: 11.5px; font-weight: 700; letter-spacing: .02em; white-space: nowrap;
+}
+@media (max-width: 640px) { .tp .card-cat-nombre { font-size: 12.5px; } .tp .card-grado { font-size: 11px; padding: 2px 8px; } }
 .tp .brand-logo { height: 48px; }
 @media (max-width: 640px) { .tp .hd-wa small { color: var(--p-noche); } }
 
